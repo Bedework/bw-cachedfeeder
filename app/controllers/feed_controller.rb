@@ -5,14 +5,12 @@ class FeedController < ApplicationController
   # Rails caching for each action
   caches_page :calendar
   caches_page :eventList
-  caches_page :secondary_calendar
-  caches_page :secondary_eventList
   caches_page :ics
   caches_page :event
   caches_page :external
   
   #before_filter :inspect
-  def inspect
+  def addExtension
     if params[:xmlRss]
       ActionController::Base.page_cache_extension = '.' + params[:xmlRss]
       headers["Content-Type"] = APP_CONFIG['content_type'][params[:xmlRss]]
@@ -44,64 +42,42 @@ class FeedController < ApplicationController
     return clnt.get_content(target)
   end
 
-  def index # Returns feed URL from this sytem
+  def calendar # Bedework calendar web client (uses setViewPeriod.do)
 	 currUrl = FeedModel.new('calendar', params)
-	 target = currUrl.buildUrl('primary')
-	 @debugInfo, @dukeUrl = target, target
-	 @feederUrl =  currUrl.buildUrl('feeder')
+	 target = currUrl.buildUrl
+   logger.info("\nFEED: calendar URL is #{target}\n")
 	 @xmlOutput = getFeed(target)
-  end
-
-  def calendar # Defailt suite Bedework calendar web client (uses setViewPeriod.do)
-	 currUrl = FeedModel.new('calendar', params)
-	 target = currUrl.buildUrl('primary') # should be either duke or student
-  
-     
-	 @xmlOutput = getFeed(target)
-   inspect()
+   addExtension()
   end
   
-  def eventList # Defailt suite Bedework Events List web client (uses setViewPeriod.do)
+  def eventList # Bedework Events List web client (uses setViewPeriod.do)
 	  currUrl = FeedModel.new('list', params)
-	  target = currUrl.buildUrl('primary') # default suite name
+	  target = currUrl.buildUrl
     # brutal but effective ActionController::Base.page_cache_extension        = '.rss'
+	  logger.info("\nFEED: list URL is #{target}\n")
 	  @xmlOutput = getFeed(target)
-    inspect()
+    addExtension()
 	end
-  
-  def secondary_calendar # Student suite Bedework calendar client
-   currUrl = FeedModel.new('calendar', params)
-   target = currUrl.buildUrl('secondary') # secondary suite name
-   @xmlOutput = getFeed(target)
-   inspect()
-  end
-  
-  def secondary_eventList # Student suite Bedework calendar client
-    currUrl = FeedModel.new('list', params)
-    target = currUrl.buildUrl('secondary') #
-    @xmlOutput = getFeed(target)
-    inspect()
-  end
-  
+	
   def ics # Bedework ICS interface, accepts ~ seperated list of categories
     currUrl = FeedModel.new('ics', params)
-    target = currUrl.buildUrl('primary')
+    target = currUrl.buildUrl
     @xmlOutput = getFeed(target)
-    inspect()
+    addExtension()
   end
   
-  def event # request specific event from any suite
+  def event # request specific event 
     currUrl = FeedModel.new('event', params)
-    target = currUrl.buildUrl('primary')
+    target = currUrl.buildUrl
     @xmlOutput = getFeed(target)
-    inspect()
+    addExtension()
   end
   
   def external
     currUrl = FeedModel.new('external', params)
-    target = currUrl.buildUrl('primary')
+    target = currUrl.buildUrl
     @xmlOutput = getFeed(target)
-    inspect()
+    addExtension()
   end
   
 end
