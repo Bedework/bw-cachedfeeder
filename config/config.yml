@@ -4,23 +4,20 @@ content_type:
   xml:   text/xml; charset=UTF-8 
   jsonp: application/javascript; charset=UTF-8
   ics:   text/calendar; charset=UTF-8
+  
+skin:
+  # These skins must correspond to .xls files found in the webapps deployment area. 
+  rss:  rss-list
+  xml:  cleanXml
+  html: default
+  json: json-list-src
+  javascript: js-list
 
-externals:
-  unc:    http://slice.unc.edu/index.php/events/all/eventlist?format=feed&type=rss
-  ncsu:   http://calendar.activedatax.com/ncstate/RSSSyndicator.aspx?category=2-0&location=&type=N&binary=Y&keywords=
-  nccu:   http://webevent.nccu.edu/RSSSyndicator.aspx?category=&location=&type=N&binary=Y
-  dida:   http://eflyer.duke.edu/feed/index.php?display_id=2
-  eflyer: http://eflyer.duke.edu/feed/
+# externals:
+# unc:    http://slice.unc.edu/index.php/events/all/eventlist?format=feed&type=rss
+# ncsu:   http://calendar.activedatax.com/ncstate/RSSSyndicator.aspx?category=2-0&location=&type=N&binary=Y&keywords=
+# nccu:   http://webevent.nccu.edu/RSSSyndicator.aspx?category=&location=&type=N&binary=Y
+# dida:   http://eflyer.duke.edu/feed/index.php?display_id=2
+# eflyer: http://eflyer.duke.edu/feed/
 
-skins:
-  # These skins must correspond to .xls files found in the webapps deployment area.
-  calendar:
-    rss:  rss
-    html: default
-    xml:  cleanXml
-  list: 
-    rss:  rss-list
-    xml:  cleanXml
-    jsonp: json-list-src
-    javascript: js-list
 

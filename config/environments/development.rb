@@ -18,8 +18,8 @@ config.action_controller.page_cache_extension        = '.xml'
 
 #config.action_view.cache_template_extensions         = false
 config.action_view.debug_rjs                         = true
-#TARGETSERVER = 'http://localhost:8080/cal'
-TARGETSERVER = 'http://events.rpi.edu'
+TARGETSERVER = 'http://localhost:8080/cal'
+#TARGETSERVER = 'http://events.rpi.edu'
 #TARGETSERVER = 'http://bedework.org:8585/cal'
 
 # Don't care if the mailer can't send
