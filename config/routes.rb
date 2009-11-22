@@ -2,11 +2,6 @@ ActionController::Routing::Routes.draw do |map|
   # Routes define all Bedework parameters and feed caching URL segments
   # The priority is based upon order of creation: first created -> highest priority.
 
- 
-  # Allow downloading Web Service WSDL as a file with an extension
-  # instead of a file named 'wsdl'
-  map.connect ':controller/service.wsdl', :action => 'wsdl'
- 
   # Used for feeds (other than ICS) where the number of days is specified 
   map.connect 'genFeedDays/:days/:skin/:group/:categories', :controller => 'feed', :action => 'genFeedDays',
   :requirements => {:categories => /.*/}
@@ -23,8 +18,15 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'icsRange/:startDate/:endDate/:group/:categories', :controller=> 'feed', :action => 'icsRange',
   :requirements => {:categories => /.*/, :startDate => /\d{4}-\d{2}-\d{2}/, :endDate => /\d{4}-\d{2}-\d{2}/}
   
+  map.connect 'categories/:skin/:objName', :controller=> 'feed', :action => 'categories'
+  map.connect 'groups/:skin/:objName', :controller=> 'feed', :action => 'groups'
   
-  # Used for feeds where the start and ends dates are specified.
+
+  # Allow downloading Web Service WSDL as a file with an extension
+  # instead of a file named 'wsdl'
+  #map.connect ':controller/service.wsdl', :action => 'wsdl'
+  
+    # Used for feeds where the start and ends dates are specified.
   # Calendar -- limited to date parameters, skin
   # map.connect 'calendar/:date/:viewType/:skin', :controller => 'feed', :action => 'calendar'
   

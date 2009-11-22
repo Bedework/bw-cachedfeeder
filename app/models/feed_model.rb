@@ -7,11 +7,13 @@
 
 class FeedModel
   attr_accessor :urlType, :reqParams
-  attr_reader :daysAction, :rangeAction  #, :eventAction
+  attr_reader :daysAction, :rangeAction, :categoriesAction, :groupsAction #, :eventAction
   def initialize(urlType, reqParams)
     @urlType, @reqParams = urlType, reqParams 
     @daysAction = 'main/setViewPeriod.do'
     @rangeAction = 'main/listEvents.do'
+    @categoriesAction = 'widget/categories.do'
+    @groupsAction = 'widget/groups.do'
     #@eventAction = 'event/eventView.do'
   end
   
@@ -54,8 +56,10 @@ class FeedModel
       when 'icsDays' then getIcsTarget(myGroup, myCats, "Days")
       when 'genFeedRange' then getGenFeedTarget(myGroup, myCats, "Range")
       when 'icsRange' then getIcsTarget(myGroup, myCats, "Range")
-      when 'event' then getEventTarget()
-      when 'external' then getExt()
+      when 'categories' then getCategories()
+      when 'groups' then getGroups()
+      # when 'event' then getEventTarget()
+      # when 'external' then getExt()
     end
     
     return target
@@ -68,20 +72,24 @@ class FeedModel
     else
       ifCats = convertCats(ifCats)
     end
+    if ( currGroup = 'all')
+      ifGroup = ''
+    else
+      ifGroup = "&creator=" + currGroup
+    end
     if (daysOrRange == "Range")
       action = daysAction
     else
       action = rangeAction
     end
-    bedeUrl = TARGETSERVER + "/" + action + "?format=text/calendar&creator=" + currGroup + "&" \
-             + "setappvar=summaryMode(details)" + ifCats
+    bedeUrl = TARGETSERVER + "/" + action + "?format=text/calendar&" + "setappvar=summaryMode(details)" + ifCats + ifGroup
     if (daysOrRange == "Range")
       if reqParams[:startDate] and reqParams[:endDate] # following params are optional
         if reqParams[:startDate] != "0000-00-00"
           bedeUrl += "&start=" + reqParams[:startDate]
         end
         if reqParams[:endDate] != "0000-00-00"
-         bedeUrl += "&end=" + reqParams[:endDate]
+          bedeUrl += "&end=" + reqParams[:endDate]
         end
       end
     else 
@@ -100,14 +108,18 @@ class FeedModel
     else
       ifCats = convertCats(ifCats)
     end
+    if ( currGroup = 'all')
+      ifGroup = ''
+    else
+      ifGroup = "&creator=" + currGroup
+    end
     if (daysOrRange == "Range")
       action = daysAction
     else
       action = rangeAction
     end
     
-    bedeUrl = TARGETSERVER + "/" + action + "?skinName=" + currentSkin + "&creator=" + currGroup + "&" \
-           + "setappvar=summaryMode(details)" + ifCats
+    bedeUrl = TARGETSERVER + "/" + action + "?skinName=" + currentSkin + "&setappvar=summaryMode(details)" + ifCats + ifGroup
     if (daysOrRange == "Range")
       if reqParams[:startDate] and reqParams[:endDate] # following params are optional
         if reqParams[:startDate] != "0000-00-00"
@@ -125,6 +137,17 @@ class FeedModel
     return bedeUrl 
   end
   
+  def getCategories()
+    currSkin = getSkin(reqParams[:skin])
+    obj = reqParams[:objName]
+    bedeUrl = TARGETSERVER + "/" + categoriesAction + "?skinName=" + currSkin + "&setappvar=objName(" + obj + ")"
+  end
+  
+  def getGroups()
+    currSkin = getSkin(reqParams[:skin])
+     obj = reqParams[:objName]
+    bedeUrl = TARGETSERVER + "/" + groupsAction + "?skinName=" + currSkin + "&setappvar=objName(" + obj + ")"
+  end
   
   # def getEventTarget() # Return a specific event in desired skin
   #  currentSkin = 'default' #getSkin(reqParams[:xmlRss])

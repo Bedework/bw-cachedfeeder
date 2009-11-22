@@ -3,15 +3,21 @@ content_type:
   rss:   application/rss+xml; charset=UTF-8
   xml:   text/xml; charset=UTF-8 
   jsonp: application/javascript; charset=UTF-8
+  json: application/javascript; charset=UTF-8
   ics:   text/calendar; charset=UTF-8
+  widget-json-groups: text/html; charset=UTF-8
+  widget-json-cats: text/html; charset=UTF-8
   
 skin:
   # These skins must correspond to .xls files found in the webapps deployment area. 
   rss:  rss-list
   xml:  cleanXml
   html: default
+  html-list: list-html
   json: json-list-src
   javascript: js-list
+  widget-json-groups: widget-json-groups
+  widget-json-cats: widget-json-cats
 
 # externals:
 # unc:    http://slice.unc.edu/index.php/events/all/eventlist?format=feed&type=rss

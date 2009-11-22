@@ -10,6 +10,8 @@ class FeedController < ApplicationController
   caches_page :icsDays
   caches_page :event
   caches_page :external
+  caches_page :categories
+  caches_page :groups
   
   #before_filter :inspect
   def addExtension
@@ -67,6 +69,22 @@ class FeedController < ApplicationController
 	
   def icsRange
     currUrl = FeedModel.new('icsRange', params)
+    target = currUrl.buildUrl
+    logger.info("\nFEED: list URL is #{target}\n")
+    @xmlOutput = getFeed(target)
+    addExtension()
+  end
+  
+  def categories
+    currUrl = FeedModel.new('categories', params)
+    target = currUrl.buildUrl
+    logger.info("\nFEED: list URL is #{target}\n")
+    @xmlOutput = getFeed(target)
+    addExtension()
+  end
+  
+  def groups
+    currUrl = FeedModel.new('groups', params)
     target = currUrl.buildUrl
     logger.info("\nFEED: list URL is #{target}\n")
     @xmlOutput = getFeed(target)
