@@ -6,8 +6,10 @@ class FeedController < ApplicationController
   #caches_page :calendar
   caches_page :genFeedRange
   caches_page :genFeedDays
+  caches_page :genFeedPeriod
   caches_page :icsRange
   caches_page :icsDays
+  caches_page :icsPeriod
   caches_page :event
   caches_page :external
   caches_page :categories
@@ -16,12 +18,15 @@ class FeedController < ApplicationController
   #before_filter :inspect
   def addExtension
     if params[:skin]
-      ActionController::Base.page_cache_extension = '.' + params[:skin]
-      headers["Content-Type"] = APP_CONFIG['content_type'][params[:skin]]  
+      # skin names are in the form {list, grid}-{outputType}
+      skinNameSplits = params[:skin].split("-")
+      outputType = skinNameSplits[1]
+      ActionController::Base.page_cache_extension = '.' + outputType
+      headers["Content-Type"] = APP_CONFIG['content_type'][outputType] 
       return
     end
     
-    if params[:action] == 'icsDays' || params[:action] == 'icsRange'
+    if params[:action] == 'icsDays' || params[:action] == 'icsRange' || params[:action] == 'icsPeriod' 
       ActionController::Base.page_cache_extension = '.ics'
       headers["Content-Type"] = APP_CONFIG['content_type']['ics']
       return
@@ -50,14 +55,6 @@ class FeedController < ApplicationController
 	  @xmlOutput = getFeed(target)
     addExtension()
 	end
-	
-  def icsDays
-    currUrl = FeedModel.new('icsDays', params)
-    target = currUrl.buildUrl
-    logger.info("\nFEED: list URL is #{target}\n")
-    @xmlOutput = getFeed(target)
-    addExtension()
-  end
   
   def genFeedRange
 	  currUrl = FeedModel.new('genFeedRange', params)
@@ -66,9 +63,33 @@ class FeedController < ApplicationController
 	  @xmlOutput = getFeed(target)
     addExtension()
 	end
-	
+  
+  def genFeedPeriod
+    currUrl = FeedModel.new('genFeedPeriod', params)
+    target = currUrl.buildUrl
+    logger.info("\nFEED: list URL is #{target}\n")
+    @xmlOutput = getFeed(target)
+    addExtension()
+  end
+  
+  def icsDays
+    currUrl = FeedModel.new('icsDays', params)
+    target = currUrl.buildUrl
+    logger.info("\nFEED: list URL is #{target}\n")
+    @xmlOutput = getFeed(target)
+    addExtension()
+  end
+  
   def icsRange
     currUrl = FeedModel.new('icsRange', params)
+    target = currUrl.buildUrl
+    logger.info("\nFEED: list URL is #{target}\n")
+    @xmlOutput = getFeed(target)
+    addExtension()
+  end
+  
+  def icsPeriod
+    currUrl = FeedModel.new('icsPeriod', params)
     target = currUrl.buildUrl
     logger.info("\nFEED: list URL is #{target}\n")
     @xmlOutput = getFeed(target)
