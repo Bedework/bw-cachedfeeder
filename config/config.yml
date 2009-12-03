@@ -10,12 +10,12 @@ content_type:
   
 skin:
   # These skins must correspond to .xls files found in the webapps deployment area. 
-  rss:  rss-list
-  xml:  cleanXml
-  html: default
-  html-list: list-html
-  json: json-list-src
-  javascript: js-list
+  list-rss: list-rss
+  list-xml:  default
+  list-html: list-html
+  list-json: list-json
+  grid-json: grid-json
+  grid-html: grid-html
   widget-json-groups: widget-json-groups
   widget-json-cats: widget-json-cats
 
