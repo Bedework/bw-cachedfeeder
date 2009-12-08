@@ -7,26 +7,17 @@
 
 class FeedModel
   attr_accessor :urlType, :reqParams
-  attr_reader :listAction, :gridAction, :categoriesAction, :groupsAction #, :eventAction
+  attr_reader :listAction, :gridAction, :categoriesAction, :groupsAction, :eventAction
   def initialize(urlType, reqParams)
     @urlType, @reqParams = urlType, reqParams 
     @gridAction = 'main/setViewPeriod.do'
     @listAction = 'main/listEvents.do'
     @categoriesAction = 'widget/categories.do'
     @groupsAction = 'widget/groups.do'
-    #@eventAction = 'event/eventView.do'
+    @eventAction = 'event/eventView.do'
   end
   
   def convertCats(catStr) # Convert ~ seperated string to bedework &cat=category format
-    workStringArr = catStr.split(/~/)
-    longCats = ''
-    workStringArr.each do |workStr|
-      longCats += '&catuid=' + workStr
-    end   
-    return longCats
-  end
-  
-  def joinGroupAndCats(groupStr, catsStr) 
     workStringArr = catStr.split(/~/)
     longCats = ''
     workStringArr.each do |workStr|
@@ -73,7 +64,7 @@ class FeedModel
       when 'icsPeriod' then getTarget(myGroup, myCats, "ics", "period")
       when 'categories' then getCategories()
       when 'groups' then getGroups()
-      # when 'event' then getEventTarget()
+      when 'event' then getEventTarget()
       # when 'external' then getExt()
     end
     
@@ -91,7 +82,7 @@ class FeedModel
       if currCats == 'all'
         ifCats = ''
       else
-        ifCats = convertCats(ifCats)
+        ifCats = convertCats(currCats)
       end
       if currGroup == 'all'
         ifGroup = ''
@@ -146,29 +137,28 @@ class FeedModel
   
   def getGroups()
     currSkin = getSkin(reqParams[:skin])
-     obj = reqParams[:objName]
+    obj = reqParams[:objName]
     bedeUrl = TARGETSERVER + "/" + groupsAction + "?skinName=" + currSkin + "&setappvar=objName(" + obj + ")"
   end
   
   
-  # def getEventTarget() # Return a specific event in desired skin
-  #  currentSkin = 'default' #getSkin(reqParams[:xmlRss])
-  #  finalGuid = reqParams[:guid]
-  #  bedeUrl = TARGETSERVER + "/" + eventAction + "?skinName=" + currentSkin + "&subid=" + reqParams[:subId] + "&calPath=/public/" + reqParams[:calPath]  \
-  #  + "&guid=" + finalGuid.gsub('_', '.')
+  def getEventTarget() # Return a specific event in desired skin
+    currSkin = getSkin(reqParams[:skin])
+    skinParam = "?skinName=" + currSkin
+    guidParam = "&guid=" + reqParams[:guid].gsub('_', '.')
+    calPathParam = '&calPath=%2Fpublic%2Fcals%2FMainCal'
+    bedeUrl = TARGETSERVER + "/" + eventAction + skinParam + calPathParam + guidParam
     
-  #  if reqParams[:recurrenceId] != '0'
-  #    bedeUrl += "&recurrenceId=" + reqParams[:recurrenceId]
-  #  else
-  #    bedeUrl += "&recurrenceId=" # is this necessary?
-  #  end
-    
-  #  if reqParams[:date]
-  #    bedeUrl += "&date=" + reqParams[:date]
-  #  end
-    
-  #  return bedeUrl
-  #end
+    if reqParams[:recurrenceId] != '0'
+      bedeUrl += "&recurrenceId=" + reqParams[:recurrenceId]
+    else
+      bedeUrl += "&recurrenceId=" # is this necessary?
+    end
+    if reqParams[:date]
+      bedeUrl += "&date=" + reqParams[:date]
+    end
+    return bedeUrl
+  end
   
   #def getExt()
 
