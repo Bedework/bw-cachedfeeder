@@ -80,6 +80,14 @@ class FeedController < ApplicationController
     addExtension()
   end
   
+  def event 
+    currUrl = FeedModel.new('event', params)
+    target = currUrl.buildUrl
+    logger.info("\nFEED: list URL is #{target}\n")
+    @xmlOutput = getFeed(target)
+    addExtension()
+   end
+  
   def icsRange
     currUrl = FeedModel.new('icsRange', params)
     target = currUrl.buildUrl
@@ -120,12 +128,7 @@ class FeedController < ApplicationController
   #  addExtension()
   #  end
   
-  #def event # request specific event 
-  #  currUrl = FeedModel.new('event', params)
-  #  target = currUrl.buildUrl
-  #  @xmlOutput = getFeed(target)
-  #  addExtension()
-  #end
+  
   
   #def external
   #  currUrl = FeedModel.new('external', params)
