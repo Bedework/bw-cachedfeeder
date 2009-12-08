@@ -41,6 +41,7 @@ class FeedController < ApplicationController
   
   def getFeed(feedUrl) # uses httpclient gem
     target = ARGV.shift || feedUrl
+    target = ARGV.shift || target  # shift again to get by version marker
     proxy = ENV['HTTP_PROXY']
     clnt = HTTPClient.new(proxy)
     clnt.reset(target)
