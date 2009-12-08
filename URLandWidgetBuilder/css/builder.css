@@ -1,0 +1,55 @@
+<style type="text/css">
+  <!--
+
+  input.slider {
+      border:0;
+      background:#D0D0D0;
+      color:#f6931f;
+      font-weight:bold;
+  }
+  input.datepicker {
+      background:#D0D0D0;
+  }
+  input.allClicker {
+      background: #f6931f;
+      width: 30px;
+      height: 30px;   
+  }
+  .invisible {
+	display: none;
+  } 
+  h1 {
+	color: #f6931f;
+	margin-left:auto;
+    width:99%;
+  }
+  ul.noBullet {
+    list-style-type: none;
+    margin-left:auto;
+    width:93%;
+  }
+  body { 
+    background-color: #D0D0D0;
+    font-family:"Trebuchet MS", Helvetica, sans-serif;
+  }
+  #codeBoxBox {
+    margin-left:auto;
+    width:93%;
+  }
+  #UrlBox {
+	font-family:monospace;
+  }
+  #selectGroup {
+     margin-left:auto;
+     width:93%;
+  }
+  #timeframeWidgets {
+     margin-left:auto;
+     width:93%;
+  }
+  p.prompt {
+	margin-left:auto;
+    width:98%;
+  }
+  -->
+</style>
