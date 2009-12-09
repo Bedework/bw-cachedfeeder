@@ -194,11 +194,11 @@
         if  (document.getElementById('startEndDates').checked == true) { 
           startDate = document.getElementById('startDate').value;
           if (startDate == "") {
-            startDate = '0000-00-00';
+            startDate = '00000000';
           }
           endDate = document.getElementById('endDate').value;
           if (endDate == "") {
-            endDate = '0000-00-00';
+            endDate = '00000000';
           }
           dates = startDate + '/' + endDate;
         } else {
@@ -207,7 +207,19 @@
         }
      
         if (document.getElementById('widget').checked == true) {
-	        skin = "html"
+	      if (document.getElementById('iframe').checked == true) {
+		    if (document.getElementById('list').checked == true) {
+			  skin = "list-html";
+		    } else {
+	          skin = "grid-html";
+            }
+	      } else {
+		    if (document.getElementById('list').checked == true) {
+		      skin = "list-json";
+			} else {
+              skin = "grid-json";
+	        }
+		  }
         } else {
           if (document.getElementById('ics').checked == true) {
             ics = true; 
@@ -244,15 +256,30 @@
       }
 
       function updateUrlDisplay(){
-        
-        document.getElementById('UrlBox').innerHTML = constructURL();
-        document.getElementById('UrlBox').href = constructURL();
-        outputType = $("input[name='output']:checked").val();
-	    if ( outputType == "iframe" ) {
-	      code = "<iframe src=\"" + constructURL() + "</iframe>";
-          document.getElementById('functions').innerHTML = code;
+	
+	    if (document.getElementById('widget').checked == true) {
+          outputType = $("input[name='output']:checked").val();
+	      if ( outputType == "iframe" ) {
+	        code = "<iframe src=\"" + constructURL() + "</iframe>";
+            document.getElementById('functions').innerHTML = code;
+          } else {
+	        url = constructURL() + '&setappvar=objName(bwObject)'
+	        jLine1 = '<html xmlns="http://www.w3.org/1999/xhtml">\n';
+  		    jLine2 = '  <head>\n';
+            jLine3 = '    <link type="text/css" href="../css/listEvents.css" rel="stylesheet" />\n';
+            jLine4 = '  </head>\n';
+		    jLine5 = '  <body>\n';
+		    jLine6 = '    <div id="bwOutput"></div>\n';
+		    jLine7 = '      &lt script> type="text/javascript" src="listEvents.js"> &lt/script>\n';
+		    jLine8 = '      &lt script> type="text/javascript" src="' + url + '"> &lt/script>\n';
+		    jLine9 = '  </body>\n'
+		    jLineA = '</html>'
+		    jsHtml = jLine1 + jLine2 + jLine3 + jLine4 + jLine5 + jLine6 + jLine7 + jLine8 + jLine9 + jLineA;
+	        document.getElementById('functions').innerHTML = jsHtml;
+          } 
         } else {
-	      document.getElementById('functions').innerHTML = "Yo Mama";
+         document.getElementById('UrlBox').innerHTML = constructURL();
+         document.getElementById('UrlBox').href = constructURL();
         }
       }
 
@@ -361,13 +388,13 @@
 
         <ul class="noBullet">
           <li class="trigger">
-            <input type="radio" id="list" name="type" value="List" />List
+            <input type="radio" id="list" name="type" onclick="updateUrlDisplay()" value="List" />List
           </li>
           <li class="trigger">
-            <input type="radio" id="week" name="type" value="Week" checked="checked" />Current Week
+            <input type="radio" id="week" name="type" onclick="updateUrlDisplay()" value="Week" checked="checked" />Current Week
           </li>
           <li class="trigger">
-            <input type="radio" id="month" name="type" value="Month" />Current Month
+            <input type="radio" id="month" name="type" onclick="updateUrlDisplay()" value="Month" />Current Month
           </li>
         </ul>
       </div>    
@@ -445,10 +472,10 @@
         
       <div id="codeBox" class="invisible">
         <p class="prompt">
-          JavaScript Functions
+          Widget Code
         </p>
         <div id="codeBoxBox">
-          <textarea name="functions" id="functions" rows="20" cols="60"></textarea>
+          <textarea name="functions" id="functions" rows="20" cols="78"></textarea>
         </div>
       </div>
     </form>
