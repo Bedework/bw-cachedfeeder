@@ -11,7 +11,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'v1.0/genFeedRange/:startDate/:endDate/:skin/:group/:categories', :controller => 'feed', :action => 'genFeedRange',
   :requirements => {:startDate => /\d{8}/, :endDate => /\d{8}/}
 
-  # Used for feeds (other than ICS) where the period (week, month, year) are specified
+  # Used for feeds (other than ICS) where the period (day, week, month, year) are specified
   map.connect 'v1.0/genFeedPeriod/:period/:date/:skin/:group/:categories', :controller => 'feed', :action => 'genFeedPeriod',
   :requirements => {:date => /\d{8}/}
    
@@ -31,7 +31,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'v1.0/groups/:skin/:objName', :controller=> 'feed', :action => 'groups'
   
   # Used for specific event
-  map.connect 'event/:skin/:recurrenceId/:guid', :controller => 'feed', :action => 'event',
+  map.connect 'v1.0/event/:skin/:recurrenceId/:guid', :controller => 'feed', :action => 'event',
   :requirements => {:guid => /.*/}  #needed when you have '.' in one of your path elements
 
     # requires guid extension "@mysite.edu" to have .edu (or other) mime type mapped to html in Apache. otherwise cache is served as plain text
