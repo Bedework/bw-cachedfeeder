@@ -182,15 +182,18 @@
 
       function constructURL(){
 	 
-        // Four cases:  
+        // five cases:  
         //   (1)  ics with number of days specified.  Other parameters: group, categories
         //   (2)  ics with date range specified.  Other parameters: group, categories
         //   (3)  other feed with number of days specified.  Other parameters: skin, group, categories
         //   (4)  other feed with date range specified.  Other paramters: skin, group, categories
+        //   (5)  other feed for week or month period specified (widget only)
  
         ics = false;
         byDays = false;
+        weekOrMonth = false;
 
+        // byDays?  If byDays, get number of days, else get start and end dates.
         if  (document.getElementById('startEndDates').checked == true) { 
           startDate = document.getElementById('startDate').value;
           if (startDate == "") {
@@ -205,39 +208,57 @@
           byDays = true;
           numberOfDays = document.getElementById('numDays').value;
         }
-     
-        if (document.getElementById('widget').checked == true) {
-	      if (document.getElementById('iframe').checked == true) {
-		    if (document.getElementById('list').checked == true) {
-			  skin = "list-html";
-		    } else {
-	          skin = "grid-html";
-            }
-	      } else {
-		    if (document.getElementById('list').checked == true) {
-		      skin = "list-json";
-			} else {
-              skin = "grid-json";
-	        }
-		  }
+
+        // Feed. ics?  If not, get skin.  ics doesn't need a skin.
+        if (document.getElementById('ics').checked == true) {
+            ics = true;
         } else {
-          if (document.getElementById('ics').checked == true) {
-            ics = true; 
-          } else {
             skin = $("input[name='dataType']:checked").val();
-          }
-        }
-        if (ics) {
+        } 
+
+        // Widget?  set skin.
+	          
+        if (document.getElementById('widget').checked == true) {
+	      //widget
+	      outputType = $("input[name='output']:checked").val();
+	      if (document.getElementById('list').checked == true) {
+		    //list
+		    if (outputType == "iframe") {
+			  // iframe
+		      skin = "list-html"; 
+		    } else {
+			  // javascript
+			  skin = "list-json";
+		    }
+		  } else {
+		    //week or month grid
+		    weekOrMonth = true;
+			if (outputType == "iframe") {
+			  // iframe
+			  skin = "grid-html"; 
+		    } else {
+			  // javascript
+			  skin = "grid-json";
+		    }
+		  }
+		}
+		if (weekOrMonth) {
+		  if (document.getElementById('week').checked == true) {
+	        constructedURL = getCacheUrlPrefix() + "genFeedPeriod"  + "/week/";
+	      } else {
+	        constructedURL = getCacheUrlPrefix() + "genFeedPeriod"  + "/month/";
+	      }
+		} else if (ics) {
           if (byDays) {
-            constructedURL = getCacheUrlPrefix() + "icsDays"  + "/" + numberOfDays + "/"
+            constructedURL = getCacheUrlPrefix() + "icsDays"  + "/" + numberOfDays + "/";
           } else {
-            constructedURL = getCacheUrlPrefix() + "icsRange"  + "/" + dates + "/"
+            constructedURL = getCacheUrlPrefix() + "icsRange"  + "/" + dates + "/";
           }
         } else {
           if (byDays) {
-            constructedURL = getCacheUrlPrefix() + "genFeedDays"  + "/" + numberOfDays + "/" + skin + "/"
+            constructedURL = getCacheUrlPrefix() + "genFeedDays"  + "/" + numberOfDays + "/" + skin + "/";
           } else {
-            constructedURL = getCacheUrlPrefix() + "genFeedRange"  + "/" + dates + "/" + skin + "/"
+            constructedURL = getCacheUrlPrefix() + "genFeedRange"  + "/" + dates + "/" + skin + "/";
           }
         }
         constructedURL = constructedURL + getGroupValue();
@@ -263,17 +284,21 @@
 	        code = "<iframe src=\"" + constructURL() + "</iframe>";
             document.getElementById('functions').innerHTML = code;
           } else {
-	        url = constructURL() + '&setappvar=objName(bwObject)'
+	        url = constructURL() + '&setappvar=objName(bwObject)';
 	        jLine1 = '<html xmlns="http://www.w3.org/1999/xhtml">\n';
-  		    jLine2 = '  <head>\n';
-            jLine3 = '    <link type="text/css" href="../css/listEvents.css" rel="stylesheet" />\n';
-            jLine4 = '  </head>\n';
+		    jLine2 = '  <head>\n';
+		    jLine3 = '    <link type="text/css" href="../css/blue.css" rel="stylesheet" />\n';
+		    jLine4 = '  </head>\n';
 		    jLine5 = '  <body>\n';
 		    jLine6 = '    <div id="bwOutput"></div>\n';
-		    jLine7 = '      &lt script> type="text/javascript" src="listEvents.js"> &lt/script>\n';
+	        if ( skin == "list-json") {
+		      jLine7 = '      &lt script> type="text/javascript" src="listEvents.js"> &lt/script>\n';
+	        } else {
+		      jLine7 = '      &lt script> type="text/javascript" src="gridEvents.js"> &lt/script>\n';
+		    }
 		    jLine8 = '      &lt script> type="text/javascript" src="' + url + '"> &lt/script>\n';
-		    jLine9 = '  </body>\n'
-		    jLineA = '</html>'
+		    jLine9 = '  </body>\n';
+		    jLineA = '</html>';
 		    jsHtml = jLine1 + jLine2 + jLine3 + jLine4 + jLine5 + jLine6 + jLine7 + jLine8 + jLine9 + jLineA;
 	        document.getElementById('functions').innerHTML = jsHtml;
           } 
