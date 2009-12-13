@@ -18,10 +18,11 @@
 //               events [
 //                  event info
 
-function cacheFeederUrl () { 
-  return "http://localhost:3000"
+function cacheFeederUrl() { 
+  return "http://localhost:3000";
 }
-function monthView (outputContainerID, groupAndCats) {
+
+function monthView(outputContainerID, groupAndCats) {
   var outputContainer = document.getElementById(outputContainerID);
   var output = "";
   var weekList = new Array();
@@ -58,13 +59,13 @@ function weekView(week, groupAndCats) {
   output += '  <tr>';
   for (i in dayList) {
     var day = week.days[dayList[i]];  
-    output += dayView(day, groupAndCats);
+    output += dayView(day, i, groupAndCats);
   }
   output += '  </tr>';
   return output;
 }
 
-function dayView(day, groupAndCats) {
+function dayView(day, dayPos, groupAndCats) {
   var output = "";
   var eventList = new Array();
   var eventIndex = 0; 
@@ -86,39 +87,40 @@ function dayView(day, groupAndCats) {
 
     for (i in eventList) {
       var event = day.events[eventList[i]];  
-      output += eventView(event);
+      output += eventView(event, dayPos, day.shortdate);
     }
     output += '  </ul>';
-    output += '</td>';
-    return output;
+    output += '</td>';  
   }
+  return output;
 }
 
-function eventView(event) {
+function eventView(event, dayPos, dayShortDate) {
+  var xpropertiesList = new Array();
+  var xpropertiesIndex = 0;
   output = "";
-		
+
   // catPath = calendar.encodedPath;
-  // guid = guid;
-  // recurrenceId = recurrenceId;
-  // switch (status)
-//	   case 'CANCELLED': 
-//	      eventClass = "eventCancelled";
-//	      break;
-//	    case 'TENTATIVE':
-//	      eventClass = "eventTentative";
-//	      break;
-//	    default:
-//	      // Special styles for the month grid
-//	      if ( position() mod 2 == 1 {
-//	        eventClass = "eventLinkA";
-//	      } else {
-//		    eventClass = "eventLinkB"
-//	      }
-//	    }
-//	  }
-	  // These are set in the add/modify subscription forms in the admin client;
-	  // if present, these override the background-color set by eventClass. The
-	  // subscription styles should not be used for canceled events (tentative is ok).
+
+  switch (event.status) {
+	case 'CANCELLED': 
+	  eventClass = "eventCancelled";
+	  break;
+	case 'TENTATIVE':
+	  eventClass = "eventTentative";
+	  break;
+	default:
+	  // Special styles for the month grid
+	  // if ( position() mod 2 == 1 {
+	  eventClass = "eventLinkA";
+	  //} else {
+	  //   eventClass = "eventLinkB";
+	  //}
+  }
+
+  // These are set in the add/modify subscription forms in the admin client;
+  // if present, these override the background-color set by eventClass. The
+  // subscription styles should not be used for canceled events (tentative is ok).
 
 //	  <xsl:variable name="subscriptionClass">
 //	    <xsl:if test="status != 'CANCELLED'">
@@ -130,65 +132,75 @@ function eventView(event) {
   // output += ' class="{$eventClass} {$subscriptionClass}'
   output += '>';
 
-//	  if (status='CANCELLED') {
-//	    output += $bwStr-EvCG-CanceledColon;
-//	    output += ' ';
-//	  }
-//	  if (start/shortdate != ../shortdate) {
-//	    output += $bwStr-EvCG-Cont;
-//	  } else if (start/allday = 'false') {
-//	    output += start/time;
-//	  } else 
-//	    output += $bwStr-EvCG-AllDayColon;
-//	  }
-//	  output += summary
-//	  if ( $dayPos > 5) {
-//	    eventTipClass = eventTipReverse;
-//	  } else {
-//		eventTipClass = eventTip;
-//	  }
-//	  if (status='CANCELLED') {
-//		output += '<span class="eventTipStatusCancelled">$bwStr-EvCG-CanceledColon</span>';
-//	  } else {
-//	    output += '<span class=$eventTipClass>$bwStr-EvCG-Tentative</span>';
-	    output += '<strong>' + event.summary + '</strong><br/>';
-//	    output += '$bwStr-EvCG-Time';
-//	    if ( start/allday == "true") {
-//	      output += '$bwStr-EvCG-AllDay';
-//	    } else {
-//	      if (start/shortdate != ../shortdate )
-//	        output += '"start/month"/"start/day"';
-//	        output += ' ';
-//	      }
-//	      output += start/time;
-//	      if (start/time != end/time) || (start/shortdate != end/shortdate) {
-//	        output += '-';
-//	        if ( end/shortdate != ../shortdate ) {
-//	          output += '"end/month"/"end/day"';
-//	          output += ' ';
-//	        }
-//	        output += end/time;
-//	      }
-//	    }
-//	    output += '<br/>';
-//	    if ("location/address" ) {
-//	      output += '$bwStr-EvCG-Location';
-//	      output += ' ';
-//	      output += 'location/address';
-//	      output += '<br/>';
-//	    }
-//	    if ( exists "xproperties/X-BEDEWORK-ALIAS")
-//	      ouput += '$bwStr-EvCG-TopicalArea'
-//	      for-each select="xproperties/X-BEDEWORK-ALIAS"
-//	        <xsl:call-template name="substring-afterLastInstanceOf">
-//	          <xsl:with-param name="string" select="values/text"/>
-//	          <xsl:with-param name="char">/</xsl:with-param>
-//	        </xsl:call-template>
-//	       }
-//	     }
-//	     output += '</span>';
-	     output += '</a>';
-	     output += '</li>';
-//	  }	
+  if (status == 'CANCELLED') {
+    output += 'Cancelled: ';  // bwStr-EvCG-CanceledColon
+    output += ' ';
+  }
+  if (event.start.shortdate != dayShortDate) {
+    output += 'Cont: '; // $bwStr-EvCG-Cont;
+  } else if (event.start.allday == 'false') {
+    output += event.start.time + ' ';
+  } else {
+    output += 'All Day: '; // $bwStr-EvCG-AllDayColon
+  }
+  output += event.summary;
+
+  // Build tool tips that display event information.
+  if ( dayPos > 5) {
+    eventTipClass = 'eventTipReverse';
+  } else {
+    eventTipClass = 'eventTip';
+  }
+  output += '<span class="' + eventTipClass + '">';
+  if (status == 'CANCELLED') {
+    output += '<span class="eventTipStatusCancelled">Cancelled: </span>';  //'$bwStr-EvCG-CanceledColon</span>';
+  }
+  if (status == 'TENTATIVE') {
+    output += '<span class="' + eventTipClass + '">Tentative: </span>';    //$bwStr-EvCG-Tentative</span>';
+  }
+  output += '<strong>' + event.summary + '</strong><br/>';
+  output += 'Time: ';  //'$bwStr-EvCG-Time';
+  if ( event.start.allday == "true") {
+    output += 'All Day: '; // $bwStr-EvCG-AllDay';
+  } else {
+    if (event.start.shortdate != dayShortDate) {
+      output += event.start.month + '/' + event.start.day;
+      output += ' ';
+    }
+    output += event.start.time;
+    if ((event.start.time != event.end.time) || (event.start.shortdate != event.end.shortdate)) {
+      output += '-';
+      if (event.end.shortdate != dayShortDate) {
+        output += event.end.month + '/' + event.end.day;
+        output += ' ';
+      }
+      output += event.end.time;
+    }
+  }
+  output += '<br/>';
+  if (event.location.address != undefined) {
+    output += 'Location:'; //'$bwStr-EvCG-Location';
+    output += ' ';
+    output += event.location.address;
+    output += '<br/>';
+  }
+  for (i = 0; i < event.xproperties.length; i++) {
+    xpropertiesList[xpropertiesIndex] = i;
+    xpropertiesIndex++;
+  }
+
+  for (i in xpropertiesList) {
+    var xproperty = event.xproperties[xpropertiesList[i]];
+    // can't have dashes in a variable name.  Ugh. 
+    if (xproperty["X-BEDEWORK-ALIAS"] != undefined) {
+      output += 'TopicalArea: ';
+      stringLoc = xproperty["X-BEDEWORK-ALIAS"].values.text.lastIndexOf('/');
+      output +=  xproperty["X-BEDEWORK-ALIAS"].values.text.slice(stringLoc + 1);
+      output += '<br>';
+    }
+  }
+  output += '</span>';
+  output += '</a>';
+  output += '</li>';
   return output;
 }
