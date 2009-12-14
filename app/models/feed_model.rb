@@ -1,7 +1,7 @@
 #
 #  FeedModel.rb
 #
-#  Created by Jeremy Bandini on 9/30/08.
+#  Created by Jeremy Bandini on 9/30/08.  Modified by Barry Leibson during the waning months of 2009.
 #  Copyright (c) 2008 Duke University. All rights reserved.
 
 
@@ -36,11 +36,6 @@ class FeedModel
     return workString
   end
   
-  def restoreSlashes(st) # Replace all tildes with slashes.  I.e., put them back where they belong.
-    workString = st.gsub('~', '/')
-    return workString
-  end
-  
   def getSkin(feedType) # determine by feedType
     return APP_CONFIG['skin'][feedType]
   end
@@ -49,16 +44,18 @@ class FeedModel
     target = 'default'
     myGroup = 'none'
     if reqParams[:group]
-      myGroup = restoreSlashes(reqParams[:group])
+      myGroup = reqParams[:group]
     end
     if reqParams[:categories]
       myCats = cleanCats(reqParams[:categories])
     end
-    
+    if reqParams[:objName]
+      myObjName = reqParams[:objName]
+    end 
     target = case urlType
-      when 'genFeedDays' then getTarget(myGroup, myCats, "gen", "days")
-      when 'genFeedRange' then getTarget(myGroup, myCats, "gen", "range")
-      when 'genFeedPeriod' then getTarget(myGroup, myCats, "gen", "period")
+      when 'genFeedDays' then getTarget(myGroup, myCats, "gen", "days", myObjName)
+      when 'genFeedRange' then getTarget(myGroup, myCats, "gen", "range", myObjName)
+      when 'genFeedPeriod' then getTarget(myGroup, myCats, "gen", "period", myObjName)
       when 'icsDays' then getTarget(myGroup, myCats, "ics", "days")
       when 'icsRange' then getTarget(myGroup, myCats, "ics", "range")
       when 'icsPeriod' then getTarget(myGroup, myCats, "ics", "period")
@@ -71,7 +68,7 @@ class FeedModel
     return target
   end
   
-  def getTarget(currGroup, currCats, genOrIcs, daysRangeOrPeriod) 
+  def getTarget(currGroup, currCats, genOrIcs, daysRangeOrPeriod, obj) 
     
     # set Bedework method and construct group and category information
     if daysRangeOrPeriod == 'period'
@@ -96,8 +93,13 @@ class FeedModel
     if genOrIcs == 'ics'
       bedeUrl = TARGETSERVER + "/" + action + "?format=text/calendar&setappvar=summaryMode(details)" + groupAndCats  
     else
+      if obj == '_none_'
+        objParam = ''
+      else
+        objParam = "&setappvar=objName(" + obj + ")"
+      end
       currentSkin = getSkin(reqParams[:skin]) 
-      bedeUrl = TARGETSERVER + "/" + action + "?skinName=" + currentSkin + "&setappvar=summaryMode(details)" + groupAndCats
+      bedeUrl = TARGETSERVER + "/" + action + "?skinName=" + currentSkin + "&setappvar=summaryMode(details)" + groupAndCats + objParam
     end
     if daysRangeOrPeriod == "range"
       if reqParams[:startDate] and reqParams[:endDate] 
