@@ -189,14 +189,18 @@ function eventView(event, dayPos, dayShortDate) {
     xpropertiesIndex++;
   }
 
+  firstOne = true; 
   for (i in xpropertiesList) {
     var xproperty = event.xproperties[xpropertiesList[i]];
-    // can't have dashes in a variable name.  Ugh. 
     if (xproperty["X-BEDEWORK-ALIAS"] != undefined) {
-      output += 'TopicalArea: ';
-      stringLoc = xproperty["X-BEDEWORK-ALIAS"].values.text.lastIndexOf('/');
-      output +=  xproperty["X-BEDEWORK-ALIAS"].values.text.slice(stringLoc + 1);
-      output += '<br>';
+	  stringLoc = xproperty["X-BEDEWORK-ALIAS"].values.text.lastIndexOf('/');
+	  topArea = xproperty["X-BEDEWORK-ALIAS"].values.text.slice(stringLoc + 1);
+	  if (firstOne) {
+        output += 'TopicalArea: ' + topArea;
+        firstOne = false;
+      } else {
+        output +=  ', ' + topArea;
+      }
     }
   }
   output += '</span>';
