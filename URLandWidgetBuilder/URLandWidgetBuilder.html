@@ -192,6 +192,7 @@
         ics = false;
         byDays = false;
         weekOrMonth = false;
+        jsonObject = false;
 
         // byDays?  If byDays, get number of days, else get start and end dates.
         if  (document.getElementById('startEndDates').checked == true) { 
@@ -229,6 +230,7 @@
 		    } else {
 			  // javascript
 			  skin = "list-json";
+			  jsonObject = true;
 		    }
 		  } else {
 		    //week or month grid
@@ -239,14 +241,15 @@
 		    } else {
 			  // javascript
 			  skin = "grid-json";
+			  jsonObject = true;
 		    }
 		  }
 		}
 		if (weekOrMonth) {
 		  if (document.getElementById('week').checked == true) {
-	        constructedURL = getCacheUrlPrefix() + "genFeedPeriod"  + "/week/";
+	        constructedURL = getCacheUrlPrefix() + "genFeedPeriod"  + "/week/00000000/" + skin + "/";
 	      } else {
-	        constructedURL = getCacheUrlPrefix() + "genFeedPeriod"  + "/month/";
+	        constructedURL = getCacheUrlPrefix() + "genFeedPeriod"  + "/month/00000000/" + skin + "/" ;
 	      }
 		} else if (ics) {
           if (byDays) {
@@ -261,6 +264,7 @@
             constructedURL = getCacheUrlPrefix() + "genFeedRange"  + "/" + dates + "/" + skin + "/";
           }
         }
+        
         constructedURL = constructedURL + getGroupValue();
 
         if (document.getElementById('allCategories').checked == true) {
@@ -273,6 +277,9 @@
             constructedURL = constructedURL + '/' + catList;
           }
         }
+        if (jsonObject) {
+          constructedURL += '/bwObject';
+        }
         return constructedURL;	
       }
 
@@ -284,7 +291,7 @@
 	        code = "<iframe src=\"" + constructURL() + "</iframe>";
             document.getElementById('functions').innerHTML = code;
           } else {
-	        url = constructURL() + '&setappvar=objName(bwObject)';
+	        url = constructURL();
 	        jLine1 = '<html xmlns="http://www.w3.org/1999/xhtml">\n';
 		    jLine2 = '  <head>\n';
 		    jLine3 = '    <link type="text/css" href="../css/blue.css" rel="stylesheet" />\n';
