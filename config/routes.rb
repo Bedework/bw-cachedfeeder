@@ -2,18 +2,21 @@ ActionController::Routing::Routes.draw do |map|
   # Routes define all Bedework parameters and feed caching URL segments
   # The priority is based upon order of creation: first created -> highest priority.
   
-  #all the URL's
+  # objName in the next three routes are there for the json feeds when 
 
   # Used for feeds (other than ICS) where the number of days is specified 
-  map.connect 'v1.0/genFeedDays/:days/:skin/:group/:categories', :controller => 'feed', :action => 'genFeedDays'
+  map.connect 'v1.0/genFeedDays/:days/:skin/:group/:categories/:objName:', :controller => 'feed', :action => 'genFeedDays',
+  :defaults => { :objName => '_none_'}
   
   # Used for feeds (other than ICS) where the start and end dates are specified.
-  map.connect 'v1.0/genFeedRange/:startDate/:endDate/:skin/:group/:categories', :controller => 'feed', :action => 'genFeedRange',
-  :requirements => {:startDate => /\d{8}/, :endDate => /\d{8}/}
+  map.connect 'v1.0/genFeedRange/:startDate/:endDate/:skin/:group/:categories/:objName', :controller => 'feed', :action => 'genFeedRange',
+  :requirements => {:startDate => /\d{8}/, :endDate => /\d{8}/},
+  :defaults => { :objName => '_none_'}
 
   # Used for feeds (other than ICS) where the period (day, week, month, year) are specified
-  map.connect 'v1.0/genFeedPeriod/:period/:date/:skin/:group/:categories', :controller => 'feed', :action => 'genFeedPeriod',
-  :requirements => {:date => /\d{8}/}
+  map.connect 'v1.0/genFeedPeriod/:period/:date/:skin/:group/:categories/:objName', :controller => 'feed', :action => 'genFeedPeriod',
+  :requirements => {:date => /\d{8}/},
+  :defaults => { :objName => '_none_'}
    
   # Used for ICS feeds where the number of days is specified.
   map.connect 'v1.0/icsDays/:days/:group/:categories', :controller=> 'feed', :action => 'icsDays'
