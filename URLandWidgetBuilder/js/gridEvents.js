@@ -40,14 +40,14 @@ function monthView(outputContainerID, groupAndCats) {
     // provide a shorthand reference to the week;
     var week = bwObject.bwEventCalendar.year.month.weeks[weekList[i]];
     output += '  <tr>';
-    output += weekView(week, groupAndCats);
+    output += weekView(outputContainerID, week, i, groupAndCats);
     output += '  </tr>';
   }
   output += '</table>';
   outputContainer.innerHTML = output;
 }
 
-function weekView(week, groupAndCats) { 
+function weekView(outputContainerID, week, weekIndex, groupAndCats) { 
   var output = "";
   var dayList = new Array();
   var dayIndex = 0;
@@ -59,13 +59,13 @@ function weekView(week, groupAndCats) {
   output += '  <tr>';
   for (i in dayList) {
     var day = week.days[dayList[i]];  
-    output += dayView(day, i, groupAndCats);
+    output += dayView(outputContainerID, weekIndex, day, i, groupAndCats);
   }
   output += '  </tr>';
   return output;
 }
 
-function dayView(day, dayPos, groupAndCats) {
+function dayView(outputContainerID, weekIndex, day, dayPos, groupAndCats) {
   var output = "";
   var eventList = new Array();
   var eventIndex = 0; 
@@ -87,7 +87,7 @@ function dayView(day, dayPos, groupAndCats) {
 
     for (i in eventList) {
       var event = day.events[eventList[i]];  
-      output += eventView(event, dayPos, day.shortdate);
+      output += eventView(outputContainerID, weekIndex, event, i , dayPos, day.shortdate, groupAndCats);
     }
     output += '  </ul>';
     output += '</td>';  
@@ -95,7 +95,7 @@ function dayView(day, dayPos, groupAndCats) {
   return output;
 }
 
-function eventView(event, dayPos, dayShortDate) {
+function eventView(outputContainerID, weekIndex, event, eventIndex, dayPos, dayShortDate, groupAndCats) {
   var xpropertiesList = new Array();
   var xpropertiesIndex = 0;
   output = "";
@@ -122,13 +122,15 @@ function eventView(event, dayPos, dayShortDate) {
   // if present, these override the background-color set by eventClass. The
   // subscription styles should not be used for canceled events (tentative is ok).
 
-//	  <xsl:variable name="subscriptionClass">
-//	    <xsl:if test="status != 'CANCELLED'">
-//	      <xsl:apply-templates select="categories" mode="customEventColor"/>
-//	    </xsl:if>
-//	  </xsl:variable>
+  //	  <xsl:variable name="subscriptionClass">
+  //	    <xsl:if test="status != 'CANCELLED'">
+  //	      <xsl:apply-templates select="categories" mode="customEventColor"/>
+  //	    </xsl:if>
+  //	  </xsl:variable>
   output += '<li>';
-  output += '<a href="' + cacheFeederUrl() + '/v1.0/event/list-html/' + event.recurrenceId + '/' + event.guid + '"';
+  output += '<a href="javascript:showEvent('
+  output += "'" + outputContainerID + "'," + weekIndex + ',' + dayPos + ',' 
+                    + eventIndex + ",'" + groupAndCats + "'" + ')";';
   // output += ' class="{$eventClass} {$subscriptionClass}'
   output += '>';
 
@@ -207,4 +209,48 @@ function eventView(event, dayPos, dayShortDate) {
   output += '</a>';
   output += '</li>';
   return output;
+}
+
+function showEvent(outputContainerID, weekIndex, dayIndex, eventIndex, groupAndCats) {
+  var outputContainer = document.getElementById(outputContainerID);
+  var output = "";
+  // provide a shorthand reference to the event:
+  var week = bwObject.bwEventCalendar.year.month.weeks[weekIndex];
+  var day = week.days[dayIndex];
+  var event = day.events[eventIndex];
+  
+  // create the event
+  output += "<h1 id=\"bwEventsTitle\">" + event.summary + "</h1>";
+  output += "<table id=\"bwEventLogistics\">";
+  output += "<tr><th>When:</th><td>" + event.start.longdate + " ";
+  output += event.start.time;
+  if ((event.start.shortdate != event.end.shortdate) && (event.start.time != event.end.time)) {
+    output += " - " + event.end.longdate + " ";
+    output += event.end.time;
+  } else if (event.start.time != event.end.time) {
+    output += " - " + event.end.time;
+  }
+  output += "</td></tr>";
+  if (event.location.link != "") {
+    output += '<tr><th>Where:</th><td><a href="' + event.location.link + '">' + event.location.address + '</a></td></tr>';
+  } else {
+    output += '<tr><th>Where:</th><td>' + event.location.address + '</td></tr>';
+  }
+  
+  output += "<tr><th>Description:</th><td>" + event.description + "</td></tr>";
+  output += "<tr><th>Calendar:</th><td>" + event.calendar.name + "</td></tr>";
+  if (event.categories != "") {
+    output += "<tr><th>Categories:</th><td>" + event.categories + "</td></tr>";
+  }
+  if (event.link != "") {
+    output += '<tr><th>See:</th><td><a href="' + event.link + '">' + event.link + '</a></td></tr>';
+  }
+  output += "</table>";
+  
+  // create a link back to the main view
+  output += '<p id="bwEventsListLink"><a href="javascript:monthView(' + "'" + outputContainerID 
+                + "','" + groupAndCats + "'" + ')">Return to Calendar</a>';
+  
+  // Send the output to the container:
+  outputContainer.innerHTML = output;
 }
