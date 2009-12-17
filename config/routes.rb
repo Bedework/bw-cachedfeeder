@@ -5,7 +5,7 @@ ActionController::Routing::Routes.draw do |map|
   # objName in the next three routes are there for the json feeds when 
 
   # Used for feeds (other than ICS) where the number of days is specified 
-  map.connect 'v1.0/genFeedDays/:days/:skin/:group/:categories/:objName:', :controller => 'feed', :action => 'genFeedDays',
+  map.connect 'v1.0/genFeedDays/:days/:skin/:group/:categories/:objName', :controller => 'feed', :action => 'genFeedDays',
   :defaults => { :objName => '_none_'}
   
   # Used for feeds (other than ICS) where the start and end dates are specified.
@@ -35,6 +35,9 @@ ActionController::Routing::Routes.draw do |map|
   
   # Used for specific event
   map.connect 'v1.0/event/:skin/:recurrenceId/:guid', :controller => 'feed', :action => 'event',
+  :requirements => {:guid => /.*/}  #needed when you have '.' in one of your path elements
+  
+  map.connect 'v1.0/download/:recurrenceId/:guid/:eventId', :controller => 'feed', :action => 'download',
   :requirements => {:guid => /.*/}  #needed when you have '.' in one of your path elements
 
     # requires guid extension "@mysite.edu" to have .edu (or other) mime type mapped to html in Apache. otherwise cache is served as plain text
