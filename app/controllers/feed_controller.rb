@@ -14,6 +14,7 @@ class FeedController < ApplicationController
   caches_page :external
   caches_page :categories
   caches_page :groups
+  caches_page :download
   
   #before_filter :inspect
   def addExtension
@@ -26,7 +27,13 @@ class FeedController < ApplicationController
       return
     end
     
-    if params[:action] == 'icsDays' || params[:action] == 'icsRange' || params[:action] == 'icsPeriod' 
+    if params[:action] == 'download'
+       ActionController::Base.page_cache_extension = '.ics'
+       headers["Content-Type"] = APP_CONFIG['content_type']['ics']
+       return
+    end
+    
+    if params[:action] == 'icsDays' || params[:action] == 'icsRange' || params[:action] == 'icsPeriod'
       ActionController::Base.page_cache_extension = '.ics'
       headers["Content-Type"] = APP_CONFIG['content_type']['ics']
       return
@@ -87,7 +94,15 @@ class FeedController < ApplicationController
     logger.info("\nFEED: list URL is #{target}\n")
     @xmlOutput = getFeed(target)
     addExtension()
-   end
+  end
+   
+  def download
+    currUrl = FeedModel.new('download', params)
+    target = currUrl.buildUrl
+    logger.info("\nFEED: list URL is #{target}\n")
+    @xmlOutput = getFeed(target)
+    addExtension()
+  end
   
   def icsRange
     currUrl = FeedModel.new('icsRange', params)
