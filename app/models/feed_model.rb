@@ -7,7 +7,7 @@
 
 class FeedModel
   attr_accessor :urlType, :reqParams
-  attr_reader :listAction, :gridAction, :categoriesAction, :groupsAction, :eventAction
+  attr_reader :listAction, :gridAction, :categoriesAction, :groupsAction, :eventAction, :downloadAction
   def initialize(urlType, reqParams)
     @urlType, @reqParams = urlType, reqParams 
     @gridAction = 'main/setViewPeriod.do'
@@ -15,6 +15,7 @@ class FeedModel
     @categoriesAction = 'widget/categories.do'
     @groupsAction = 'widget/groups.do'
     @eventAction = 'event/eventView.do'
+    @downloadAction = 'misc/export.gdo'
   end
   
   def convertCats(catStr) # Convert ~ seperated string to bedework &cat=category format
@@ -62,6 +63,7 @@ class FeedModel
       when 'categories' then getCategories()
       when 'groups' then getGroups()
       when 'event' then getEventTarget()
+      when 'download' then getDownloadTarget()
       # when 'external' then getExt()
     end
     
@@ -135,12 +137,28 @@ class FeedModel
     currSkin = getSkin(reqParams[:skin])
     obj = reqParams[:objName]
     bedeUrl = TARGETSERVER + "/" + categoriesAction + "?skinName=" + currSkin + "&setappvar=objName(" + obj + ")"
+    return bedeUrl
   end
   
   def getGroups()
     currSkin = getSkin(reqParams[:skin])
     obj = reqParams[:objName]
     bedeUrl = TARGETSERVER + "/" + groupsAction + "?skinName=" + currSkin + "&setappvar=objName(" + obj + ")"
+    return bedeUrl
+  end
+  
+  def getDownloadTarget()
+    calPathParam = '?calPath=%2Fpublic%2Fcals%2FMainCal'
+    guidParam = "&guid=" + reqParams[:guid].gsub('_', '.')
+    bedeUrl = TARGETSERVER + "/" + downloadAction + calPathParam + guidParam + '&nocache=no&contentName=' 
+    bedeUrl += reqParams[:eventId] + '.ics'
+    
+    if reqParams[:recurrenceId] != '0'
+      bedeUrl += "&recurrenceId=" + reqParams[:recurrenceId]
+    else
+      bedeUrl += "&recurrenceId=" # is this necessary?
+    end
+    return bedeUrl
   end
   
   
