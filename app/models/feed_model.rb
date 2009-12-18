@@ -150,8 +150,8 @@ class FeedModel
   def getDownloadTarget()
     calPathParam = '?calPath=%2Fpublic%2Fcals%2FMainCal'
     guidParam = "&guid=" + reqParams[:guid].gsub('_', '.')
-    bedeUrl = TARGETSERVER + "/" + downloadAction + calPathParam + guidParam + '&nocache=no&contentName=' 
-    bedeUrl += reqParams[:eventId] + '.ics'
+    bedeUrl = TARGETSERVER + "/" + downloadAction + calPathParam + guidParam + '&nocache=no&contentName='
+    bedeUrl += reqParams[:fileName]
     
     if reqParams[:recurrenceId] != '0'
       bedeUrl += "&recurrenceId=" + reqParams[:recurrenceId]
