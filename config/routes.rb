@@ -37,11 +37,10 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'v1.0/event/:skin/:recurrenceId/:guid', :controller => 'feed', :action => 'event',
   :requirements => {:guid => /.*/}  #needed when you have '.' in one of your path elements
   
-  map.connect 'v1.0/download/:recurrenceId/:guid/:eventId', :controller => 'feed', :action => 'download',
-  :requirements => {:guid => /.*/}  #needed when you have '.' in one of your path elements
+  map.connect 'v1.0/download/:recurrenceId/:guid/:fileName', :controller => 'feed', :action => 'download',
+  :requirements => {:guid => /.*/, :fileName => /.*/}  #needed when you have '.' in one of your path elements
 
-    # requires guid extension "@mysite.edu" to have .edu (or other) mime type mapped to html in Apache. otherwise cache is served as plain text
-  
+  # requires guid extension "@mysite.edu" to have .edu (or other) mime type mapped to html in Apache. otherwise cache is served as plain text
 
   # Allow downloading Web Service WSDL as a file with an extension
   # instead of a file named 'wsdl'
