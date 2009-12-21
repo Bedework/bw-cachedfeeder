@@ -99,8 +99,8 @@
         var currentCreator = "";    
         $.each(cats.bwCategories.categories.sort(sortByCreator), function(i, category){
           catCreator = category.creator.replace("/principals/users/","");
-          catKeyword = category.keyword;
-          catID = category.id;  
+          catKeyword = category.value;
+          catID = category.uid;  
           catCreatorLine = "<td>Created by: <b>" + catCreator + "</b></td>"
           tdLine = "<td><input type=\"checkbox\" name=\"categoryChecks\" onclick=\"updateUrlDisplay()\" value=\"" + catID +  "\">" + catKeyword + "</td>";
           if (currentCreator == "") {   
