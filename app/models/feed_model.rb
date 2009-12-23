@@ -75,7 +75,7 @@ class FeedModel
     # set Bedework method and construct group and category information
     if daysRangeOrPeriod == 'period'
       action = gridAction
-      groupAndCats = "&setappvar(filter:" + currGroup + "~" + currCats + ")"
+      groupAndCats = "&setappvar=filter(grpAndCats:" + currGroup + "~" + currCats + ")"
     else
       action = listAction
       if currCats == 'all'
