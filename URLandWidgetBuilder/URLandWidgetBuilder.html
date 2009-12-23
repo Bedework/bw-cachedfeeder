@@ -12,7 +12,6 @@
     <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui-1.7.2.min.js"></script>
     <script type="text/javascript" src="http://localhost:3000/v1.0/categories/widget-json-cats/catsObj"></script>
-    <script type="text/javascript" src="http://localhost:3000/v1.0/groups/widget-json-groups/groupsObj"></script>
 
     <link type="text/css" href="css/ui-lightness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
     <link type="text/css" href="css/builder.css" rel="stylesheet">
@@ -72,52 +71,37 @@
       var cats;  // holds category tree returned by script call to the feeder app.
       var grps;  // holds group tree returned by script call to the feeder app.
 
-      function getCatAndGroupData() {
+      function getCatAndLimitData() {
 	   
 	    cats = catsObj;
-	    processCatData();
-	    grps = groupsObj;
-        processGroupData();
+	    processOrgCatData();
+	    processRegularCatData();
+        processLimitCatData();
       }
     
-      function sortByCreator(a,b) {
-        a = a.creator;
-        b = b.creator;
+      function sortByValue(a,b) {
+        a = a.value;
+        b = b.value;
         return a == b ? 0 : (a < b ? -1 : 1)
       }
-       
-      function processCatData() {
-    
+
+      function processOrgCatData() {
+
         //set n to the number of columns 
         var n = 4;
-        
-        //initialize with all/none button and start of first row.
-        // allNoneClickerLine = "<input type=\"checkbox\" onclick=\"checkAll(this.id, 'activities')\" class=\"allClicker\" name=\"allClicker\" id=\"allClicker\"/><label for=\"allClicker\">Select all/none</label>";
-
-        // var trLine = "<tr><td>" + allNoneClickerLine + "</td></tr>";     
-        //$("#activities").append(trLine);
+        var column = 1;
+        var trLine = "<tr><td>Offices:</td></tr><tr>";
+        var tdLine;
         var currentCreator = "";    
-        $.each(cats.bwCategories.categories.sort(sortByCreator), function(i, category){
-          catCreator = category.creator.replace("/principals/users/","");
-          catKeyword = category.value;
-          catID = category.uid;  
-          catCreatorLine = "<td>Created by: <b>" + catCreator + "</b></td>"
-          tdLine = "<td><input type=\"checkbox\" name=\"categoryChecks\" onclick=\"updateUrlDisplay()\" value=\"" + catID +  "\">" + catKeyword + "</td>";
-          if (currentCreator == "") {   
-            trLine = "<tr>" + catCreatorLine + "</tr>";
-            $("#categoriesTableBody").append(trLine);
-            trLine = "<tr>" + tdLine;
-            column = 2;
-            currentCreator = catCreator;
-          } else if (currentCreator != catCreator) {
-            $("#categoriesTableBody").append(trLine + "</tr><tr>" + catCreatorLine + "</tr>");
-            trLine = "<tr>" + tdLine;   
-            column = 2;
-            currentCreator = catCreator;
-          } else {
+        $.each(cats.bwCategories.categories.sort(sortByValue), function(i, category) {
+	      // skip over any system categories
+	      if ((category.value.substring(0,4) != 'sys/') && (category.value.substring(0,4) == 'org/')) {
+            catKeyword = category.value;
+            catUid = category.uid;  
+            tdLine = "<td><input type=\"checkbox\" name=\"categoryChecks\" onclick=\"updateUrlDisplay()\" value=\"" + catUid +  "\">" + catKeyword.substring(4) + "</td>"
             //arrange the categories -- n checkboxes per line      
             if ( column != n ) {
-              trLine = trLine + tdLine;
+              trLine += tdLine;
               column++; 
             } else {
               trLine = trLine + tdLine + "</tr>";
@@ -125,7 +109,41 @@
               trLine = "<tr>"
               column = 1;
             }
-          }   
+          }  
+        });
+		if ( column == 1) {
+	      lastLine = "</tr>";
+	    } else {
+	      lastLine = trLine + "</tr>";
+	    }
+	    $("#categoriesTableBody").append(lastLine);      
+	  }
+       
+      function processRegularCatData() {
+    
+        //set n to the number of columns 
+        var n = 4;
+        var column = 1;
+        var trLine = "<tr><td>Other Categories:</td></tr><tr>";
+        var tdLine;
+        var currentCreator = "";    
+        $.each(cats.bwCategories.categories.sort(sortByValue), function(i, category) {
+	      // skip over any system categories
+	      if ((category.value.substring(0,4) != 'sys/') && (category.value.substring(0,4) != 'org/')) {
+            catKeyword = category.value;
+            catID = category.uid;  
+            tdLine = "<td><input type=\"checkbox\" name=\"categoryChecks\" onclick=\"updateUrlDisplay()\" value=\"" + catID +  "\">" + catKeyword + "</td>"
+            //arrange the categories -- n checkboxes per line      
+            if ( column != n ) {
+              trLine += tdLine;
+              column++; 
+            } else {
+              trLine = trLine + tdLine + "</tr>";
+              $("#categoriesTableBody").append(trLine);
+              trLine = "<tr>"
+              column = 1;
+            }
+          }  
         });
          
         if ( column == 1) {
@@ -133,7 +151,7 @@
         } else {
           lastLine = trLine + "</tr>";
         }
-        $("#activities").append(lastLine);      
+        $("#categoriesTableBody").append(lastLine);      
       }
 
       function replaceAll(text, strA, strB) {
@@ -144,13 +162,14 @@
         return text;
       }
       
-      function processGroupData() {
-        trLine = "<tr><td><input type=\"radio\" checked\=\"checked\" id=\"no--Limit\" name=\"groupCheck\" onclick=\"updateUrlDisplay()\" value=\"all\">No Limit</td></tr>";
+      function processLimitCatData() {
+        trLine = "<tr><td><input type=\"radio\" checked\=\"checked\" id=\"no--Limit\" name=\"limitCatCheck\" onclick=\"updateUrlDisplay()\" value=\"all\">No Limit</td></tr>";
         $("#filter").append(trLine);
-        $.each(grps.bwGroups.groups, function(i, group){ 
-           eventOwner = replaceAll(group.eventOwner,"/","~");
-           trLine = "<tr><td><input type=\"radio\" id=\"" + group.name + "\" name=\"groupCheck\" onclick=\"updateUrlDisplay()\" value=\"" + eventOwner +  "\">" + group.name + "</td></tr>";
-           $("#filter").append(trLine);
+        $.each(cats.bwCategories.categories.sort(sortByValue), function(i, category){
+	       if (category.value.substring(0,4) == 'org/' ) {
+              trLine = "<tr><td><input type=\"radio\" id=\"Limit" + category.value + "\" name=\"limitCatCheck\" onclick=\"updateUrlDisplay()\" value=\"" + category.uid +  "\">" + category.value.substring(4) + "</td></tr>";
+             $("#filter").append(trLine);
+           }
         }); 
       }
    
@@ -160,8 +179,8 @@
       //   updateUrlDisplay()
       // }
 
-      function getGroupValue () {
-        return $("input[name='groupCheck']:checked").val();
+      function getLimitCatValue () {
+        return $("input[name='limitCatCheck']:checked").val();
       }
 
       // construct category parameters
@@ -177,16 +196,16 @@
         return categoryIDList;
       }
     
-      //##### end of category/group functions
+      //##### end of category/limit functions
 
 
       function constructURL(){
 	 
         // five cases:  
-        //   (1)  ics with number of days specified.  Other parameters: group, categories
-        //   (2)  ics with date range specified.  Other parameters: group, categories
-        //   (3)  other feed with number of days specified.  Other parameters: skin, group, categories
-        //   (4)  other feed with date range specified.  Other paramters: skin, group, categories
+        //   (1)  ics with number of days specified.  Other parameters: limitCategory, categories
+        //   (2)  ics with date range specified.  Other parameters: limitCategory, categories
+        //   (3)  other feed with number of days specified.  Other parameters: skin, limitCategory, categories
+        //   (4)  other feed with date range specified.  Other paramters: skin, limitCategory, categories
         //   (5)  other feed for week or month period specified (widget only)
  
         ics = false;
@@ -265,7 +284,7 @@
           }
         }
         
-        constructedURL = constructedURL + getGroupValue();
+        constructedURL = constructedURL + getLimitCatValue();
 
         if (document.getElementById('allCategories').checked == true) {
           constructedURL = constructedURL + '/all';
@@ -317,7 +336,7 @@
 
       $(document).ready(function(){ 
 	
-	    getCatAndGroupData(); //from server
+	    getCatAndLimitData(); //from server
 	
         //$('#startDate').attr('disabled', 'disabled'); 
         //$('#endDate').attr('disabled', 'disabled'); 
