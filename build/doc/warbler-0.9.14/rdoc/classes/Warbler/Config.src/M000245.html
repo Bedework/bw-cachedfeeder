@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>new (Warbler::Config)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/warbler/config.rb, line 93</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">warbler_home</span> = <span class="ruby-constant">WARBLER_HOME</span>)
+      <span class="ruby-ivar">@warbler_home</span> = <span class="ruby-identifier">warbler_home</span>
+      <span class="ruby-ivar">@staging_dir</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;tmp&quot;</span>, <span class="ruby-value str">&quot;war&quot;</span>)
+      <span class="ruby-ivar">@dirs</span>        = <span class="ruby-constant">TOP_DIRS</span>.<span class="ruby-identifier">select</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">d</span><span class="ruby-operator">|</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">d</span>)}
+      <span class="ruby-ivar">@includes</span>    = <span class="ruby-constant">FileList</span>[]
+      <span class="ruby-ivar">@excludes</span>    = <span class="ruby-constant">FileList</span>[]
+      <span class="ruby-ivar">@java_libs</span>   = <span class="ruby-identifier">default_jar_files</span>
+      <span class="ruby-ivar">@java_classes</span> = <span class="ruby-constant">FileList</span>[]
+      <span class="ruby-ivar">@gems</span>        = <span class="ruby-constant">Warbler</span><span class="ruby-operator">::</span><span class="ruby-constant">Gems</span>.<span class="ruby-identifier">new</span>
+      <span class="ruby-ivar">@gem_dependencies</span> = <span class="ruby-keyword kw">true</span>
+      <span class="ruby-ivar">@exclude_logs</span> = <span class="ruby-keyword kw">true</span>
+      <span class="ruby-ivar">@public_html</span> = <span class="ruby-constant">FileList</span>[<span class="ruby-value str">&quot;public/**/*&quot;</span>]
+      <span class="ruby-ivar">@pathmaps</span>    = <span class="ruby-identifier">default_pathmaps</span>
+      <span class="ruby-ivar">@webxml</span>      = <span class="ruby-identifier">default_webxml_config</span>
+      <span class="ruby-ivar">@rails_root</span>  = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-keyword kw">defined?</span>(<span class="ruby-constant">RAILS_ROOT</span>) <span class="ruby-operator">?</span> <span class="ruby-constant">RAILS_ROOT</span> <span class="ruby-operator">:</span> <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">getwd</span>)
+      <span class="ruby-ivar">@war_name</span>    = <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-ivar">@rails_root</span>)
+      <span class="ruby-identifier">auto_detect_frameworks</span>
+      <span class="ruby-keyword kw">yield</span> <span class="ruby-keyword kw">self</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+      <span class="ruby-ivar">@excludes</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">warbler_vendor_excludes</span>(<span class="ruby-identifier">warbler_home</span>)
+      <span class="ruby-ivar">@excludes</span> <span class="ruby-operator">+=</span> <span class="ruby-constant">FileList</span>[<span class="ruby-value str">&quot;**/*.log&quot;</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@exclude_logs</span>
+      <span class="ruby-ivar">@excludes</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-ivar">@staging_dir</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

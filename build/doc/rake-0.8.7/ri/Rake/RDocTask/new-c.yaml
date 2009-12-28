@@ -1,0 +1,13 @@
+--- !ruby/object:RI::MethodDescription 
+visibility: public
+block_params: self
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Create an RDoc task with the given name. See the RDocTask class overview for
+    documentation.
+full_name: Rake::RDocTask::new
+params: (name = :rdoc) {|self| ...}
+name: new
+is_singleton: true
+aliases: []
+

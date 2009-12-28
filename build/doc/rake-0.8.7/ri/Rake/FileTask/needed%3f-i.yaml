@@ -1,0 +1,13 @@
+--- !ruby/object:RI::MethodDescription 
+visibility: public
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Is this file task needed? Yes if it doesn't exist, or if its time stamp is
+    out of date.
+full_name: Rake::FileTask#needed?
+params: ()
+name: needed?
+is_singleton: false
+aliases: []
+

@@ -1,0 +1,11 @@
+--- !ruby/object:RI::MethodDescription 
+visibility: public
+block_params: self if block_given?
+comment: 
+full_name: Warbler::Task::new
+params: (name = :war, config = nil, tasks = :define_tasks) {|self if block_given?|
+  ...}
+name: new
+is_singleton: true
+aliases: []
+

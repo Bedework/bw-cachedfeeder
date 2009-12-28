@@ -1,0 +1,37 @@
+--- !ruby/object:RI::ClassDescription 
+includes: []
+
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Alternate implementations of system() and backticks `` on Windows for ruby-1.8
+    and earlier.
+attributes: []
+
+instance_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: backticks
+- !ruby/object:RI::MethodSummary 
+  name: find_runnable
+- !ruby/object:RI::MethodSummary 
+  name: repair_command
+- !ruby/object:RI::MethodSummary 
+  name: system
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: define_module_function
+full_name: Rake::AltSystem
+constants: 
+- !ruby/object:RI::Constant 
+  comment: 
+  value: Config::CONFIG["host_os"] =~ %r!(msdos|mswin|djgpp|mingw)!
+  name: WINDOWS
+- !ruby/object:RI::Constant 
+  comment: 
+  value: '%w[com exe bat cmd]'
+  name: RUNNABLE_EXTS
+- !ruby/object:RI::Constant 
+  comment: 
+  value: '%r!\.(#{RUNNABLE_EXTS.join(''|'')})\Z!i'
+  name: RUNNABLE_PATTERN
+superclass: 
+name: AltSystem

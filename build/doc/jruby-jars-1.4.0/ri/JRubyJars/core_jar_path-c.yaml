@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+visibility: public
+block_params: 
+comment: 
+full_name: JRubyJars::core_jar_path
+params: ()
+name: core_jar_path
+is_singleton: true
+aliases: []
+

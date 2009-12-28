@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>context_params (Warbler::WebxmlOpenStruct)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/warbler/config.rb, line 224</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">context_params</span>
+      <span class="ruby-identifier">require</span> <span class="ruby-value str">'cgi'</span>
+      <span class="ruby-identifier">params</span> = {}
+      <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+        <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">v</span>
+        <span class="ruby-keyword kw">when</span> <span class="ruby-constant">WebxmlOpenStruct</span>
+          <span class="ruby-identifier">nested_params</span> = <span class="ruby-identifier">v</span>.<span class="ruby-identifier">context_params</span>
+          <span class="ruby-identifier">nested_params</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">nk</span>,<span class="ruby-identifier">nv</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">params</span>[<span class="ruby-node">&quot;#{CGI::escapeHTML(k.to_s)}.#{nk}&quot;</span>] = <span class="ruby-identifier">nv</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">params</span>[<span class="ruby-constant">CGI</span><span class="ruby-operator">::</span><span class="ruby-identifier">escapeHTML</span>(<span class="ruby-identifier">k</span>.<span class="ruby-identifier">to_s</span>)] = <span class="ruby-constant">CGI</span><span class="ruby-operator">::</span><span class="ruby-identifier">escapeHTML</span>(<span class="ruby-identifier">v</span>.<span class="ruby-identifier">to_s</span>)
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">params</span>.<span class="ruby-identifier">delete_if</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> [<span class="ruby-value str">'ignored'</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">ignored</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">k</span>.<span class="ruby-identifier">to_s</span>) }
+      <span class="ruby-identifier">params</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

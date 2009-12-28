@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+visibility: public
+block_params: 
+comment: 
+full_name: Warbler::WebxmlOpenStruct#context_params
+params: ()
+name: context_params
+is_singleton: false
+aliases: []
+

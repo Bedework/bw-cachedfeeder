@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+visibility: public
+block_params: 
+comment: 
+full_name: Rake::FtpFile::date
+params: ()
+name: date
+is_singleton: true
+aliases: []
+

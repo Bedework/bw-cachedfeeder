@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+visibility: public
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Display the tasks and comments.
+full_name: Rake::Application#display_tasks_and_comments
+params: ()
+name: display_tasks_and_comments
+is_singleton: false
+aliases: []
+

@@ -1,0 +1,25 @@
+--- !ruby/object:RI::ClassDescription 
+includes: []
+
+comment: 
+attributes: []
+
+instance_methods: []
+
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: core_jar_path
+- !ruby/object:RI::MethodSummary 
+  name: stdlib_jar_path
+full_name: JRubyJars
+constants: 
+- !ruby/object:RI::Constant 
+  comment: 
+  value: '''1.4.0'''
+  name: VERSION
+- !ruby/object:RI::Constant 
+  comment: 
+  value: File.expand_path(File.dirname(__FILE__))
+  name: PATH
+superclass: 
+name: JRubyJars

@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+visibility: public
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Create an FTP uploader targetting the directory <tt>path</tt> on <tt>host</tt>
+    using the given account and password. <tt>path</tt> will be the root path of the
+    uploader.
+full_name: Rake::FtpUploader::new
+params: (path, host, account, password)
+name: new
+is_singleton: true
+aliases: []
+

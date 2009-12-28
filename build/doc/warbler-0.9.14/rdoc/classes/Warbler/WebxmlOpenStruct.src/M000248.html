@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>servlet_context_listener (Warbler::WebxmlOpenStruct)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/warbler/config.rb, line 203</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">servlet_context_listener</span>
+      <span class="ruby-keyword kw">case</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">booter</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:rack</span>
+        <span class="ruby-value str">&quot;org.jruby.rack.RackServletContextListener&quot;</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:merb</span>
+        <span class="ruby-value str">&quot;org.jruby.rack.merb.MerbServletContextListener&quot;</span>
+      <span class="ruby-keyword kw">else</span> <span class="ruby-comment cmt"># :rails, default</span>
+        <span class="ruby-value str">&quot;org.jruby.rack.rails.RailsServletContextListener&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

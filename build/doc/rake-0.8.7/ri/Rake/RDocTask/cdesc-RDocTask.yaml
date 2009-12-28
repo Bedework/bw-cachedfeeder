@@ -1,0 +1,125 @@
+--- !ruby/object:RI::ClassDescription 
+includes: []
+
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Create a documentation task that will generate the RDoc files for a project.
+- !ruby/struct:SM::Flow::P 
+  body: 'The RDocTask will create the following targets:'
+- !ruby/object:SM::Flow::LIST 
+  type: :LABELED
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    body: Main task for this RDOC task.
+    label: <b><em>rdoc</em></b>
+  - !ruby/struct:SM::Flow::LI 
+    body: Delete all the rdoc files. This target is automatically added to the main
+      clobber target.
+    label: <b>:clobber_<em>rdoc</em></b>
+  - !ruby/struct:SM::Flow::LI 
+    body: Rebuild the rdoc files from scratch, even if they are not out of date.
+    label: <b>:re<em>rdoc</em></b>
+- !ruby/struct:SM::Flow::P 
+  body: 'Simple Example:'
+- !ruby/struct:SM::Flow::VERB 
+  body: "  Rake::RDocTask.new do |rd|\n    rd.main = &quot;README.rdoc&quot;\n    \
+    rd.rdoc_files.include(&quot;README.rdoc&quot;, &quot;lib/**/*.rb&quot;)\n  end\n"
+- !ruby/struct:SM::Flow::P 
+  body: The <tt>rd</tt> object passed to the block is an RDocTask object. See the
+    attributes list for the RDocTask class for available customization options.
+- !ruby/struct:SM::Flow::H 
+  text: Specifying different task names
+  level: 2
+- !ruby/struct:SM::Flow::P 
+  body: 'You may wish to give the task a different name, such as if you are generating
+    two sets of documentation. For instance, if you want to have a development set
+    of documentation including private methods:'
+- !ruby/struct:SM::Flow::VERB 
+  body: "  Rake::RDocTask.new(:rdoc_dev) do |rd|\n    rd.main = &quot;README.doc&quot;\n\
+    \    rd.rdoc_files.include(&quot;README.rdoc&quot;, &quot;lib/**/*.rb&quot;)\n\
+    \    rd.options &lt;&lt; &quot;--all&quot;\n  end\n"
+- !ruby/struct:SM::Flow::P 
+  body: The tasks would then be named :<em>rdoc_dev</em>, :clobber_<em>rdoc_dev</em>,
+    and :re<em>rdoc_dev</em>.
+- !ruby/struct:SM::Flow::P 
+  body: 'If you wish to have completely different task names, then pass a Hash as
+    first argument. With the <tt>:rdoc</tt>, <tt>:clobber_rdoc</tt> and <tt>:rerdoc</tt>
+    options, you can customize the task names to your liking. For example:'
+- !ruby/struct:SM::Flow::VERB 
+  body: "  Rake::RDocTask.new(:rdoc =&gt; &quot;rdoc&quot;, :clobber_rdoc =&gt; &quot;rdoc:clean&quot;, \
+    :rerdoc =&gt; &quot;rdoc:force&quot;)\n"
+- !ruby/struct:SM::Flow::P 
+  body: This will create the tasks <tt>:rdoc</tt>, <tt>:rdoc_clean</tt> and <tt>:rdoc:force</tt>.
+attributes: 
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Whether to run the rdoc process as an external shell (default is false)
+  rw: RW
+  name: external
+- !ruby/object:RI::Attribute 
+  comment: 
+  rw: RW
+  name: inline_source
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Name of file to be used as the main, top level file of the RDoc. (default
+      is none)
+  rw: RW
+  name: main
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Name of the main, top level task. (default is :rdoc)
+  rw: RW
+  name: name
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Additional list of options to be passed rdoc. (default is [])
+  rw: RW
+  name: options
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Name of directory to receive the html output files. (default is &quot;html&quot;)
+  rw: RW
+  name: rdoc_dir
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: List of files to be included in the rdoc generation. (default is [])
+  rw: RW
+  name: rdoc_files
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Name of template to be used by rdoc. (defaults to rdoc's default)
+  rw: RW
+  name: template
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Title of RDoc documentation. (defaults to rdoc's default)
+  rw: RW
+  name: title
+instance_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: before_running_rdoc
+- !ruby/object:RI::MethodSummary 
+  name: define
+- !ruby/object:RI::MethodSummary 
+  name: option_list
+- !ruby/object:RI::MethodSummary 
+  name: option_string
+- !ruby/object:RI::MethodSummary 
+  name: quote
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: new
+full_name: Rake::RDocTask
+constants: []
+
+superclass: TaskLib
+name: RDocTask

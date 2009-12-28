@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: README.txt</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>README.txt</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>README.txt
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Mon Dec 28 12:37:48 -0500 2009</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h1><a href="../classes/Warbler.html">Warbler</a></h1>
+<p>
+<a href="../classes/Warbler.html">Warbler</a> is a gem to make a .war file
+out of a Rails, Merb, or Rack-based application. The intent is to provide a
+minimal, flexible, ruby-like way to bundle up all of your application files
+for deployment to a Java application server.
+</p>
+<p>
+<a href="../classes/Warbler.html">Warbler</a> provides a sane set of
+out-of-the box defaults that should allow most Rails applications without
+external gem dependencies (aside from Rails itself) to assemble and Just
+Work.
+</p>
+<p>
+<a href="../classes/Warbler.html">Warbler</a> bundles JRuby and the
+JRuby-Rack servlet adapter for dispatching requests to your application
+inside the java application server, and assembles all jar files in
+WARBLER_HOME/lib/*.jar into your application. No external dependencies are
+downloaded.
+</p>
+<h2>Getting Started</h2>
+<ol>
+<li>Install the gem: <tt>gem install warbler</tt>.
+
+</li>
+<li>Run warbler in the top directory of your Rails application:
+<tt>warble</tt>.
+
+</li>
+<li>Deploy your railsapp.war file to your favorite Java application server.
+
+</li>
+</ol>
+<h2>Usage</h2>
+<p>
+<a href="../classes/Warbler.html">Warbler</a>&#8216;s <tt>warble</tt>
+command is just a small wrapper around Rake with internally defined tasks.
+(Notice &quot;rake&quot; still prints out in the message, but you should
+substitute &quot;warble&quot; for &quot;rake&quot; on the command line when
+running this way.)
+</p>
+<pre>
+   $ warble -T
+   rake config         # Generate a configuration file to customize your war assembly
+   rake pluginize      # Unpack warbler as a plugin in your Rails application
+   rake war            # Create trunk.war
+   rake war:app        # Copy all application files into the .war
+   rake war:clean      # Clean up the .war file and the staging area
+   rake war:gems       # Unpack all gems into WEB-INF/gems
+   rake war:jar        # Run the jar command to create the .war
+   rake war:java_libs  # Copy all java libraries into the .war
+   rake war:public     # Copy all public HTML files to the root of the .war
+   rake war:webxml     # Generate a web.xml file for the webapp
+</pre>
+<p>
+<a href="../classes/Warbler.html">Warbler</a> makes heavy use of
+Rake&#8216;s file and directory tasks, so only recently updated files will
+be copied, making repeated assemblies much faster.
+</p>
+<h2>Configuration</h2>
+<h3>Rails applications</h3>
+<p>
+Rails applications are detected automatically and configured appropriately.
+The following items are set up for you:
+</p>
+<ul>
+<li>The Rails gem is packaged if you haven&#8216;t vendored Rails.
+
+</li>
+<li>Other gems configured in Rails.configuration.gems are packaged (Rails 2.1
+or later)
+
+</li>
+<li>Multi-thread-safe execution (as introduced in Rails 2.2) is detected and
+runtime pooling is disabled.
+
+</li>
+</ul>
+<h3>Merb applications</h3>
+<p>
+Merb applications are detected automatically, and the merb-core gem and its
+dependencies are packaged.
+</p>
+<h3>Other Rack-based applications</h3>
+<p>
+If you have a &#8216;config.ru&#8217; file in the top directory of your
+application, its contents will be used as the rackup script for your
+Rack-based application. You will probably need to specify framework and
+application gems in config/warble.rb.
+</p>
+<p>
+See &lt;a href=&quot;<a
+href="http://jruby-rack.kenai.com/sources/main/show/examples">the">jruby-rack.kenai.com/sources/main/show/examples">the</a>
+examples in the jruby-rack project&lt;/a&gt; of how to configure <a
+href="../classes/Warbler.html">Warbler</a> to package Camping and Sinatra
+apps.
+</p>
+<h3>Configuration auto-detect notes</h3>
+<ul>
+<li>If you don&#8216;t have database access in the environment where you
+package your application, you may wish to set `Warbler.framework_detection`
+to false at the top of config.rb. In this case you may need to specify
+additional details such as booter, gems and other settings.
+
+</li>
+<li>A more accurate way of detecting a Merb application&#8216;s gems is needed.
+Until then, you will have to specify them in config/warble.rb. See below.
+
+</li>
+<li>Is it possible to more generally detect what gems an application uses?
+Gem.loaded_specs is available, but the application needs to be loaded first
+before its contents are reliable.
+
+</li>
+</ul>
+<h3>Custom configuration</h3>
+<p>
+The default configuration puts application files (<tt>app</tt>,
+<tt>config</tt>, <tt>lib</tt>, <tt>log</tt>, <tt>vendor</tt>, <tt>tmp</tt>)
+under the .war file&#8216;s WEB-INF directory, and files in <tt>public</tt>
+in the root of the .war file. Any Java .jar files stored in lib will
+automatically be placed in WEB-INF/lib for placement on the web app&#8216;s
+classpath.
+</p>
+<p>
+If the default settings are not appropriate for your application, you can
+customize <a href="../classes/Warbler.html">Warbler</a>&#8216;s behavior.
+To customize files, libraries, and gems included in the .war file,
+you&#8216;ll need a config/warble.rb file. There a two ways of doing this.
+With the gem, simply run
+</p>
+<pre>
+    warble config
+</pre>
+<p>
+If you have <a href="../classes/Warbler.html">Warbler</a> installed as a
+plugin, use the generator:
+</p>
+<pre>
+ script/generate warble
+</pre>
+<p>
+Finally, edit the config/warble.rb to your taste. If you install the gem
+but later decide you&#8216;d like to have it as a plugin, use the
+<tt>pluginize</tt> command:
+</p>
+<pre>
+    warble pluginize
+</pre>
+<p>
+If you wish to upgrade or switch one or more java libraries from
+what&#8216;s bundled in the <a href="../classes/Warbler.html">Warbler</a>
+gem, simply change the jars in WARBLER_HOME/lib, or modify the
+<tt>java_libs</tt> attribute of <a
+href="../classes/Warbler/Config.html">Warbler::Config</a> to include the
+files you need.
+</p>
+<p>
+Once <a href="../classes/Warbler.html">Warbler</a> is installed as a
+plugin, you can use <tt>rake</tt> to build the war (with the same set of
+tasks as above).
+</p>
+<p>
+The generated config/warble.rb file is fully-documented with the available
+options and default values.
+</p>
+<h3>Web.xml</h3>
+<p>
+Java web applications are configured mainly through this file, and <a
+href="../classes/Warbler.html">Warbler</a> creates a suitable default file
+for you for use. However, if you need to customize it in any way, you have
+two options.
+</p>
+<ol>
+<li>If you just want a static web.xml file whose contents you manually control,
+you may copy the one generated for you in <tt>tmp/war/WEB-INF/web.xml</tt>
+to <tt>config/web.xml</tt> and modify as needed. It will be copied into the
+webapp for you.
+
+</li>
+<li>If you want to inject some dynamic information into the file, copy the
+<tt>WARBLER_HOME/web.xml.erb</tt> to <tt>config/web.xml.erb</tt>. Its
+contents will be evaluated for you and put in the webapp. Note that you can
+also pass arbitrary properties to the ERb template by setting
+<tt>config.webxml.customkey</tt> values in your <tt>config/warble.rb</tt>
+file.
+
+</li>
+</ol>
+<p>
+For more information on configuration, see <a
+href="../classes/Warbler/Config.html">Warbler::Config</a>.
+</p>
+<h3>Troubleshooting</h3>
+<p>
+If <a href="../classes/Warbler.html">Warbler</a> isn&#8216;t packaging the
+files you were expecting, there are several debug tasks available to give
+you more insight into what&#8216;s going on.
+</p>
+<ul>
+<li><tt>war:debug</tt> prints a YAML dump of the current configuration
+
+</li>
+<li><tt>war:debug:X</tt> prints a list of files that <a
+href="../classes/Warbler.html">Warbler</a> will include during that stage
+of assembly. Valid values of <tt>X</tt> are <tt>app, java_libs, gems,
+public, includes, excludes</tt>.
+
+</li>
+</ul>
+<h2>Source</h2>
+<p>
+You can get the <a href="../classes/Warbler.html">Warbler</a> source using
+Git, in any of the following ways:
+</p>
+<pre>
+   git clone git://kenai.com/warbler~main
+   git clone git://git.caldersphere.net/warbler.git
+   git clone git://github.com/nicksieger/warbler.git
+</pre>
+<p>
+You can also download a tarball of <a
+href="../classes/Warbler.html">Warbler</a> source at <a
+href="http://github.com/nicksieger/warbler/tree/master">github.com/nicksieger/warbler/tree/master</a>.
+</p>
+<h2>License</h2>
+<p>
+<a href="../classes/Warbler.html">Warbler</a> is provided under the terms
+of the MIT license.
+</p>
+<p>
+<a href="../classes/Warbler.html">Warbler</a> (c) 2007-2009 Sun
+Microsystems, Inc.
+</p>
+<p>
+<a href="../classes/Warbler.html">Warbler</a> also bundles several other
+pieces of software for convenience. Please read the file LICENSES.txt to
+ensure that you agree with the terms of all the components.
+</p>
+
+    </div>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

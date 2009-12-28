@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+visibility: public
+block_params: 
+comment: 
+full_name: Rake::TaskManager#synthesize_file_task
+params: (task_name)
+name: synthesize_file_task
+is_singleton: false
+aliases: []
+

@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+visibility: public
+block_params: 
+comment: 
+full_name: Warbler::project_application
+params: ()
+name: project_application
+is_singleton: true
+aliases: []
+

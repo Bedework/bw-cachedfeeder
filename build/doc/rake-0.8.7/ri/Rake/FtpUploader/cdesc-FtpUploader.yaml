@@ -1,0 +1,30 @@
+--- !ruby/object:RI::ClassDescription 
+includes: []
+
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Manage the uploading of files to an FTP account.
+attributes: 
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Log uploads to standard output when true.
+  rw: RW
+  name: verbose
+instance_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: close
+- !ruby/object:RI::MethodSummary 
+  name: makedirs
+- !ruby/object:RI::MethodSummary 
+  name: upload_files
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: connect
+- !ruby/object:RI::MethodSummary 
+  name: new
+full_name: Rake::FtpUploader
+constants: []
+
+superclass: Object
+name: FtpUploader
