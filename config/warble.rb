@@ -54,7 +54,7 @@ Warbler::Config.new do |config|
 
   # Name of the war file (without the .war) -- defaults to the basename
   # of RAILS_ROOT
-   config.war_name = "cache"
+   config.war_name = "webcache"
 
   # Value of RAILS_ENV for the webapp
   config.webxml.rails.env = 'development'
