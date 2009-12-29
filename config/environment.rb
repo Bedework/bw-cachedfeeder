@@ -10,31 +10,21 @@ RAILS_GEM_VERSION = '2.3.2' unless defined? RAILS_GEM_VERSION
 require File.join(File.dirname(__FILE__), 'boot')
 require RAILS_ROOT + '/lib/hpricot-0.6.161-java/lib/universal-java1.5/fast_xs'
 require RAILS_ROOT + '/lib/hpricot-0.6.161-java/lib/universal-java1.5/hpricot_scan'
-#require RAILS_ROOT + '/lib/hpricot-0.6.161-java/lib'
-#include Java
-#require RAILS_ROOT + '/vendor/gems/hpricot-0.6.164/lib/universal-java1.6/hpricot_scan.jar'
-
-#
 
 Rails::Initializer.run do |config|
   ## RACKING
   
-    #config.gem "sinatra"
     config.gem "builder"
-    #config.gem "json"
-    # config.gem "hpricot"
-
     config.time_zone = 'UTC'
-  
       
   ## END
   # config/initializers/load_config.rb
-APP_CONFIG = YAML.load_file("#{RAILS_ROOT}/config/config.yml")
-  
-config.load_paths += Dir["#{RAILS_ROOT}/vendor/gems/**"].map do |dir| 
-  File.directory?(lib = "#{dir}/lib") ? lib : dir
-end
-config.load_paths << RAILS_ROOT + '/lib/hpricot-0.6.161-java/lib'
+  APP_CONFIG = YAML.load_file("#{RAILS_ROOT}/config/config.yml")
+  config.action_controller.page_cache_directory = RAILS_ROOT + "/public/cache/"
+  config.load_paths += Dir["#{RAILS_ROOT}/vendor/gems/**"].map do |dir| 
+    File.directory?(lib = "#{dir}/lib") ? lib : dir
+  end
+  config.load_paths << RAILS_ROOT + '/lib/hpricot-0.6.161-java/lib'
   config.gem "httpclient"
   # Settings in config/environments/* take precedence over those specified here
   # Skip frameworks you're not going to use (only works if using vendor/rails)
@@ -58,7 +48,7 @@ config.load_paths << RAILS_ROOT + '/lib/hpricot-0.6.161-java/lib'
   # This is necessary if your schema can't be completely dumped by the schema dumper,
   # like if you have constraints or database-specific column types
   # config.active_record.schema_format = :sql
-
+  
   # Activate observers that should always be running
   # config.active_record.observers = :cacher, :garbage_collector
 
