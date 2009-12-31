@@ -72,36 +72,55 @@ class FeedModel
   
   def getTarget(currGroup, currCats, genOrIcs, daysRangeOrPeriod, obj) 
     
+    currentSkin = getSkin(reqParams[:skin])
+    skinSplits= currentSkin.split(/-/)
+    output = skinSplits[1]
+    
     # set Bedework method and construct group and category information
     if daysRangeOrPeriod == 'period'
       action = gridAction
-      groupAndCats = "&setappvar=filter(grpAndCats:" + currGroup + "~" + currCats + ")"
+      if currGroup == 'all' && currCats == 'all'
+        groupAndCats = ''
+      else
+        groupAndCats = "&setappvar=filter(grpAndCats:" + currGroup + "~" + currCats + ")"
+      end
     else
       action = listAction
-      if currCats == 'all'
-        ifCats = ''
-      else
-        ifCats = convertCats(currCats)
+      if output == 'json' || output == 'html'
+        if currGroup == 'all' && currCats == 'all'
+          groupAndCats = ''
+        else
+          groupAndCats = "&setappvar=filter(grpAndCats:" + currGroup + "~" + currCats + ")"
+        end
+      else  
+        if currCats == 'all'
+          ifCats = ''
+        else
+          ifCats = convertCats(currCats)
+        end
+        if currGroup == 'all'
+          ifGroup = ''
+        else
+          ifGroup = "&creator=" + currGroup
+        end
+        groupAndCats = ifCats + ifGroup
       end
-      if currGroup == 'all'
-        ifGroup = ''
-      else
-        ifGroup = "&creator=" + currGroup
-      end
-      groupAndCats = ifCats + ifGroup
     end
+    
+    bedeUrl = TARGETSERVER + "/" + action + "?calPath=/public/cals/MainCal"
     
     # build the Bedework URL and return it.
     if genOrIcs == 'ics'
-      bedeUrl = TARGETSERVER + "/" + action + "?format=text/calendar&setappvar=summaryMode(details)" + groupAndCats  
+      bedeUrl += "&format=text/calendar&setappvar=summaryMode(details)" + groupAndCats  
     else
-      if obj == '_none_'
-        objParam = ''
-      else
-        objParam = "&setappvar=objName(" + obj + ")"
+      if output == 'json'
+        if obj == '_none_'
+          objParam = ''
+        else
+          objParam = "&setappvar=objName(" + obj + ")"
+        end
       end
-      currentSkin = getSkin(reqParams[:skin]) 
-      bedeUrl = TARGETSERVER + "/" + action + "?skinName=" + currentSkin + "&setappvar=summaryMode(details)" + groupAndCats + objParam
+      bedeUrl += "&skinName=" + currentSkin + "&setappvar=summaryMode(details)" + groupAndCats + objParam
     end
     if daysRangeOrPeriod == "range"
       if reqParams[:startDate] and reqParams[:endDate] 
@@ -136,14 +155,14 @@ class FeedModel
   def getCategories()
     currSkin = getSkin(reqParams[:skin])
     obj = reqParams[:objName]
-    bedeUrl = TARGETSERVER + "/" + categoriesAction + "?skinName=" + currSkin + "&setappvar=objName(" + obj + ")"
+    bedeUrl = TARGETSERVER + "/" + categoriesAction + "?skinName=" + currSkin + "&setappvar=objName(" + obj + ")&calPath=/public/cals/MainCal"
     return bedeUrl
   end
   
   def getGroups()
     currSkin = getSkin(reqParams[:skin])
     obj = reqParams[:objName]
-    bedeUrl = TARGETSERVER + "/" + groupsAction + "?skinName=" + currSkin + "&setappvar=objName(" + obj + ")"
+    bedeUrl = TARGETSERVER + "/" + groupsAction + "?skinName=" + currSkin + "&setappvar=objName(" + obj + ")&calPath=/public/cals/MainCal"
     return bedeUrl
   end
   
@@ -151,7 +170,7 @@ class FeedModel
     calPathParam = '?calPath=%2Fpublic%2Fcals%2FMainCal'
     guidParam = "&guid=" + reqParams[:guid].gsub('_', '.')
     bedeUrl = TARGETSERVER + "/" + downloadAction + calPathParam + guidParam + '&nocache=no&contentName='
-    bedeUrl += reqParams[:fileName]
+    bedeUrl += reqParams[:fileName] + "&calPath=/public/cals/MainCal"
     
     if reqParams[:recurrenceId] != '0'
       bedeUrl += "&recurrenceId=" + reqParams[:recurrenceId]
