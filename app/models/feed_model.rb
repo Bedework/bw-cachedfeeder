@@ -113,12 +113,10 @@ class FeedModel
     if genOrIcs == 'ics'
       bedeUrl += "&format=text/calendar&setappvar=summaryMode(details)" + groupAndCats  
     else
-      if output == 'json'
-        if obj == '_none_'
-          objParam = ''
-        else
-          objParam = "&setappvar=objName(" + obj + ")"
-        end
+      if obj == '_none_'
+        objParam = ''
+      else
+        objParam = "&setappvar=objName(" + obj + ")"
       end
       bedeUrl += "&skinName=" + currentSkin + "&setappvar=summaryMode(details)" + groupAndCats + objParam
     end
