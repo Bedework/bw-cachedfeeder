@@ -7,9 +7,11 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <title>Bedework Feed Builder</title>
     <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
-    <script type="text/javascript" src="js/jquery-ui-1.7.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.7.1.custom.min.js"></script>
     <script type="text/javascript" src="http://localhost:8080/webcache/v1.0/categories/widget-json-cats/catsObj"></script>
-    <link type="text/css" href="css/ui-lightness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
+    <link type="text/css" href="css/custom-theme/jquery-ui-1.7.1.custom.css" rel="stylesheet" />
+    <link type="text/css" href="css/custom-theme/bedeworkJquery.css" rel="stylesheet" />
+    <link type="text/css" href="css/bedeworkJqueryThemes" rel="stylesheet" />
     <link type="text/css" href="css/builder.css" rel="stylesheet">
     <script type="text/javascript">
 
@@ -22,7 +24,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         $("#slider").slider({
           range: "min",
           min: 0,
-          max: 100,
+          max: 31,
           value: 7,
           slide: function(event, ui) {
             $("#numDays").val(ui.value);
@@ -68,8 +70,8 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
       function getCatAndLimitData() {
 
         cats = catsObj;
-        processOrgCatData();
         processRegularCatData();
+        processOrgCatData();
         processLimitCatData();
       }
 
@@ -84,7 +86,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         //set n to the number of columns
         var n = 4;
         var column = 1;
-        var trLine = "<tr><td>Offices:</td></tr><tr>";
+        var trLine = "<tr><th>Organizations:</th></tr><tr>";
         var tdLine;
         var currentCreator = "";
         $.each(cats.bwCategories.categories.sort(sortByValue), function(i, category) {
@@ -120,7 +122,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         //set n to the number of columns
         var n = 4;
         var column = 1;
-        var trLine = "<tr><td>Other Categories:</td></tr><tr>";
+        var trLine = "<tr><th>General Categories:</th></tr><tr>";
         var tdLine;
         var currentCreator = "";
         $.each(cats.bwCategories.categories.sort(sortByValue), function(i, category) {
@@ -359,29 +361,29 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         $(".trigger").click(function() {
           if ($('#list').attr('checked') && $('#widget').attr('checked') || $('#feed').attr('checked')) {
             // widget & list or feed
-            $('#timeframeUnit').show('slow');
+            $('#timeframeUnit').show('fast');
           }
           else {
             $('#timeframeUnit').hide('slow');
           }
           if ($('#feed').attr('checked')) {
             // feed
-            $('#dataFormat').show('slow');
+            $('#dataFormat').show('fast');
             $('#output').hide('slow');
             $('#type').hide('slow');
-            $('#URL').show('slow');
+            $('#URL').show('fast');
             $('#codeBox').hide('slow');
           }
           else {
             // widget
             $('#dataFormat').hide('slow');
-            $('#output').show('slow');
-            $('#type').show('slow');
+            $('#output').show('fast');
+            $('#type').show('fast');
             $('#URL').hide('slow');
-            $('#codeBox').show('slow');
+            $('#codeBox').show('fast');
           }
           if ($('#checkedCategories').attr('checked')) {
-            $('#selectCategories').show('slow');
+            $('#selectCategories').show('fast');
           }
           else {
             $('#selectCategories').hide('slow');
@@ -399,7 +401,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         Bedework Feed URL and Widget Builder
       </h1>
       <p class="prompt">
-        Raw feed or an embeddable widget?
+        Raw event feed or an embeddable widget?
       </p>
       <ul class="noBullet">
         <li class="trigger">
@@ -528,15 +530,15 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         </table>
         </div>
         <div id="URL">
-          <p class="prompt">
+          <p class="output">
             Your URL:
             <a href="" id="UrlBox">
             </a>
           </p>
         </div>
         <div id="codeBox" class="invisible">
-          <p class="prompt">
-            Widget Code
+          <p class="output">
+            Widget Code:
           </p>
           <div id="codeBoxBox">
             <textarea name="functions" id="functions" rows="20" cols="78">
