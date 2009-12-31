@@ -1,30 +1,19 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <!--
-
-   NOTE: Set the location of your webcache in two places below.  Search for localhost:8080.
-
+NOTE: Set the location of your webcache in two places below.  Search for localhost:8080.
 -->
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-    <title>
-      Bedework Feed Builder
-    </title>
-
+    <title>Bedework Feed Builder</title>
     <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui-1.7.2.min.js"></script>
-    <script type="text/javascript" src="http://localhost:8080/webcache/v1.0/categories/widget-json-cats/catsObj">
-    </script>
-
+    <script type="text/javascript" src="http://localhost:8080/webcache/v1.0/categories/widget-json-cats/catsObj"></script>
     <link type="text/css" href="css/ui-lightness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
     <link type="text/css" href="css/builder.css" rel="stylesheet">
-
     <script type="text/javascript">
 
-      function getCacheUrlPrefix () {
+      function getCacheUrlPrefix() {
         return urlPrefix = "http://localhost:8080/webcache/v1.0/"
       }
 
@@ -45,7 +34,7 @@
 
       // use JQuery UI datepicker widget for start date and end date
       $(function() {
-        $("#startDate").datepicker({ 
+        $("#startDate").datepicker({
           dateFormat: 'yymmdd',
           onSelect: function(dateText, inst) {
             updateUrlDisplay();
@@ -53,7 +42,7 @@
         });
       });
       $(function() {
-        $("#endDate").datepicker({ 
+        $("#endDate").datepicker({
           dateFormat: 'yymmdd',
           minDate: $('#startDate').datepicker('getDate'),
           onSelect: function(dateText, inst) {
@@ -63,29 +52,28 @@
       });
 
       // $("#startDate").click(function() {
-	  //  $("#numDays").find("em").css({color:"#993300", fontWeight:"bold"}); 
-	  // });
+      //  $("#numDays").find("em").css({color:"#993300", fontWeight:"bold"});
+      // });
 
       //######### category and group utility functions ##########
-      
-      function sortByFirstColumn(a,b) {
-          var x = a[0].toLowerCase();
-          var y = b[0].toLowerCase();
-          return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-      }
-                
-      var cats;  // holds category tree returned by script call to the feeder app.
-      var grps;  // holds group tree returned by script call to the feeder app.
 
+      function sortByFirstColumn(a, b) {
+        var x = a[0].toLowerCase();
+        var y = b[0].toLowerCase();
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+      }
+
+      var cats; // holds category tree returned by script call to the feeder app.
+      var grps; // holds group tree returned by script call to the feeder app.
       function getCatAndLimitData() {
-	   
-	    cats = catsObj;
-	    processOrgCatData();
-	    processRegularCatData();
+
+        cats = catsObj;
+        processOrgCatData();
+        processRegularCatData();
         processLimitCatData();
       }
-    
-      function sortByValue(a,b) {
+
+      function sortByValue(a, b) {
         a = a.value;
         b = b.value;
         return a == b ? 0 : (a < b ? -1 : 1)
@@ -93,134 +81,138 @@
 
       function processOrgCatData() {
 
-        //set n to the number of columns 
+        //set n to the number of columns
         var n = 4;
         var column = 1;
         var trLine = "<tr><td>Offices:</td></tr><tr>";
         var tdLine;
-        var currentCreator = "";    
+        var currentCreator = "";
         $.each(cats.bwCategories.categories.sort(sortByValue), function(i, category) {
-	      // skip over any system categories
-	      if ((category.value.substring(0,4) != 'sys/') && (category.value.substring(0,4) == 'org/')) {
+          // skip over any system categories
+          if ((category.value.substring(0, 4) != 'sys/') && (category.value.substring(0, 4) == 'org/')) {
             catKeyword = category.value;
-            catUid = category.uid;  
-            tdLine = "<td><input type=\"checkbox\" name=\"categoryChecks\" onclick=\"updateUrlDisplay()\" value=\"" + catUid +  "\">" + catKeyword.substring(4) + "</td>"
-            //arrange the categories -- n checkboxes per line      
-            if ( column != n ) {
+            catUid = category.uid;
+            tdLine = "<td><input type=\"checkbox\" name=\"categoryChecks\" onclick=\"updateUrlDisplay()\" value=\"" + catUid + "\">" + catKeyword.substring(4) + "</td>"
+            //arrange the categories -- n checkboxes per line
+            if (column != n) {
               trLine += tdLine;
-              column++; 
-            } else {
+              column++;
+            }
+            else {
               trLine = trLine + tdLine + "</tr>";
               $("#categoriesTableBody").append(trLine);
               trLine = "<tr>"
               column = 1;
             }
-          }  
+          }
         });
-		if ( column == 1) {
-	      lastLine = "</tr>";
-	    } else {
-	      lastLine = trLine + "</tr>";
-	    }
-	    $("#categoriesTableBody").append(lastLine);      
-	  }
-       
+        if (column == 1) {
+          lastLine = "</tr>";
+        }
+        else {
+          lastLine = trLine + "</tr>";
+        }
+        $("#categoriesTableBody").append(lastLine);
+      }
+
       function processRegularCatData() {
-    
-        //set n to the number of columns 
+
+        //set n to the number of columns
         var n = 4;
         var column = 1;
         var trLine = "<tr><td>Other Categories:</td></tr><tr>";
         var tdLine;
-        var currentCreator = "";    
+        var currentCreator = "";
         $.each(cats.bwCategories.categories.sort(sortByValue), function(i, category) {
-	      // skip over any system categories
-	      if ((category.value.substring(0,4) != 'sys/') && (category.value.substring(0,4) != 'org/')) {
+          // skip over any system categories
+          if ((category.value.substring(0, 4) != 'sys/') && (category.value.substring(0, 4) != 'org/')) {
             catKeyword = category.value;
-            catID = category.uid;  
-            tdLine = "<td><input type=\"checkbox\" name=\"categoryChecks\" onclick=\"updateUrlDisplay()\" value=\"" + catID +  "\">" + catKeyword + "</td>"
-            //arrange the categories -- n checkboxes per line      
-            if ( column != n ) {
+            catID = category.uid;
+            tdLine = "<td><input type=\"checkbox\" name=\"categoryChecks\" onclick=\"updateUrlDisplay()\" value=\"" + catID + "\">" + catKeyword + "</td>"
+            //arrange the categories -- n checkboxes per line
+            if (column != n) {
               trLine += tdLine;
-              column++; 
-            } else {
+              column++;
+            }
+            else {
               trLine = trLine + tdLine + "</tr>";
               $("#categoriesTableBody").append(trLine);
               trLine = "<tr>"
               column = 1;
             }
-          }  
+          }
         });
-         
-        if ( column == 1) {
+
+        if (column == 1) {
           lastLine = "</tr>";
-        } else {
+        }
+        else {
           lastLine = trLine + "</tr>";
         }
-        $("#categoriesTableBody").append(lastLine);      
+        $("#categoriesTableBody").append(lastLine);
       }
 
       function replaceAll(text, strA, strB) {
-        while ( text.indexOf(strA) != -1)
-        {
-            text = text.replace(strA,strB);
+        while (text.indexOf(strA) != -1) {
+          text = text.replace(strA, strB);
         }
         return text;
       }
-      
+
       function processLimitCatData() {
         trLine = "<tr><td><input type=\"radio\" checked\=\"checked\" id=\"no--Limit\" name=\"limitCatCheck\" onclick=\"updateUrlDisplay()\" value=\"all\">No Limit</td></tr>";
         $("#filter").append(trLine);
-        $.each(cats.bwCategories.categories.sort(sortByValue), function(i, category){
-	       if (category.value.substring(0,4) == 'org/' ) {
-              trLine = "<tr><td><input type=\"radio\" id=\"Limit" + category.value + "\" name=\"limitCatCheck\" onclick=\"updateUrlDisplay()\" value=\"" + category.uid +  "\">" + category.value.substring(4) + "</td></tr>";
-             $("#filter").append(trLine);
-           }
-        }); 
+        $.each(cats.bwCategories.categories.sort(sortByValue), function(i, category) {
+          if (category.value.substring(0, 4) == 'org/') {
+            trLine = "<tr><td><input type=\"radio\" id=\"Limit" + category.value + "\" name=\"limitCatCheck\" onclick=\"updateUrlDisplay()\" value=\"" + category.uid + "\">" + category.value.substring(4) + "</td></tr>";
+            $("#filter").append(trLine);
+          }
+        });
       }
-   
+
       // check all/check none button.  Thanks to Adrian J. Moreno.
       // function checkAll(id, pID) {
       //   $( "#" + pID + " :checkbox").attr('checked', $('#' + id).is(':checked'));
       //   updateUrlDisplay()
       // }
 
-      function getLimitCatValue () {
+      function getLimitCatValue() {
         return $("input[name='limitCatCheck']:checked").val();
       }
 
       // construct category parameters
-      function constructCategoryList () {
+      function constructCategoryList() {
         var categoryIDList = "";
         $("input[name='categoryChecks']:checked").each(function() {
           if (categoryIDList == "") {
-              categoryIDList = this.value;
-          } else {
-              categoryIDList = categoryIDList + "~" + this.value;
+            categoryIDList = this.value;
+          }
+          else {
+            categoryIDList = categoryIDList + "~" + this.value;
           }
         });
         return categoryIDList;
       }
-    
+
       //##### end of category/limit functions
 
 
-      function constructURL(){
-	 
-        // five cases:  
+      function constructURL() {
+
+        // five cases:
         //   (1)  ics with number of days specified.  Other parameters: limitCategory, categories
         //   (2)  ics with date range specified.  Other parameters: limitCategory, categories
         //   (3)  other feed with number of days specified.  Other parameters: skin, limitCategory, categories
         //   (4)  other feed with date range specified.  Other paramters: skin, limitCategory, categories
         //   (5)  other feed for week or month period specified (widget only)
- 
+
         ics = false;
         byDays = false;
         weekOrMonth = false;
         jsonObject = false;
 
         // byDays?  If byDays, get number of days, else get start and end dates.
-        if  (document.getElementById('startEndDates').checked == true) { 
+        if (document.getElementById('startEndDates').checked == true) {
           startDate = document.getElementById('startDate').value;
           if (startDate == "") {
             startDate = '00000000';
@@ -230,140 +222,157 @@
             endDate = '00000000';
           }
           dates = startDate + '/' + endDate;
-        } else {
+        }
+        else {
           byDays = true;
           numberOfDays = document.getElementById('numDays').value;
         }
 
         // Feed. ics?  If not, get skin.  ics doesn't need a skin.
         if (document.getElementById('ics').checked == true) {
-            ics = true;
-        } else {
-            skin = $("input[name='dataType']:checked").val();
-        } 
+          ics = true;
+        }
+        else {
+          skin = $("input[name='dataType']:checked").val();
+        }
 
         // Widget?  set skin.
-	          
+
         if (document.getElementById('widget').checked == true) {
-	      //widget
-	      outputType = $("input[name='output']:checked").val();
-	      if (document.getElementById('list').checked == true) {
-		    //list
-		    if (outputType == "iframe") {
-			  // iframe
-		      skin = "list-html"; 
-		    } else {
-			  // javascript
-			  skin = "list-json";
-			  jsonObject = true;
-		    }
-		  } else {
-		    //week or month grid
-		    weekOrMonth = true;
-			if (outputType == "iframe") {
-			  // iframe
-			  skin = "grid-html"; 
-		    } else {
-			  // javascript
-			  skin = "grid-json";
-			  jsonObject = true;
-		    }
-		  }
-		}
-		if (weekOrMonth) {
-		  if (document.getElementById('week').checked == true) {
-	        constructedURL = getCacheUrlPrefix() + "genFeedPeriod"  + "/week/00000000/" + skin + "/";
-	      } else {
-	        constructedURL = getCacheUrlPrefix() + "genFeedPeriod"  + "/month/00000000/" + skin + "/" ;
-	      }
-		} else if (ics) {
-          if (byDays) {
-            constructedURL = getCacheUrlPrefix() + "icsDays"  + "/" + numberOfDays + "/";
-          } else {
-            constructedURL = getCacheUrlPrefix() + "icsRange"  + "/" + dates + "/";
+          //widget
+          outputType = $("input[name='output']:checked").val();
+          if (document.getElementById('list').checked == true) {
+            //list
+            if (outputType == "iframe") {
+              // iframe
+              skin = "list-html";
+            }
+            else {
+              // javascript
+              skin = "list-json";
+              jsonObject = true;
+            }
           }
-        } else {
-          if (byDays) {
-            constructedURL = getCacheUrlPrefix() + "genFeedDays"  + "/" + numberOfDays + "/" + skin + "/";
-          } else {
-            constructedURL = getCacheUrlPrefix() + "genFeedRange"  + "/" + dates + "/" + skin + "/";
+          else {
+            //week or month grid
+            weekOrMonth = true;
+            if (outputType == "iframe") {
+              // iframe
+              skin = "grid-html";
+            }
+            else {
+              // javascript
+              skin = "grid-json";
+              jsonObject = true;
+            }
           }
         }
-        
+        if (weekOrMonth) {
+          if (document.getElementById('week').checked == true) {
+            constructedURL = getCacheUrlPrefix() + "genFeedPeriod" + "/week/00000000/" + skin + "/";
+          }
+          else {
+            constructedURL = getCacheUrlPrefix() + "genFeedPeriod" + "/month/00000000/" + skin + "/";
+          }
+        }
+        else
+          if (ics) {
+            if (byDays) {
+              constructedURL = getCacheUrlPrefix() + "icsDays" + "/" + numberOfDays + "/";
+            }
+            else {
+              constructedURL = getCacheUrlPrefix() + "icsRange" + "/" + dates + "/";
+            }
+          }
+          else {
+            if (byDays) {
+              constructedURL = getCacheUrlPrefix() + "genFeedDays" + "/" + numberOfDays + "/" + skin + "/";
+            }
+            else {
+              constructedURL = getCacheUrlPrefix() + "genFeedRange" + "/" + dates + "/" + skin + "/";
+            }
+          }
+
         constructedURL = constructedURL + getLimitCatValue();
 
         if (document.getElementById('allCategories').checked == true) {
           constructedURL = constructedURL + '/all';
-        } else {
+        }
+        else {
           catList = constructCategoryList();
-          if (catList.length == 0 ) {
+          if (catList.length == 0) {
             constructedURL = constructedURL + '/all';
-          } else {
+          }
+          else {
             constructedURL = constructedURL + '/' + catList;
           }
         }
         if (jsonObject) {
           constructedURL += '/bwObject';
         }
-        return constructedURL;	
+        return constructedURL;
       }
 
-      function updateUrlDisplay(){
-	
-	    if (document.getElementById('widget').checked == true) {
+      function updateUrlDisplay() {
+
+        if (document.getElementById('widget').checked == true) {
           outputType = $("input[name='output']:checked").val();
-	      if ( outputType == "iframe" ) {
-	        code = "<iframe src=\"" + constructURL() + "</iframe>";
+          if (outputType == "iframe") {
+            code = "<iframe src=\"" + constructURL() + "</iframe>";
             document.getElementById('functions').innerHTML = code;
-          } else {
-	        url = constructURL();
-	        jLine1 = '<html xmlns="http://www.w3.org/1999/xhtml">\n';
-		    jLine2 = '  <head>\n';
-		    jLine3 = '    <link type="text/css" href="../css/blue.css" rel="stylesheet" />\n';
-		    jLine4 = '  </head>\n';
-		    jLine5 = '  <body>\n';
-		    jLine6 = '    <div id="bwOutput"></div>\n';
-		    jLine7 = '      <';
-	        if ( skin == "list-json") {
-		      jLine7 += 'script type="text/javascript" src="listEvents.js"> &lt/script>\n';
-	        } else {
-		      jLine7 += 'script type="text/javascript" src="gridEvents.js"> &lt/script>\n';
-		    }
-		    jLine8 = '      <';
-		    jLine8 += 'script> type="text/javascript" src="' + url + '"> &lt/script>\n';
-		    jLine9 = '  </body>\n';
-		    jLineA = '</html>';
-		    jsHtml = jLine1 + jLine2 + jLine3 + jLine4 + jLine5 + jLine6 + jLine7 + jLine8 + jLine9 + jLineA;
-	        document.getElementById('functions').innerHTML = jsHtml;
-          } 
-        } else {
-         document.getElementById('UrlBox').innerHTML = constructURL();
-         document.getElementById('UrlBox').href = constructURL();
+          }
+          else {
+            url = constructURL();
+            jLine1 = '<html xmlns="http://www.w3.org/1999/xhtml">\n';
+            jLine2 = '  <head>\n';
+            jLine3 = '    <link type="text/css" href="../css/blue.css" rel="stylesheet" />\n';
+            jLine4 = '  </head>\n';
+            jLine5 = '  <body>\n';
+            jLine6 = '    <div id="bwOutput"></div>\n';
+            jLine7 = '      <';
+            if (skin == "list-json") {
+              jLine7 += 'script type="text/javascript" src="listEvents.js"> &lt/script>\n';
+            }
+            else {
+              jLine7 += 'script type="text/javascript" src="gridEvents.js"> &lt/script>\n';
+            }
+            jLine8 = '      <';
+            jLine8 += 'script> type="text/javascript" src="' + url + '"> &lt/script>\n';
+            jLine9 = '  </body>\n';
+            jLineA = '</html>';
+            jsHtml = jLine1 + jLine2 + jLine3 + jLine4 + jLine5 + jLine6 + jLine7 + jLine8 + jLine9 + jLineA;
+            document.getElementById('functions').innerHTML = jsHtml;
+          }
+        }
+        else {
+          document.getElementById('UrlBox').innerHTML = constructURL();
+          document.getElementById('UrlBox').href = constructURL();
         }
       }
 
-      $(document).ready(function(){ 
-	
-	    getCatAndLimitData(); //from server
-	
-        //$('#startDate').attr('disabled', 'disabled'); 
-        //$('#endDate').attr('disabled', 'disabled'); 
-        //$('#numDays').attr('disabled', 'disabled'); 
-        $(".trigger").click(function(){
-	      if($('#list').attr('checked') && $('#widget').attr('checked') || $('#feed').attr('checked')) {
-		    // widget & list or feed
-		    $('#timeframeUnit').show('slow');
-	      } else {
-		    $('#timeframeUnit').hide('slow');
-	      }
-          if($('#feed').attr('checked')) {
+      $(document).ready(function() {
+
+        getCatAndLimitData(); //from server
+        //$('#startDate').attr('disabled', 'disabled');
+        //$('#endDate').attr('disabled', 'disabled');
+        //$('#numDays').attr('disabled', 'disabled');
+        $(".trigger").click(function() {
+          if ($('#list').attr('checked') && $('#widget').attr('checked') || $('#feed').attr('checked')) {
+            // widget & list or feed
+            $('#timeframeUnit').show('slow');
+          }
+          else {
+            $('#timeframeUnit').hide('slow');
+          }
+          if ($('#feed').attr('checked')) {
             // feed
             $('#dataFormat').show('slow');
             $('#output').hide('slow');
             $('#type').hide('slow');
             $('#URL').show('slow');
             $('#codeBox').hide('slow');
-          } else {
+          }
+          else {
             // widget
             $('#dataFormat').hide('slow');
             $('#output').show('slow');
@@ -371,41 +380,39 @@
             $('#URL').hide('slow');
             $('#codeBox').show('slow');
           }
-          if($('#checkedCategories').attr('checked')) {
+          if ($('#checkedCategories').attr('checked')) {
             $('#selectCategories').show('slow');
-          } else {
+          }
+          else {
             $('#selectCategories').hide('slow');
           }
         });
-        
+
         //updateURLDisplay();
-        
+
       });
     </script>
   </head>
-
-  <body>  
+  <body>
     <form>
-    
-      <h1>Bedework Feed URL and Widget Builder</h1>
-
+      <h1>
+        Bedework Feed URL and Widget Builder
+      </h1>
       <p class="prompt">
-	    Raw feed or an embeddable widget?
-	  </p>
-	
-      <ul class="noBullet">    
+        Raw feed or an embeddable widget?
+      </p>
+      <ul class="noBullet">
         <li class="trigger">
           <input type="radio" onclick='updateUrlDisplay()' checked="checked" id="feed" name="feedOrWidget" value="feed" />Feed
-        </li>      
+        </li>
         <li class="trigger">
           <input type="radio" onclick='updateUrlDisplay()' id="widget" name="feedOrWidget" value="widget" />Widget
         </li>
       </ul>
-
       <div id="dataFormat">
         <p class="prompt">
-	      Data format?
-	    </p>
+          Data format?
+        </p>
         <ul class="noBullet">
           <li>
             <input type="radio" id="rss" onclick='updateUrlDisplay()' name="dataType" value="list-rss"/>RSS
@@ -423,8 +430,7 @@
             <input type="radio" id="html" onclick='updateUrlDisplay()' name="dataType" value="list-html" />HTML
           </li>
         </ul>
-      </div>  <!-- DataFormat -->
-
+      </div><!-- DataFormat -->
       <div id="output" class="invisible">
         <p class="prompt">
           Output?
@@ -438,13 +444,10 @@
           </li>
         </ul>
       </div>
-
-    
       <div id="type" class="invisible">
         <p class="prompt">
           Type?
         </p>
-
         <ul class="noBullet">
           <li class="trigger">
             <input type="radio" id="list" name="type" onclick="updateUrlDisplay()" value="List" />List
@@ -456,87 +459,90 @@
             <input type="radio" id="month" name="type" onclick="updateUrlDisplay()" value="Month" />Current Month
           </li>
         </ul>
-      </div>    
-     
+      </div>
       <div id="timeframeUnit">
-	    <p class="prompt">
-	       Specify the number of days (from the current date) or provide a start date and an end date.
-	    </p>
-	    
-	    <div id="timeframeWidgets">       
+        <p class="prompt">
+          Specify the number of days (from the current date) or provide a start date and an end date.
+        </p>
+        <div id="timeframeWidgets">
           <table>
-            <tr> 
-              <td><input type="radio" id="numberOfDays" name="timeframe" onclick="updateUrlDisplay()" value="days" checked="checked" /></td>
+            <tr>
               <td>
-                <div class="daysNumber">      
-                  <div id="slider" style="width:300px;"></div>
-                  <label for="numDays">Number of Days:</label><input class="slider" onclick='updateUrlDisplay()' type="text" size="3" id="numDays" />  
-                </div>  <!-- daysNumber -->
+                <input type="radio" id="numberOfDays" name="timeframe" onclick="updateUrlDisplay()" value="days" checked="checked" />
+              </td>
+              <td>
+                <div class="daysNumber">
+                  <div id="slider" style="width:300px;">
+                  </div>
+                  <label for="numDays">
+                    Number of Days:
+                  </label>
+                  <input class="slider" onclick='updateUrlDisplay()' type="text" size="3" id="numDays" />
+                </div><!-- daysNumber -->
               </td>
             </tr>
-            <tr> 
-              <td><input type="radio" id="startEndDates" name="timeframe" onclick="updateUrlDisplay()" value="dates" /></td>
+            <tr>
               <td>
-               <div class="dateRange">
-                 Start Date: <input size="8" class="datepicker" id="startDate" onclick="updateUrlDisplay()" type="text"></input>
-                 End Date: <input size="8"class="datepicker" id="endDate" onclick="updateUrlDisplay()" type="text"></input>
-               </div>
+                <input type="radio" id="startEndDates" name="timeframe" onclick="updateUrlDisplay()" value="dates" />
               </td>
-            </tr>
-          </table>
-        </div>  <!-- timeframeWidgets -->
-      </div>  <!-- timeframeUnit -->
-
-      <p class="prompt">
-        Include everything or only those events from selected categories (Lectures, Arts Events, etc.)?
-      </p>
-
-      <ul class="noBullet">
-        <li class="trigger">
-          <input type="radio" id="allCategories" name="allOrSomeCats" onclick='updateUrlDisplay()' value="all" checked="checked"/>Include everything
-        </li>
-        <li  class="trigger">
-          <input type="radio" id="checkedCategories" name="allOrSomeCats" onclick='updateUrlDisplay()' value="selectedCats" />Include selected categories only
-        </li>  
-      </ul>
-        
-      <div id="selectCategories" class="invisible">
-        <ul class="noBullet">
-          <li>
-            <table id="categoriesTable">
-              <tbody id="categoriesTableBody">
-              </tbody>
+              <td>
+                <div class="dateRange">
+                  Start Date: <input size="8" class="datepicker" id="startDate" onclick="updateUrlDisplay()" type="text">
+                  </input>End Date: <input size="8"class="datepicker" id="endDate" onclick="updateUrlDisplay()" type="text">
+                  </input>
+                  </div>
+                </td>
+              </tr>
             </table>
+          </div><!-- timeframeWidgets -->
+        </div><!-- timeframeUnit -->
+        <p class="prompt">
+          Include everything or only those events from selected categories (Lectures, Arts Events, etc.)?
+        </p>
+        <ul class="noBullet">
+          <li class="trigger">
+            <input type="radio" id="allCategories" name="allOrSomeCats" onclick='updateUrlDisplay()' value="all" checked="checked"/>Include everything
           </li>
-         </ul>
-      </div>  <!-- selectCategories -->
-
-    
-      <p class="prompt">
-        Limit To:
-      </p>
-    
-      <div id="selectGroup">
-         <table>
-           <tbody id="filter" /> 
-           </tbody>
-         </table>
-      </div>       
-
-      <div id="URL">
-        <p class="prompt">
-          Your URL: <a href="" id="UrlBox"></a>
-        </p>
-      </div>
-        
-      <div id="codeBox" class="invisible">
-        <p class="prompt">
-          Widget Code
-        </p>
-        <div id="codeBoxBox">
-          <textarea name="functions" id="functions" rows="20" cols="78"></textarea>
+          <li class="trigger">
+            <input type="radio" id="checkedCategories" name="allOrSomeCats" onclick='updateUrlDisplay()' value="selectedCats" />Include selected categories only
+          </li>
+        </ul>
+        <div id="selectCategories" class="invisible">
+          <ul class="noBullet">
+            <li>
+              <table id="categoriesTable">
+                <tbody id="categoriesTableBody">
+                </tbody>
+              </table>
+            </li>
+          </ul>
         </div>
-      </div>
-    </form>
-  </body>
-</html>
+        <!-- selectCategories -->
+        <p class="prompt">
+          Limit To:
+        </p>
+        <div id="selectGroup">
+          <table>
+          <tbody id="filter" />
+          </tbody>
+        </table>
+        </div>
+        <div id="URL">
+          <p class="prompt">
+            Your URL:
+            <a href="" id="UrlBox">
+            </a>
+          </p>
+        </div>
+        <div id="codeBox" class="invisible">
+          <p class="prompt">
+            Widget Code
+          </p>
+          <div id="codeBoxBox">
+            <textarea name="functions" id="functions" rows="20" cols="78">
+            </textarea>
+          </div>
+        </div>
+      </form>
+    </body>
+  </html>
