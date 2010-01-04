@@ -57,7 +57,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
       //  $("#numDays").find("em").css({color:"#993300", fontWeight:"bold"});
       // });
 
-      //######### category and group utility functions ##########
+      //######### category functions ##########
 
       function sortByFirstColumn(a, b) {
         var x = a[0].toLowerCase();
@@ -66,7 +66,6 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
       }
 
       var cats; // holds category tree returned by script call to the feeder app.
-      var grps; // holds group tree returned by script call to the feeder app.
       function getCatAndLimitData() {
 
         cats = catsObj;
@@ -210,7 +209,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
 
         ics = false;
         byDays = false;
-        weekOrMonth = false;
+        // weekOrMonth = false;
         jsonObject = false;
 
         // byDays?  If byDays, get number of days, else get start and end dates.
@@ -224,8 +223,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
             endDate = '00000000';
           }
           dates = startDate + '/' + endDate;
-        }
-        else {
+        } else {
           byDays = true;
           numberOfDays = document.getElementById('numDays').value;
         }
@@ -233,8 +231,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         // Feed. ics?  If not, get skin.  ics doesn't need a skin.
         if (document.getElementById('ics').checked == true) {
           ics = true;
-        }
-        else {
+        } else {
           skin = $("input[name='dataType']:checked").val();
         }
 
@@ -242,42 +239,41 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
 
         if (document.getElementById('widget').checked == true) {
           //widget
-          outputType = $("input[name='output']:checked").val();
-          if (document.getElementById('list').checked == true) {
+          // outputType = $("input[name='output']:checked").val();
+          // if (document.getElementById('list').checked == true) {
             //list
             if (outputType == "iframe") {
               // iframe
               skin = "list-html";
-            }
-            else {
+            } else {
               // javascript
               skin = "list-json";
               jsonObject = true;
             }
           }
-          else {
+          // else {
             //week or month grid
-            weekOrMonth = true;
-            if (outputType == "iframe") {
+          //  weekOrMonth = true;
+          //  if (outputType == "iframe") {
               // iframe
-              skin = "grid-html";
-            }
-            else {
+          //    skin = "grid-html";
+          //  }
+          //  else {
               // javascript
-              skin = "grid-json";
-              jsonObject = true;
-            }
-          }
+              //skin = "grid-json";
+              //jsonObject = true;
+            //}
+          //}
         }
-        if (weekOrMonth) {
-          if (document.getElementById('week').checked == true) {
-            constructedURL = getCacheUrlPrefix() + "genFeedPeriod" + "/week/00000000/" + skin + "/";
-          }
-          else {
-            constructedURL = getCacheUrlPrefix() + "genFeedPeriod" + "/month/00000000/" + skin + "/";
-          }
-        }
-        else
+        // if (weekOrMonth) {
+        //  if (document.getElementById('week').checked == true) {
+        //    constructedURL = getCacheUrlPrefix() + "genFeedPeriod" + "/week/00000000/" + skin + "/";
+        //  }
+        //  else {
+        //    constructedURL = getCacheUrlPrefix() + "genFeedPeriod" + "/month/00000000/" + skin + "/";
+        //  }
+        //}
+        //else
           if (ics) {
             if (byDays) {
               constructedURL = getCacheUrlPrefix() + "icsDays" + "/" + numberOfDays + "/";
@@ -313,7 +309,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
           constructedURL += '/bwObject';
         }
         return constructedURL;
-      }
+      //}
 
       function updateUrlDisplay() {
 
@@ -370,7 +366,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
             // feed
             $('#dataFormat').show('fast');
             $('#output').hide('slow');
-            $('#type').hide('slow');
+            // $('#type').hide('slow');
             $('#URL').show('fast');
             $('#codeBox').hide('slow');
           }
@@ -378,7 +374,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
             // widget
             $('#dataFormat').hide('slow');
             $('#output').show('fast');
-            $('#type').show('fast');
+            // $('#type').show('fast');
             $('#URL').hide('slow');
             $('#codeBox').show('fast');
           }
@@ -446,6 +442,8 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
           </li>
         </ul>
       </div>
+
+      <!--  not supporting grid calendars.... yet 
       <div id="type" class="invisible">
         <p class="prompt">
           Type?
@@ -462,6 +460,8 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
           </li>
         </ul>
       </div>
+      -->
+
       <div id="timeframeUnit">
         <p class="prompt">
           Specify the number of days (from the current date) or provide a start date and an end date.
