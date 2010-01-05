@@ -94,7 +94,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
           // skip over any system categories
           if ((category.value.substring(0, 4) != 'sys/') && (category.value.substring(0, 4) == 'org/')) {
             catKeyword = category.value;
-            catUid = category.uid;
+            catID = category.uid;
             tdLine = "<td><input type=\"checkbox\" name=\"" + checksObj + "\" onclick=\"updateUrlDisplay()\" value=\"" + catID + "\">" + catKeyword + "</td>"
             //arrange the categories -- n checkboxes per line
             if (column != n) {
@@ -306,7 +306,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
 	    } else if (exCatList == '()') {
 		  filterExpression = inCatList;
 	    } else {
-		  filterExpession = inCatList + '&' + exCatList;
+		  filterExpression = inCatList + '&' + exCatList;
 	    }
       }
       if (limitCat != "") {
@@ -323,7 +323,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
 	     constructedURL += escape(filterExpression);
       } 
 
-      if (jsonObject) {
+      if (jsonObject == true ) {
         constructedURL += '/bwObject';
       }
       return constructedURL;
