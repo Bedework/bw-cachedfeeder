@@ -171,18 +171,21 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
       
       
       function getLimitCatValue() {
-	
-        return '(' + $("input[name='limitCatCheck']:checked").val() + ')';
+	    if ($("input[name='limitCatCheck']:checked").val() == "all") {
+		  return "" 
+	    } else {
+	      return "catuid=('" + $("input[name='limitCatCheck']:checked").val() + "')";
+        }
       }
-      
+
       // construct category parameters
       function constructIncludeCategoryList() {
         var categoryIDList = "";
         $("input[name='includeCatChecks']:checked").each(function() {
           if (categoryIDList == "") {
-            categoryIDList = this.value;
+            categoryIDList = "catuid='" + this.value + "'";
           } else {
-            categoryIDList = categoryIDList + "|" + this.value;
+            categoryIDList = categoryIDList + "|catuid='" + this.value + "'";
           }
         });
         return '(' + categoryIDList + ')';
@@ -193,9 +196,9 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         var categoryIDList = "";
         $("input[name='excludeCatChecks']:checked").each(function() {
           if (categoryIDList == "") {
-            categoryIDList = '!' + this.value;
+            categoryIDList = "!catuid='" + this.value + "'";
           } else {
-            categoryIDList = categoryIDList + '&!' + this.value;
+            categoryIDList = categoryIDList + "&!catuid='" + this.value + "'";
           }
         });
         return '(' + categoryIDList + ')';
@@ -293,32 +296,31 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
       }
       
       
-      fexpr = ""
+      filterExpression = "";
       inCatList = constructIncludeCategoryList();
       exCatList = constructExcludeCategoryList();
       limitCat = getLimitCatValue();
       if ((inCatList != '()') || (exCatList != '()')) {
 	    if (inCatList == '()') {
-		  fexpr += "fexpr=" + exCatList;
+		  filterExpression = exCatList;
 	    } else if (exCatList == '()') {
-		  fexpr += "fexpr=" + inCatList;
+		  filterExpression = inCatList;
 	    } else {
-		  fexpr += "fexpr=" + inCatList + '&' + exCatList;
+		  filterExpession = inCatList + '&' + exCatList;
 	    }
       }
-      if (limitCat != "(all)") {
-	    if ( fexpr == "") {
-		  fexpr = "fexpr=" + limitCat;
+      if (limitCat != "") {
+	    if ( filterExpression == "") {
+		  filterExpression = limitCat;
 		} else {
-		  fexpr += '&' + limitCat;
+		  filterExpression += '&' + limitCat;
 		}
 	  }
 
-      if ( fexpr == "" ) {
-	     constructedURL += "(nofilter)";
+      if ( filterExpression == "" ) {
+	     constructedURL += "-no-filter-";
 	  } else {
-	     // constructedURL += escape(fexpr);
-	     constructedURL += fexpr;
+	     constructedURL += escape(filterExpression);
       } 
 
       if (jsonObject) {
