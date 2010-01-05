@@ -44,22 +44,19 @@ class FeedModel
   def buildUrl() # Main URL building action
     target = 'default'
     myGroup = 'none'
-    if reqParams[:group]
-      myGroup = reqParams[:group]
-    end
-    if reqParams[:categories]
-      myCats = cleanCats(reqParams[:categories])
+    if reqParams[:filter]
+      myFilter = reqParams[:filter]
     end
     if reqParams[:objName]
       myObjName = reqParams[:objName]
     end 
     target = case urlType
-      when 'genFeedDays' then getTarget(myGroup, myCats, "gen", "days", myObjName)
-      when 'genFeedRange' then getTarget(myGroup, myCats, "gen", "range", myObjName)
-      when 'genFeedPeriod' then getTarget(myGroup, myCats, "gen", "period", myObjName)
-      when 'icsDays' then getTarget(myGroup, myCats, "ics", "days")
-      when 'icsRange' then getTarget(myGroup, myCats, "ics", "range")
-      when 'icsPeriod' then getTarget(myGroup, myCats, "ics", "period")
+      when 'genFeedDays' then getTarget(myFilter, "gen", "days", myObjName)
+      when 'genFeedRange' then getTarget(myFilter, "gen", "range", myObjName)
+      when 'genFeedPeriod' then getTarget(myFilter, "gen", "period", myObjName)
+      when 'icsDays' then getTarget(myFilter, "ics", "days", myObjName)
+      when 'icsRange' then getTarget(myFilter, "ics", "range", myObjName)
+      when 'icsPeriod' then getTarget(myFilter, "ics", "period", myObjName)
       when 'categories' then getCategories()
       when 'groups' then getGroups()
       when 'event' then getEventTarget()
@@ -70,55 +67,39 @@ class FeedModel
     return target
   end
   
-  def getTarget(currGroup, currCats, genOrIcs, daysRangeOrPeriod, obj) 
+  def getTarget(filter, genOrIcs, daysRangeOrPeriod, obj) 
     
-    currentSkin = getSkin(reqParams[:skin])
-    skinSplits= currentSkin.split(/-/)
+    skin = getSkin(reqParams[:skin])
+    skinSplits = skin.split(/-/)
     output = skinSplits[1]
     
-    # set Bedework method and construct group and category information
+    if filter == '-no-filter-'
+      filterParam = ''
+    else
+      encodedFilter = CGI::escape(filter)
+      filterParam = "&fexpr=" + encodedFilter
+    end
+      
+    if obj == '-no-object-'
+      objParam = ''
+    else
+      objParam = "&setappvar=objName(" + obj + ")"
+    end
+    
+    # set Bedework action
     if daysRangeOrPeriod == 'period'
       action = gridAction
-      if currGroup == 'all' && currCats == 'all'
-        groupAndCats = ''
-      else
-        groupAndCats = "&setappvar=filter(grpAndCats:" + currGroup + "~" + currCats + ")"
-      end
     else
       action = listAction
-      if output == 'json' || output == 'html'
-        if currGroup == 'all' && currCats == 'all'
-          groupAndCats = ''
-        else
-          groupAndCats = "&setappvar=filter(grpAndCats:" + currGroup + "~" + currCats + ")"
-        end
-      else  
-        if currCats == 'all'
-          ifCats = ''
-        else
-          ifCats = convertCats(currCats)
-        end
-        if currGroup == 'all'
-          ifGroup = ''
-        else
-          ifGroup = "&creator=" + currGroup
-        end
-        groupAndCats = ifCats + ifGroup
-      end
     end
     
     bedeUrl = TARGETSERVER + "/" + action + "?calPath=/public/cals/MainCal"
     
     # build the Bedework URL and return it.
     if genOrIcs == 'ics'
-      bedeUrl += "&format=text/calendar&setappvar=summaryMode(details)" + groupAndCats  
-    else
-      if obj == '_none_'
-        objParam = ''
-      else
-        objParam = "&setappvar=objName(" + obj + ")"
-      end
-      bedeUrl += "&skinName=" + currentSkin + "&setappvar=summaryMode(details)" + groupAndCats + objParam
+      bedeUrl += "&format=text/calendar&setappvar=summaryMode(details)" + filterParam + objParam
+    else 
+      bedeUrl += "&skinName=" + skin + "&setappvar=summaryMode(details)" + filterParam + objParam
     end
     if daysRangeOrPeriod == "range"
       if reqParams[:startDate] and reqParams[:endDate] 
