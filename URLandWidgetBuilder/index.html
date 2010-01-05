@@ -69,8 +69,10 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
       function getCatAndLimitData() {
       
         cats = catsObj;
-        processRegularCatData();
-        processOrgCatData();
+        processRegularCatData("#categoriesTableBody","includeCatChecks");
+        processOrgCatData("#categoriesTableBody", "includeCatChecks");
+        processRegularCatData("#excludeCatTableBody", "excludeCatChecks");
+        processOrgCatData("#excludeCatTableBody", "excludeCatChecks");
         processLimitCatData();
       }
       
@@ -80,7 +82,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         return a == b ? 0 : (a < b ? -1 : 1)
       }
       
-      function processOrgCatData() {
+      function processOrgCatData(appendToElem, checksObj) {
       
         //set n to the number of columns
         var n = 4;
@@ -93,14 +95,14 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
           if ((category.value.substring(0, 4) != 'sys/') && (category.value.substring(0, 4) == 'org/')) {
             catKeyword = category.value;
             catUid = category.uid;
-            tdLine = "<td><input type=\"checkbox\" name=\"categoryChecks\" onclick=\"updateUrlDisplay()\" value=\"" + catUid + "\">" + catKeyword.substring(4) + "</td>"
+            tdLine = "<td><input type=\"checkbox\" name=\"" + checksObj + "\" onclick=\"updateUrlDisplay()\" value=\"" + catID + "\">" + catKeyword + "</td>"
             //arrange the categories -- n checkboxes per line
             if (column != n) {
               trLine += tdLine;
               column++;
             } else {
               trLine = trLine + tdLine + "</tr>";
-              $("#categoriesTableBody").append(trLine);
+              $(appendToElem).append(trLine);
               trLine = "<tr>"
               column = 1;
             }
@@ -111,15 +113,15 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         } else {
           lastLine = trLine + "</tr>";
         }
-        $("#categoriesTableBody").append(lastLine);
+        $(appendToElem).append(lastLine);
       }
       
-      function processRegularCatData() {
+      function processRegularCatData(appendToElem, checksObj) {
       
         //set n to the number of columns
         var n = 4;
         var column = 1;
-        var trLine = "<tr><th>General Categories:</th></tr><tr>";
+        var trLine = "<tr><th>General:</th></tr><tr>";
         var tdLine;
         var currentCreator = "";
         $.each(cats.bwCategories.categories.sort(sortByValue), function(i, category) {
@@ -127,14 +129,14 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
           if ((category.value.substring(0, 4) != 'sys/') && (category.value.substring(0, 4) != 'org/')) {
             catKeyword = category.value;
             catID = category.uid;
-            tdLine = "<td><input type=\"checkbox\" name=\"categoryChecks\" onclick=\"updateUrlDisplay()\" value=\"" + catID + "\">" + catKeyword + "</td>"
+            tdLine = "<td><input type=\"checkbox\" name=\"" + checksObj + "\" onclick=\"updateUrlDisplay()\" value=\"" + catID + "\">" + catKeyword + "</td>"
             //arrange the categories -- n checkboxes per line
             if (column != n) {
               trLine += tdLine;
               column++;
             } else {
               trLine = trLine + tdLine + "</tr>";
-              $("#categoriesTableBody").append(trLine);
+              $(appendToElem).append(trLine);
               trLine = "<tr>"
               column = 1;
             }
@@ -146,7 +148,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         } else {
           lastLine = trLine + "</tr>";
         }
-        $("#categoriesTableBody").append(lastLine);
+        $(appendToElem).append(lastLine);
       }
       
       function replaceAll(text, strA, strB) {
@@ -167,28 +169,38 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         });
       }
       
-      // check all/check none button.  Thanks to Adrian J. Moreno.
-      // function checkAll(id, pID) {
-      //   $( "#" + pID + " :checkbox").attr('checked', $('#' + id).is(':checked'));
-      //   updateUrlDisplay()
-      // }
       
       function getLimitCatValue() {
-        return $("input[name='limitCatCheck']:checked").val();
+	
+        return '(' + $("input[name='limitCatCheck']:checked").val() + ')';
       }
       
       // construct category parameters
-      function constructCategoryList() {
+      function constructIncludeCategoryList() {
         var categoryIDList = "";
-        $("input[name='categoryChecks']:checked").each(function() {
+        $("input[name='includeCatChecks']:checked").each(function() {
           if (categoryIDList == "") {
             categoryIDList = this.value;
           } else {
-            categoryIDList = categoryIDList + "~" + this.value;
+            categoryIDList = categoryIDList + "|" + this.value;
           }
         });
-        return categoryIDList;
+        return '(' + categoryIDList + ')';
       }
+
+      // construct category parameters
+      function constructExcludeCategoryList() {
+        var categoryIDList = "";
+        $("input[name='excludeCatChecks']:checked").each(function() {
+          if (categoryIDList == "") {
+            categoryIDList = '!' + this.value;
+          } else {
+            categoryIDList = categoryIDList + '&!' + this.value;
+          }
+        });
+        return '(' + categoryIDList + ')';
+      }
+
       
       //##### end of category/limit functions
       
@@ -245,31 +257,27 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
             skin = "list-json";
             jsonObject = true;
           }
-        }
-        // else {
+        } // else {
         //week or month grid
         //  weekOrMonth = true;
         //  if (outputType == "iframe") {
         // iframe
         //    skin = "grid-html";
-        //  }
-        //  else {
+        //  } else {
         // javascript
         //skin = "grid-json";
         //jsonObject = true;
         //}
         //}
-      }
+        //}
       
       // if (weekOrMonth) {
       //  if (document.getElementById('week').checked == true) {
       //    constructedURL = getCacheUrlPrefix() + "genFeedPeriod" + "/week/00000000/" + skin + "/";
-      //  }
-      //  else {
+      //  } else {
       //    constructedURL = getCacheUrlPrefix() + "genFeedPeriod" + "/month/00000000/" + skin + "/";
       //  }
-      //}
-      //else
+      //} else
       if (ics) {
         if (byDays) {
           constructedURL = getCacheUrlPrefix() + "icsDays" + "/" + numberOfDays + "/";
@@ -284,23 +292,40 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         }
       }
       
-      constructedURL = constructedURL + getLimitCatValue();
       
-      if (document.getElementById('allCategories').checked == true) {
-        constructedURL = constructedURL + '/all';
-      } else {
-        catList = constructCategoryList();
-        if (catList.length == 0) {
-          constructedURL = constructedURL + '/all';
-        } else {
-          constructedURL = constructedURL + '/' + catList;
-        }
+      fexpr = ""
+      inCatList = constructIncludeCategoryList();
+      exCatList = constructExcludeCategoryList();
+      limitCat = getLimitCatValue();
+      if ((inCatList != '()') || (exCatList != '()')) {
+	    if (inCatList == '()') {
+		  fexpr += "fexpr=" + exCatList;
+	    } else if (exCatList == '()') {
+		  fexpr += "fexpr=" + inCatList;
+	    } else {
+		  fexpr += "fexpr=" + inCatList + '&' + exCatList;
+	    }
       }
+      if (limitCat != "(all)") {
+	    if ( fexpr == "") {
+		  fexpr = "fexpr=" + limitCat;
+		} else {
+		  fexpr += '&' + limitCat;
+		}
+	  }
+
+      if ( fexpr == "" ) {
+	     constructedURL += "(nofilter)";
+	  } else {
+	     // constructedURL += escape(fexpr);
+	     constructedURL += fexpr;
+      } 
+
       if (jsonObject) {
         constructedURL += '/bwObject';
       }
       return constructedURL;
-      //}
+    }
       
       function updateUrlDisplay() {
       
@@ -324,7 +349,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
               jLine7 += 'script type="text/javascript" src="gridEvents.js"> &lt/script>\n';
             }
             jLine8 = '      <';
-            jLine8 += 'script> type="text/javascript" src="' + url + '"> &lt/script>\n';
+            jLine8 += 'script type="text/javascript" src="' + url + '"> &lt/script>\n';
             jLine9 = '  </body>\n';
             jLineA = '</html>';
             jsHtml = jLine1 + jLine2 + jLine3 + jLine4 + jLine5 + jLine6 + jLine7 + jLine8 + jLine9 + jLineA;
@@ -465,6 +490,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
             </table>
           </div><!-- timeframeWidgets -->
         </div><!-- timeframeUnit -->
+
         <p class="prompt">Include everything or only those events from selected categories (Lectures, Arts Events, etc.)?</p>
         <ul class="noBullet">
           <li class="trigger">
@@ -474,7 +500,8 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
             <input type="radio" id="checkedCategories" name="allOrSomeCats" onclick='updateUrlDisplay()' value="selectedCats" />Include selected categories only
           </li>
         </ul>
-        <div id="selectCategories" class="invisible">
+
+        <div id="selectCategories" class="invisible" >
           <ul class="noBullet">
             <li>
               <table id="categoriesTable">
@@ -483,8 +510,20 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
             </li>
           </ul>
         </div>
-        <!-- selectCategories -->
-        <p class="prompt">Limit To:</p>
+
+        <p class="prompt">Exclude these categories:</p>
+
+        <div id="excludeCategories">
+	      <ul class="noBullet">
+	        <li>
+	          <table id="excludeCatTable">
+	            <tbody id="excludeCatTableBody"></tbody>
+	          </table>
+	        </li>
+	      </ul>
+	    </div>
+       
+        <p class="prompt">Limit to these organizations:</p>
         <div id="selectGroup">
           <table>
           <tbody id="filter" />
