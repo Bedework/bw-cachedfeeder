@@ -9,7 +9,7 @@ var bwJsWidgetOptions = {
   displayStartDateOnlyInList: false,
   displayTimeInList: true,
   displayLocationInList: false,
-  listMode: 'byDate' // values: 'byDate' or 'byTitle'
+  listMode: 'byDate' // values: 'byDate' or 'byTitle' - highlights the date or title first (sort is always by date)
 };
 
 // Insert Bedework calendar events from a json feed
