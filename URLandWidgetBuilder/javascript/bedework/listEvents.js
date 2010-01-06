@@ -5,9 +5,9 @@ var bwJsWidgetOptions = {
   showTitle: true,
   calendarServer: 'http://localhost:8080',
   calSuiteContext: '/cal',
-  displayStartDateOnly: false,
-  displayTime: true,
   displayEventDetailsInline: false,
+  displayStartDateOnlyInList: false,
+  displayTimeInList: true,
   displayLocationInList: false,
   listMode: 'byDate' // values: 'byDate' or 'byTitle'
 };
@@ -84,7 +84,7 @@ function outputBwDateTime(event) {
   // the following can likely be simplified
   if ((event.start.shortdate != event.end.shortdate) && 
       (event.start.datetime.substring(0,4) == event.end.datetime.substring(0,4)) && 
-      (event.start.allday == 'true' || event.start.time == event.end.datetime.time || !bwJsWidgetOptions.displayTime)) {
+      (event.start.allday == 'true' || event.start.time == event.end.datetime.time || !bwJsWidgetOptions.displayTimeInList)) {
     
     // format: December 15-18, 2010
     
@@ -92,18 +92,22 @@ function outputBwDateTime(event) {
     output += "-" + event.end.datetime.substring(6,8) + ", ";
     output += event.end.datetime.substring(0,4);
     
-  } else if ((event.start.shortdate != event.end.shortdate) && !bwJsWidgetOptions.displayStartDateOnly) {
+  } else if ((event.start.shortdate != event.end.shortdate) && !bwJsWidgetOptions.displayStartDateOnlyInList) {
     
     // format: December 15, 2010 - January 3, 2011
     // or: December 15, 2010 10:00 AM - December 18, 2010 11:00 AM
     
     output += event.start.longdate; 
-    if ((event.start.allday == 'false') && (event.start.time != event.end.datetime.time) && bwJsWidgetOptions.displayTime) {
+    if ((event.start.allday == 'false') && 
+        (event.start.time != event.end.datetime.time) && 
+        bwJsWidgetOptions.displayTimeInList) {
       output += " " + event.start.time;
     }
     output += " - ";
     output += event.end.longdate;
-    if ((event.start.allday == 'false') && (event.start.time != event.end.datetime.time) && bwJsWidgetOptions.displayTime) {
+    if ((event.start.allday == 'false') && 
+        (event.start.time != event.end.datetime.time) && 
+        bwJsWidgetOptions.displayTimeInList) {
       output += " " + event.end.datetime.time;
     }
     
@@ -114,12 +118,12 @@ function outputBwDateTime(event) {
     // or: December 15, 2010 10:00 AM - 11:00 AM
     
     output += event.start.longdate;
-    if (event.start.allday == 'false' && bwJsWidgetOptions.displayTime) {
+    if (event.start.allday == 'false' && bwJsWidgetOptions.displayTimeInList) {
       output += " " + event.start.time;
     }
     if ((event.start.allday == 'false') && 
-        bwJsWidgetOptions.displayTime && 
-        !bwJsWidgetOptions.displayStartDateOnly && 
+        bwJsWidgetOptions.displayTimeInList && 
+        !bwJsWidgetOptions.displayStartDateOnlyInList && 
         (event.start.time != event.end.datetime.time)) {
       output += " - " + event.end.datetime.time;
     }
