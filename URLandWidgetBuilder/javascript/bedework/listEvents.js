@@ -1,9 +1,87 @@
 // Insert Bedework calendar events from a json feed
 
 var bwJsWidgetOptions = {
+  title: 'Upcoming Events'; 
+  showTitle: true;
+  calendarServer: 'http://localhost:8080';
+  calSuiteContext: '/cal';
   displayEventDetailsInline: false;
-  webCacheLocation: 'http://localhost:8080/webcache';
+  displayLocationInList: false;
+  listMode: 'byDate'; // values: 'byDate' or 'byTitle'
 };
+
+// Insert Bedework calendar events from a json feed
+function insertEvents(outputContainerID) {
+  var outputContainer = document.getElementById(outputContainerID);
+  var output = "";
+  var eventlist = new Array();
+  var eventIndex = 0;
+  
+  // Include the urlPrefix for links back to events in the calendar. 
+  var urlPrefix = bwJsWidgetOptions.calendarServer + bwJsWidgetOptions.calSuiteContext + "/event/eventView.do";
+
+  if ((bwObject.bwEventList != undefined) &&
+      (bwObject.bwEventList.events != undefined) &&
+      (bwObject.bwEventList.events.length > 0)) {
+    // get events 
+    for (i = 0; i < bwObject.bwEventList.events.length; i++) {
+      eventlist[eventIndex] = i;
+      eventIndex++;
+    }
+    
+    // GENERATE OUTPUT
+    // This is where you may wish to customize the output.  To see what  
+    // fields are available for events, look at the json source file included
+    // by the widget code
+    
+    // The title is included because you may wish to hide it when 
+    // no events are present.
+    output += "<h3 id=\"bwEventsTitle\">" + bwJsWidgetOptions.title + "</h3>";
+    output += "<ul id=\"bwEventList\">";
+    
+    // Now, iterate over the events:
+    for(i in eventlist){
+      // provide a shorthand reference to the event:
+      var event = bwObject.bwEventList.events[eventlist[i]];
+      
+      // generate the query string parameters that get us back to the 
+      // event in the calendar:
+      var eventQueryString = "?subid=" + event.subscriptionId;
+      eventQueryString += "&amp;calPath=" + event.calPath;
+      eventQueryString += "&amp;guid=" + event.guid;
+      eventQueryString += "&amp;recurrenceId=" + event.recurrenceId;
+      
+      // create the list item:
+      output += "<li>";
+      output += "<strong class=\"dateTime\">";
+      // don't include times for now
+      if ((event.start.shortdate != event.end.shortdate) && (event.start.datetime.substring(0,4) == event.end.datetime.substring(0,4))) {
+        output += event.start.longdate.substring(0,event.start.longdate.indexOf(","));
+        output += "-" + event.end.datetime.substring(6,8) + ", ";
+        output += event.end.datetime.substring(0,4);
+      } else if ((event.start.shortdate != event.end.shortdate) && (event.start.datetime.substring(0,4) != event.end.datetime.substring(0,4))) {
+        output += event.start.longdate + " - ";
+        output += event.end.longdate + " ";
+      }
+      else {
+        output += event.start.longdate + " ";
+      }
+      output += "</strong><br/>";
+      
+      output += "<a href=\"" + urlPrefix + eventQueryString + "\">" + event.summary + "</a>";
+      if (bwJsWidgetOptions.displayLocationInList = "true") {
+        output += "<br/>" + event.location.address;
+      }
+      
+      output += "</li>";
+    }
+    output += "</ul>";
+    
+    // Finally, send the output to the container:
+    outputContainer.innerHTML = output;
+  }
+}
+
 
 
 function insertEvents(outputContainerID) {
