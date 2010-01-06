@@ -14,11 +14,11 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
     <link type="text/css" href="css/bedeworkJqueryThemes" rel="stylesheet" />
     <link type="text/css" href="css/builder.css" rel="stylesheet">
     <script type="text/javascript">
-      
+
       function getCacheUrlPrefix() {
         return urlPrefix = "http://localhost:8080/webcache/v1.0/"
       }
-      
+
       // use JQuery UI slider widget for number of days
       $(function() {
         $("#slider").slider({
@@ -33,7 +33,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         });
         $("#numDays").val($("#slider").slider("value"));
       });
-      
+
       // use JQuery UI datepicker widget for start date and end date
       $(function() {
         $("#startDate").datepicker({
@@ -52,22 +52,22 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
           }
         });
       });
-      
+
       // $("#startDate").click(function() {
       //  $("#numDays").find("em").css({color:"#993300", fontWeight:"bold"});
       // });
-      
+
       //######### category functions ##########
-      
+
       function sortByFirstColumn(a, b) {
         var x = a[0].toLowerCase();
         var y = b[0].toLowerCase();
         return ((x < y) ? -1 : ((x > y) ? 1 : 0));
       }
-      
+
       var cats; // holds category tree returned by script call to the feeder app.
       function getCatAndLimitData() {
-      
+
         cats = catsObj;
         processRegularCatData("#categoriesTableBody","includeCatChecks");
         processOrgCatData("#categoriesTableBody", "includeCatChecks");
@@ -75,15 +75,15 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         processOrgCatData("#excludeCatTableBody", "excludeCatChecks");
         processLimitCatData();
       }
-      
+
       function sortByValue(a, b) {
         a = a.value;
         b = b.value;
         return a == b ? 0 : (a < b ? -1 : 1)
       }
-      
+
       function processOrgCatData(appendToElem, checksObj) {
-      
+
         //set n to the number of columns
         var n = 4;
         var column = 1;
@@ -115,9 +115,9 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         }
         $(appendToElem).append(lastLine);
       }
-      
+
       function processRegularCatData(appendToElem, checksObj) {
-      
+
         //set n to the number of columns
         var n = 4;
         var column = 1;
@@ -142,7 +142,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
             }
           }
         });
-        
+
         if (column == 1) {
           lastLine = "</tr>";
         } else {
@@ -150,14 +150,14 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         }
         $(appendToElem).append(lastLine);
       }
-      
+
       function replaceAll(text, strA, strB) {
         while (text.indexOf(strA) != -1) {
           text = text.replace(strA, strB);
         }
         return text;
       }
-      
+
       function processLimitCatData() {
         trLine = "<tr><td><input type=\"radio\" checked\=\"checked\" id=\"no--Limit\" name=\"limitCatCheck\" onclick=\"updateUrlDisplay()\" value=\"all\">No Limit</td></tr>";
         $("#filter").append(trLine);
@@ -168,13 +168,13 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
           }
         });
       }
-      
-      
+
+
       function getLimitCatValue() {
-	    if ($("input[name='limitCatCheck']:checked").val() == "all") {
-		  return "" 
-	    } else {
-	      return "catuid=('" + $("input[name='limitCatCheck']:checked").val() + "')";
+      if ($("input[name='limitCatCheck']:checked").val() == "all") {
+      return ""
+      } else {
+        return "catuid=('" + $("input[name='limitCatCheck']:checked").val() + "')";
         }
       }
 
@@ -204,24 +204,24 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         return '(' + categoryIDList + ')';
       }
 
-      
+
       //##### end of category/limit functions
-      
-      
+
+
       function constructURL() {
-      
+
         // five cases:
         //   (1)  ics with number of days specified.  Other parameters: limitCategory, categories
         //   (2)  ics with date range specified.  Other parameters: limitCategory, categories
         //   (3)  other feed with number of days specified.  Other parameters: skin, limitCategory, categories
         //   (4)  other feed with date range specified.  Other paramters: skin, limitCategory, categories
         //   (5)  other feed for week or month period specified (widget only)
-        
+
         ics = false;
         byDays = false;
         // weekOrMonth = false;
         jsonObject = false;
-        
+
         // byDays?  If byDays, get number of days, else get start and end dates.
         if (document.getElementById('startEndDates').checked == true) {
           startDate = document.getElementById('startDate').value;
@@ -237,16 +237,16 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
           byDays = true;
           numberOfDays = document.getElementById('numDays').value;
         }
-        
+
         // Feed. ics?  If not, get skin.  ics doesn't need a skin.
         if (document.getElementById('ics').checked == true) {
           ics = true;
         } else {
           skin = $("input[name='dataType']:checked").val();
         }
-        
+
         // Widget?  set skin.
-        
+
         if (document.getElementById('widget').checked == true) {
           //widget
           // outputType = $("input[name='output']:checked").val();
@@ -273,7 +273,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         //}
         //}
         //}
-      
+
       // if (weekOrMonth) {
       //  if (document.getElementById('week').checked == true) {
       //    constructedURL = getCacheUrlPrefix() + "genFeedPeriod" + "/week/00000000/" + skin + "/";
@@ -294,43 +294,43 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
           constructedURL = getCacheUrlPrefix() + "genFeedRange" + "/" + dates + "/" + skin + "/";
         }
       }
-      
-      
+
+
       filterExpression = "";
       inCatList = constructIncludeCategoryList();
       exCatList = constructExcludeCategoryList();
       limitCat = getLimitCatValue();
       if ((inCatList != '()') || (exCatList != '()')) {
-	    if (inCatList == '()') {
-		  filterExpression = exCatList;
-	    } else if (exCatList == '()') {
-		  filterExpression = inCatList;
-	    } else {
-		  filterExpression = inCatList + '&' + exCatList;
-	    }
+      if (inCatList == '()') {
+      filterExpression = exCatList;
+      } else if (exCatList == '()') {
+      filterExpression = inCatList;
+      } else {
+      filterExpression = inCatList + '&' + exCatList;
+      }
       }
       if (limitCat != "") {
-	    if ( filterExpression == "") {
-		  filterExpression = limitCat;
-		} else {
-		  filterExpression += '&' + limitCat;
-		}
-	  }
+      if ( filterExpression == "") {
+      filterExpression = limitCat;
+    } else {
+      filterExpression += '&' + limitCat;
+    }
+    }
 
       if ( filterExpression == "" ) {
-	     constructedURL += "-no-filter-";
-	  } else {
-	     constructedURL += escape(filterExpression);
-      } 
+       constructedURL += "-no-filter-";
+    } else {
+       constructedURL += escape(filterExpression);
+      }
 
       if (jsonObject == true ) {
         constructedURL += '/bwObject';
       }
       return constructedURL;
     }
-      
+
       function updateUrlDisplay() {
-      
+
         if (document.getElementById('widget').checked == true) {
           outputType = $("input[name='output']:checked").val();
           if (outputType == "iframe") {
@@ -362,9 +362,9 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
           document.getElementById('UrlBox').href = constructURL();
         }
       }
-      
+
       $(document).ready(function() {
-      
+
         getCatAndLimitData(); //from server
         //$('#startDate').attr('disabled', 'disabled');
         //$('#endDate').attr('disabled', 'disabled');
@@ -397,9 +397,9 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
             $('#selectCategories').hide('slow');
           }
         });
-        
+
         //updateURLDisplay();
-      
+
       });
     </script>
   </head>
@@ -516,15 +516,15 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         <p class="prompt">Exclude these categories:</p>
 
         <div id="excludeCategories">
-	      <ul class="noBullet">
-	        <li>
-	          <table id="excludeCatTable">
-	            <tbody id="excludeCatTableBody"></tbody>
-	          </table>
-	        </li>
-	      </ul>
-	    </div>
-       
+        <ul class="noBullet">
+          <li>
+            <table id="excludeCatTable">
+              <tbody id="excludeCatTableBody"></tbody>
+            </table>
+          </li>
+        </ul>
+      </div>
+
         <p class="prompt">Limit to these organizations:</p>
         <div id="selectGroup">
           <table>
@@ -535,7 +535,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         <div id="URL">
           <p class="output">
             Your URL:
-            <a href="" id="UrlBox"></a>
+            <a href="" id="UrlBox" target="_top"></a>
           </p>
         </div>
         <div id="codeBox" class="invisible">
