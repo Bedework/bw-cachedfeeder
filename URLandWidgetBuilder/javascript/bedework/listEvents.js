@@ -1,13 +1,13 @@
 // Insert Bedework calendar events from a json feed
 
 var bwJsWidgetOptions = {
-  title: 'Upcoming Events'; 
-  showTitle: true;
-  calendarServer: 'http://localhost:8080';
-  calSuiteContext: '/cal';
-  displayEventDetailsInline: false;
-  displayLocationInList: false;
-  listMode: 'byDate'; // values: 'byDate' or 'byTitle'
+  title: 'Upcoming Events',
+  showTitle: true,
+  calendarServer: 'http://localhost:8080',
+  calSuiteContext: '/cal',
+  displayEventDetailsInline: false,
+  displayLocationInList: false,
+  listMode: 'byDate' // values: 'byDate' or 'byTitle'
 };
 
 // Insert Bedework calendar events from a json feed
@@ -29,12 +29,16 @@ function insertBwEvents(outputContainerID) {
     // GENERATE OUTPUT
     // This is where you may wish to customize the output.  To see what  
     // fields are available for events, look at the json source file included
-    // by the widget code
+    // by the widget code.  The core formatting is done in formatDateTime()
+    // and formatSummary()
     
     // The title is included because you may wish to hide it when 
     // no events are present.
-    if ()
-    output += "<h3 id=\"bwEventsTitle\">" + bwJsWidgetOptions.title + "</h3>";
+    if (bwJsWidgetOptions.showTitle) {
+      output += "<h3 id=\"bwEventsTitle\">" + bwJsWidgetOptions.title + "</h3>";  
+    }
+    
+    // Output the list
     output += "<ul id=\"bwEventList\">";
     
     // Now, iterate over the events:
