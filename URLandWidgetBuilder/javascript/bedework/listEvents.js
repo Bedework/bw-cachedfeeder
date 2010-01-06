@@ -5,6 +5,8 @@ var bwJsWidgetOptions = {
   showTitle: true,
   calendarServer: 'http://localhost:8080',
   calSuiteContext: '/cal',
+  displayStartDateOnly: false,
+  displayTime: true,
   displayEventDetailsInline: false,
   displayLocationInList: false,
   listMode: 'byDate' // values: 'byDate' or 'byTitle'
@@ -49,7 +51,7 @@ function insertBwEvents(outputContainerID) {
       // create the list item:
       output += "<li>";
       
-      if (bwJsWidgetOptions.listMode = 'byDate') {
+      if (bwJsWidgetOptions.listMode == 'byDate') {
         output += formatDateTime(event);
         output += "<br/>"
         output += formatSummary(event,outputContainerID,i);
@@ -59,7 +61,7 @@ function insertBwEvents(outputContainerID) {
         output += formatDateTime(event);
       }
       
-      if (bwJsWidgetOptions.displayLocationInList = "true") {
+      if (bwJsWidgetOptions.displayLocationInList) {
         output += "<br/><span class=\"bwLoc\">" + event.location.address + "</span>";
       }
       
@@ -75,17 +77,55 @@ function insertBwEvents(outputContainerID) {
 function outputBwDateTime(event) {
   var output;
   output += "<span class=\"bwDateTime\">";
-  // don't include times for now
-  if ((event.start.shortdate != event.end.shortdate) && (event.start.datetime.substring(0,4) == event.end.datetime.substring(0,4))) {
+
+  if (bwJsWidgetOptions.listMode == 'byDate') {
+    output +="<strong>";
+  }
+  // the following can likely be simplified
+  if ((event.start.shortdate != event.end.shortdate) && 
+      (event.start.datetime.substring(0,4) == event.end.datetime.substring(0,4)) && 
+      (event.start.allday == 'true' || event.start.time == event.end.datetime.time || !bwJsWidgetOptions.displayTime)) {
+    
+    // format: December 15-18, 2010
+    
     output += event.start.longdate.substring(0,event.start.longdate.indexOf(","));
     output += "-" + event.end.datetime.substring(6,8) + ", ";
     output += event.end.datetime.substring(0,4);
-  } else if ((event.start.shortdate != event.end.shortdate) && (event.start.datetime.substring(0,4) != event.end.datetime.substring(0,4))) {
-    output += event.start.longdate + " - ";
-    output += event.end.longdate + " ";
+    
+  } else if ((event.start.shortdate != event.end.shortdate) && !bwJsWidgetOptions.displayStartDateOnly) {
+    
+    // format: December 15, 2010 - January 3, 2011
+    // or: December 15, 2010 10:00 AM - December 18, 2010 11:00 AM
+    
+    output += event.start.longdate; 
+    if ((event.start.allday == 'false') && (event.start.time != event.end.datetime.time) && bwJsWidgetOptions.displayTime) {
+      output += " " + event.start.time;
+    }
+    output += " - ";
+    output += event.end.longdate;
+    if ((event.start.allday == 'false') && (event.start.time != event.end.datetime.time) && bwJsWidgetOptions.displayTime) {
+      output += " " + event.end.datetime.time;
+    }
+    
+  } else {
+    
+    // format: December 15, 2010
+    // or: December 15, 2010 10:00 AM
+    // or: December 15, 2010 10:00 AM - 11:00 AM
+    
+    output += event.start.longdate;
+    if (event.start.allday == 'false' && bwJsWidgetOptions.displayTime) {
+      output += " " + event.start.time;
+    }
+    if ((event.start.allday == 'false') && 
+        bwJsWidgetOptions.displayTime && 
+        !bwJsWidgetOptions.displayStartDateOnly && 
+        (event.start.time != event.end.datetime.time)) {
+      output += " - " + event.end.datetime.time;
+    }
   }
-  else {
-    output += event.start.longdate + " ";
+  if (bwJsWidgetOptions.listMode == 'byDate') {
+    output +="</strong>";
   }
   output += "</span>";
   
@@ -95,6 +135,10 @@ function outputBwDateTime(event) {
 function outputBwSummary(event,outputContainerId,i) {
   var output;
   output += "<span class=\"bwSummary\">";
+  
+  if (bwJsWidgetOptions.listMode == 'bySummary') {
+    output +="<strong>";
+  }
 
   if (bwJsWidgetOptions.displayEventDetailsInline = 'false') { 
     // link back to the calendar
@@ -116,12 +160,17 @@ function outputBwSummary(event,outputContainerId,i) {
     output += "<a href=\"javascript:showEvent('" + outputContainerID + "'," + i + ");\">" + event.summary + "</a>";
       
   }
+  if (bwJsWidgetOptions.listMode == 'bySummary') {
+    output +="</strong>";
+  }
   output += "</span>";
   
   return output;
 }
       
 function showBwEvent(outputContainerID, eventId) {
+  // Style further with CSS
+  
   var outputContainer = document.getElementById(outputContainerID);
   var output = "";
   // provide a shorthand reference to the event:
