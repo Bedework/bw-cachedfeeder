@@ -1,8 +1,9 @@
 // Insert Bedework calendar events from a json feed
 
-function cacheFeederUrl() { 
-  return "http://localhost:3000";
-}
+var bwJsWidgetOptions = {
+  displayEventDetailsInline: false;
+  webCacheLocation: 'http://localhost:8080/webcache';
+};
 
 
 function insertEvents(outputContainerID) {
