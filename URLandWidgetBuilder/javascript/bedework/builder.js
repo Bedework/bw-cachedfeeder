@@ -70,7 +70,7 @@ function sortByValue(a, b) {
 function processOrgCatData(appendToElem, checksObj) {
 
   //set n to the number of columns
-  var n = 4;
+  var n = 3;
   var column = 1;
   var trLine = "<tr><th>Organizations:</th></tr><tr>";
   var tdLine;
@@ -104,7 +104,7 @@ function processOrgCatData(appendToElem, checksObj) {
 function processRegularCatData(appendToElem, checksObj) {
 
   //set n to the number of columns
-  var n = 4;
+  var n = 3;
   var column = 1;
   var trLine = "<tr><th>General:</th></tr><tr>";
   var tdLine;

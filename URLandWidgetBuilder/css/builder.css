@@ -2,56 +2,42 @@ body {
   color: black;
   background-color: white;
   font-family: "Trebuchet MS", Helvetica, sans-serif;
-  padding: 2em;
+  padding: 0.5em 2em 2em 2em;
 }
-/*
-input.slider {
-  border: 0;
-  background: #D0D0D0;
-  color: #f6931f;
-  font-weight: bold;
-}
-
-input.datepicker {
-  background: #D0D0D0;
-}
-
-input.allClicker {
-  background: #f6931f;
-  width: 30px;
-  height: 30px;
-}
-*/
 
 .invisible {
   display: none;
 }
 
+form {
+  margin-left: 2em;
+}
+
 h1 {
   color: #697AB4;
+  margin-left: -1em;
 }
 
-ul.noBullet {
-  list-style-type: none;
-  margin-left: auto;
-  width: 93%;
+h2 {
+  margin-left: -2em;
 }
 
-ul.noBullet2 {
-  list-style-type: none;
-  margin-left: 5%;
-  width: 88%;
+h2,h3,h4 {
+  font-size: 1em;
+  font-weight: normal;
+  background-color: #eee;
+  color: black;
+  padding: 4px;
 }
 
-ul.noBullet3 {
+ul {
   list-style-type: none;
-  margin-left: 10%;
-  width: 83%;
+  margin: 1em 0;
+  padding: 0;
 }
 
 #codeBoxBox {
-  margin-left: auto;
-  width: 93%;
+  
 }
 
 #UrlBox {
@@ -59,33 +45,42 @@ ul.noBullet3 {
 }
 
 #selectGroup {
-  margin-left: auto;
-  width: 93%;
+  
 }
 
 #timeframeWidgets {
-  margin-left: auto;
-  width: 93%;
+  
 }
 
-p.prompt {
-  background-color: #eee;
-  color: black;
-  padding: 4px;
+#jsWidgetOptions {
+  margin: 1em 0 2em -2em;
+  padding: 2em 2em 1em 2em;
+  border: 1px solid #eee;
 }
 
-p.prompt2 {
-  background-color: #eee;
-  color: black;
-  padding: 4px;
-  margin-left: 5%;
+#jsWidgetOptions h2 {
+  margin: -2em -2em 1em -2em;
 }
 
-p.prompt3{
-  background-color: #eee;
-  color: black;
-  padding: 4px;
-  margin-left: 10%;
+#jsWidgetOptions ul {
+  list-style-type: disc;
+}
+
+#jsWidgetOptions li {
+  margin-bottom: 1em;
+}
+
+#jsWidgetOptions li ul {
+  margin: 1em 0 0 2em;
+}
+
+#jsWidgetOptions li ul li {
+  list-style-type: circle;
+}
+
+#jsWidgetOptions em {
+  font-style: normal;
+  font-size: 0.8em;
 }
 
 p.output {
@@ -94,11 +89,14 @@ p.output {
   padding: 4px;
   border: 1px solid #ccc;
 }
+
 td {
   white-space: nowrap;
 }
+
 th {
   font-weight: bold;
   padding: 1em 0 0.5em 0;
   text-align: left;
+  vertical-align: top;
 }
