@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title>Bedework Test Feed</title>
+  </head>
+  <body>
+    <div id="bwList"></div>
+    <script type="text/javascript" src="javascript/bedework/exampleJson.js"></script>
+    <script type="text/javascript" src="javascript/bedework/listEvents.js"></script>
+    <script type="text/javascript">
+      bwJsWidgetOptions.title = 'Upcoming Events';
+      bwJsWidgetOptions.showTitle = true;
+      bwJsWidgetOptions.displayEventDetailsInline = true;
+      bwJsWidgetOptions.displayStartDateOnlyInList = false;
+      bwJsWidgetOptions.displayTimeInList = true;
+      bwJsWidgetOptions.displayLocationInList = false;
+      bwJsWidgetOptions.listMode = 'bySummary';
+      bwJsWidgetOptions.displayCostInDetails = true;
+      bwJsWidgetOptions.displayTagsInDetails = true;
+      bwJsWidgetOptions.displayTimezoneInDetails = true;
+
+      insertBwEvents("bwList");
+    </script>
+  </body>
+</html>

@@ -9,7 +9,10 @@ var bwJsWidgetOptions = {
   displayStartDateOnlyInList: false,
   displayTimeInList: true,
   displayLocationInList: false,
-  listMode: 'byDate' // values: 'byDate' or 'byTitle' - highlights the date or title first (sort is always by date)
+  listMode: 'bySummary', // values: 'byDate' or 'bySummary' - highlights the date or title first (sort is always by date)
+  displayCostInDetails: true,
+  displayTagsInDetails: true,
+  displayTimezoneInDetails: true
 };
 
 // Insert Bedework calendar events from a json feed
@@ -52,13 +55,13 @@ function insertBwEvents(outputContainerID) {
       output += "<li>";
 
       if (bwJsWidgetOptions.listMode == 'byDate') {
-        output += formatDateTime(event);
+        output += formatBwDateTime(event);
         output += "<br/>"
-        output += formatSummary(event,outputContainerID,i);
+        output += formatBwSummary(event,outputContainerID,i);
       } else {
-        output += formatSummary(event,outputContainerID,i);
+        output += formatBwSummary(event,outputContainerID,i);
         output += "<br/>"
-        output += formatDateTime(event);
+        output += formatBwDateTime(event);
       }
 
       if (bwJsWidgetOptions.displayLocationInList) {
@@ -74,8 +77,9 @@ function insertBwEvents(outputContainerID) {
   }
 }
 
-function outputBwDateTime(event) {
-  var output;
+function formatBwDateTime(event) {
+
+  var output = "";
   output += "<span class=\"bwDateTime\">";
 
   if (bwJsWidgetOptions.listMode == 'byDate') {
@@ -90,17 +94,17 @@ function outputBwDateTime(event) {
     output += " " + event.start.time;
   }
   if (!bwJsWidgetOptions.displayStartDateOnlyInList) {
-    output += " - ";
     if (event.start.shortdate != event.end.shortdate) {
+      output += " - ";
       output += event.end.longdate;
       if ((event.start.allday == 'false') && bwJsWidgetOptions.displayTimeInList) {
-        output += " " + event.end.datetime.time;
+        output += " " + event.end.time;
       }
     } else if ((event.start.allday == 'false') &&
                 bwJsWidgetOptions.displayTimeInList &&
-                (event.start.time != event.end.datetime.time)) {
+                (event.start.time != event.end.time)) {
       // same date, different times
-      output += " " + event.end.datetime.time;
+      output += " - " + event.end.time;
     }
   }
 
@@ -112,15 +116,21 @@ function outputBwDateTime(event) {
   return output;
 }
 
-function outputBwSummary(event,outputContainerId,i) {
-  var output;
+function formatBwSummary(event,outputContainerID,i) {
+
+  var output = "";
   output += "<span class=\"bwSummary\">";
 
   if (bwJsWidgetOptions.listMode == 'bySummary') {
     output +="<strong>";
   }
 
-  if (bwJsWidgetOptions.displayEventDetailsInline = 'false') {
+  if (bwJsWidgetOptions.displayEventDetailsInline) {
+    // don't link back to the calendar - display event details in the widget
+
+    output += "<a href=\"javascript:showBwEvent('" + outputContainerID + "'," + i + ");\">" + event.summary + "</a>";
+
+  } else {
     // link back to the calendar
 
     // Include the urlPrefix for links back to events in the calendar.
@@ -135,11 +145,8 @@ function outputBwSummary(event,outputContainerId,i) {
 
     output += "<a href=\"" + urlPrefix + eventQueryString + "\">" + event.summary + "</a>";
 
-  } else {
-    // don't link back to the calendar - display event details in the widget
-    output += "<a href=\"javascript:showEvent('" + outputContainerID + "'," + i + ");\">" + event.summary + "</a>";
-
   }
+
   if (bwJsWidgetOptions.listMode == 'bySummary') {
     output +="</strong>";
   }
@@ -160,18 +167,36 @@ function showBwEvent(outputContainerID, eventId) {
   output += "<h3 id=\"bwEventsTitle\">" + event.summary + "</h3>";
   output += "<div id=\"bwEventLogistics\">";
 
+  // output date/time
   output += "<div class=\"bwEventDateTime\">"
-  output += event.start.longdate + " ";
-  output += event.start.time;
-  if ((event.start.shortdate != event.end.shortdate) &&
-      (event.start.time != event.end.time)) {
-    output += " - " + event.end.longdate + " ";
-    output += event.end.time;
-  } else if (event.start.time != event.end.time) {
+  output += event.start.longdate;
+  if ((event.start.allday == 'false') && bwJsWidgetOptions.displayTimeInList) {
+    output += " " + event.start.time;
+    if ((event.start.timezone != event.end.timezone) &&
+        bwJsWidgetOptions.displayTimezoneInDetails) {
+      output += " " + event.start.timezone;
+    }
+  }
+  if (event.start.shortdate != event.end.shortdate) {
+    output += " - ";
+    output += event.end.longdate;
+    if (event.start.allday == 'false') {
+      output += " " + event.end.time;
+      if (bwJsWidgetOptions.displayTimezoneInDetails) {
+        output += " " + event.end.timezone;
+      }
+    }
+  } else if ((event.start.allday == 'false') &&
+             (event.start.time != event.end.time)) {
+    // same date, different times
     output += " - " + event.end.time;
+    if (bwJsWidgetOptions.displayTimezoneInDetails) {
+      output += " " + event.end.timezone;
+    }
   }
   output += "</div>";
 
+  // output location
   output += "<div class=\"bwEventLoc\">"
   if (event.location.link != "") {
     output += "<a href=\""+ event.location.link + "\">" + event.location.address + "</a>";
@@ -180,15 +205,26 @@ function showBwEvent(outputContainerID, eventId) {
   }
   output += "</div>";
 
+  // output description
   output += "<div class=\"bwEventDesc\">"
   output += event.description;
   output += "</div>";
 
-  if (event.categories != "") {
-    output += "<div class=\"bwEventCats\">"
-    output += event.categories;
+  // output cost
+  if (event.cost != "" && bwJsWidgetOptions.displayCostInDetails) {
+    output += "<div class=\"bwEventCost\">"
+    output += "Cost: " + event.cost;
     output += "</div>";
   }
+
+  // output tags (categories)
+  if (event.categories != "" && bwJsWidgetOptions.displayTagsInDetails) {
+    output += "<div class=\"bwEventCats\">"
+    output += "Tags: " + event.categories;
+    output += "</div>";
+  }
+
+  // output link
   if (event.link != "") {
     output += "<div class=\"bwEventLink\">"
     output += "See: <a href=\"" + event.link + "\">" + event.link + "</a>";
@@ -197,7 +233,7 @@ function showBwEvent(outputContainerID, eventId) {
   output += "</div>";
 
   // create a link back to the main view
-  output += "<p id=\"bwEventsListLink\"><a href=\"javascript:insertEvents('" + outputContainerID + "')\">Return</a>";
+  output += "<p id=\"bwEventsListLink\"><a href=\"javascript:insertBwEvents('" + outputContainerID + "')\">Return</a>";
 
   // Send the output to the container:
   outputContainer.innerHTML = output;
