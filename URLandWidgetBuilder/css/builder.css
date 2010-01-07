@@ -37,6 +37,18 @@ ul.noBullet {
   width: 93%;
 }
 
+ul.noBullet2 {
+  list-style-type: none;
+  margin-left: 5%;
+  width: 88%;
+}
+
+ul.noBullet3 {
+  list-style-type: none;
+  margin-left: 10%;
+  width: 83%;
+}
+
 #codeBoxBox {
   margin-left: auto;
   width: 93%;
@@ -60,6 +72,20 @@ p.prompt {
   background-color: #eee;
   color: black;
   padding: 4px;
+}
+
+p.prompt2 {
+  background-color: #eee;
+  color: black;
+  padding: 4px;
+  margin-left: 5%;
+}
+
+p.prompt3{
+  background-color: #eee;
+  color: black;
+  padding: 4px;
+  margin-left: 10%;
 }
 
 p.output {
