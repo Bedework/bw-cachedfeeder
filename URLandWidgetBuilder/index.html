@@ -43,6 +43,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
           }
         });
       });
+
       $(function() {
         $("#endDate").datepicker({
           dateFormat: 'yymmdd',
@@ -66,6 +67,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
       }
 
       var cats; // holds category tree returned by script call to the feeder app.
+
       function getCatAndLimitData() {
 
         cats = catsObj;
@@ -159,22 +161,22 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
       }
 
       function processLimitCatData() {
-        trLine = "<tr><td><input type=\"radio\" checked\=\"checked\" id=\"no--Limit\" name=\"limitCatCheck\" onclick=\"updateUrlDisplay()\" value=\"all\">No Limit</td></tr>";
-        $("#filter").append(trLine);
+  //      trLine = "<tr><td><input type=\"radio\" checked\=\"checked\" id=\"no--Limit\" name=\"limitCatCheck\" onclick=\"updateUrlDisplay()\" value=\"all\">No Limit</td></tr>";
+  //      $("#limitTable").append(trLine);
         $.each(cats.bwCategories.categories.sort(sortByValue), function(i, category) {
           if (category.value.substring(0, 4) == 'org/') {
             trLine = "<tr><td><input type=\"radio\" id=\"Limit" + category.value + "\" name=\"limitCatCheck\" onclick=\"updateUrlDisplay()\" value=\"" + category.uid + "\">" + category.value.substring(4) + "</td></tr>";
-            $("#filter").append(trLine);
+            $("#limitTable").append(trLine);
           }
         });
       }
 
 
       function getLimitCatValue() {
-      if ($("input[name='limitCatCheck']:checked").val() == "all") {
-      return ""
-      } else {
-        return "catuid=('" + $("input[name='limitCatCheck']:checked").val() + "')";
+	    if (document.getElementById('noLimit').checked == true) {
+          return ""
+        } else {
+          return "catuid=('" + $("input[name='limitCatCheck']:checked").val() + "')";
         }
       }
 
@@ -274,60 +276,59 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         //}
         //}
 
-      // if (weekOrMonth) {
-      //  if (document.getElementById('week').checked == true) {
-      //    constructedURL = getCacheUrlPrefix() + "genFeedPeriod" + "/week/00000000/" + skin + "/";
-      //  } else {
-      //    constructedURL = getCacheUrlPrefix() + "genFeedPeriod" + "/month/00000000/" + skin + "/";
-      //  }
-      //} else
-      if (ics) {
-        if (byDays) {
-          constructedURL = getCacheUrlPrefix() + "icsDays" + "/" + numberOfDays + "/";
+        // if (weekOrMonth) {
+        //  if (document.getElementById('week').checked == true) {
+        //    constructedURL = getCacheUrlPrefix() + "genFeedPeriod" + "/week/00000000/" + skin + "/";
+        //  } else {
+        //    constructedURL = getCacheUrlPrefix() + "genFeedPeriod" + "/month/00000000/" + skin + "/";
+        //  }
+        //} else
+        if (ics) {
+          if (byDays) {
+            constructedURL = getCacheUrlPrefix() + "icsDays" + "/" + numberOfDays + "/";
+          } else {
+            constructedURL = getCacheUrlPrefix() + "icsRange" + "/" + dates + "/";
+          }
         } else {
-          constructedURL = getCacheUrlPrefix() + "icsRange" + "/" + dates + "/";
+          if (byDays) {
+            constructedURL = getCacheUrlPrefix() + "genFeedDays" + "/" + numberOfDays + "/" + skin + "/";
+          } else {
+            constructedURL = getCacheUrlPrefix() + "genFeedRange" + "/" + dates + "/" + skin + "/";
+          }
         }
-      } else {
-        if (byDays) {
-          constructedURL = getCacheUrlPrefix() + "genFeedDays" + "/" + numberOfDays + "/" + skin + "/";
+
+        filterExpression = "";
+        inCatList = constructIncludeCategoryList();
+        exCatList = constructExcludeCategoryList();
+        limitCat = getLimitCatValue();
+        if ((inCatList != '()') || (exCatList != '()')) {
+          if (inCatList == '()') {
+            filterExpression = exCatList;
+          } else if (exCatList == '()') {
+            filterExpression = inCatList;
+          } else {
+            filterExpression = inCatList + '&' + exCatList;
+          }
+        }
+        if (limitCat != "") {
+          if ( filterExpression == "") {
+            filterExpression = limitCat;
+          } else {
+            filterExpression += '&' + limitCat;
+          }
+        }
+
+        if ( filterExpression == "" ) {
+          constructedURL += "-no-filter-";
         } else {
-          constructedURL = getCacheUrlPrefix() + "genFeedRange" + "/" + dates + "/" + skin + "/";
+          constructedURL += escape(filterExpression);
         }
-      }
 
-
-      filterExpression = "";
-      inCatList = constructIncludeCategoryList();
-      exCatList = constructExcludeCategoryList();
-      limitCat = getLimitCatValue();
-      if ((inCatList != '()') || (exCatList != '()')) {
-      if (inCatList == '()') {
-      filterExpression = exCatList;
-      } else if (exCatList == '()') {
-      filterExpression = inCatList;
-      } else {
-      filterExpression = inCatList + '&' + exCatList;
+        if (jsonObject == true ) {
+          constructedURL += '/bwObject';
+        }
+        return constructedURL;
       }
-      }
-      if (limitCat != "") {
-      if ( filterExpression == "") {
-      filterExpression = limitCat;
-    } else {
-      filterExpression += '&' + limitCat;
-    }
-    }
-
-      if ( filterExpression == "" ) {
-       constructedURL += "-no-filter-";
-    } else {
-       constructedURL += escape(filterExpression);
-      }
-
-      if (jsonObject == true ) {
-        constructedURL += '/bwObject';
-      }
-      return constructedURL;
-    }
 
       function updateUrlDisplay() {
 
@@ -338,29 +339,37 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
             document.getElementById('functions').innerHTML = code;
           } else {
             url = constructURL();
-            jLine1 = '<html xmlns="http://www.w3.org/1999/xhtml">\n';
-            jLine2 = '  <head>\n';
-            jLine3 = '    <link type="text/css" href="../css/blue.css" rel="stylesheet" />\n';
-            jLine4 = '  </head>\n';
-            jLine5 = '  <body>\n';
-            jLine6 = '    <div id="bwOutput"></div>\n';
-            jLine7 = '      <';
-            if (skin == "list-json") {
-              jLine7 += 'script type="text/javascript" src="listEvents.js"> &lt/script>\n';
-            } else {
-              jLine7 += 'script type="text/javascript" src="gridEvents.js"> &lt/script>\n';
-            }
-            jLine8 = '      <';
-            jLine8 += 'script type="text/javascript" src="' + url + '"> &lt/script>\n';
-            jLine9 = '  </body>\n';
-            jLineA = '</html>';
-            jsHtml = jLine1 + jLine2 + jLine3 + jLine4 + jLine5 + jLine6 + jLine7 + jLine8 + jLine9 + jLineA;
+            bwJsLoc = window.location + 'javascript/bedework/'
+            jsHtml = '<div id="bwOutput"></div>\n';
+            jsHtml += '<';
+            // if (skin == "list-json") {
+            jsHtml += 'script type="text/javascript" src="' + bwJsLoc + 'listEvents.js"> &lt/script>\n';
+            // } else {
+            //  jLine3 += 'script type="text/javascript" src="gridEvents.js"> &lt/script>\n';
+            // }
+            jsHtml += '<';
+            jsHtml += 'script type="text/javascript" src="' + url + '"> &lt/script>\n';
+            jsHtml += '<';
+		    jsHtml += 'script>\n'
+		    jsHtml += '  bwJsListWidgetOptions = {\n'
+		    jsHtml += '    displayEventDetailsInline = false;\n'
+		    jsHtml += '    calendarLocation = http://localhost:8080/webcache;\n'
+		    jsHtml += '  }\n'
+		    jsHtml += '  insertEvents("bwOutput")\n'
+		    jsHtml += '&lt/script>\n'
             document.getElementById('functions').innerHTML = jsHtml;
           }
         } else {
           document.getElementById('UrlBox').innerHTML = constructURL();
           document.getElementById('UrlBox').href = constructURL();
         }
+      }
+
+      function uncheckAll(checkList) {
+	    $("input[name=$checkList]:checked").each(function() {
+          $(this).removeAttr("checked");
+        });
+        updateUrlDisplay();
       }
 
       $(document).ready(function() {
@@ -396,9 +405,19 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
           } else {
             $('#selectCategories').hide('slow');
           }
+          if ($('#someExclusions').attr('checked')) {
+            $('#excludeCategories').show('fast');
+          } else {
+            $('#excludeCategories').hide('slow');
+          }
+          if ($('#doLimit').attr('checked')) {
+            $('#selectLimit').show('fast');
+          } else {
+            $('#selectLimit').hide('slow');
+          }
         });
 
-        //updateURLDisplay();
+        updateUrlDisplay();
 
       });
     </script>
@@ -419,7 +438,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         <p class="prompt">Data format?</p>
         <ul class="noBullet">
           <li>
-            <input type="radio" id="rss" onclick='updateUrlDisplay()' name="dataType" value="list-rss"/>RSS
+            <input type="radio" id="rss" onclick='updateUrlDisplay()' name="dataType" value="list-rss" checked="checked"/>RSS
           </li>
           <li>
             <input type="radio" id="json" onclick='updateUrlDisplay()' name="dataType" value="list-json" />JSON
@@ -485,37 +504,47 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
               </td>
               <td>
                 <div class="dateRange">
-                  Start Date: <input size="8" class="datepicker" id="startDate" onclick="updateUrlDisplay()" type="text"></input>End Date: <input size="8"class="datepicker" id="endDate" onclick="updateUrlDisplay()" type="text"></input>
-                  </div>
-                </td>
-              </tr>
-            </table>
-          </div><!-- timeframeWidgets -->
-        </div><!-- timeframeUnit -->
+                  Start Date: <input size="8" class="datepicker" id="startDate" onclick="updateUrlDisplay()" type="text"></input>
+                  End Date: <input size="8"class="datepicker" id="endDate" onclick="updateUrlDisplay()" type="text"></input>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div><!-- timeframeWidgets -->
+      </div><!-- timeframeUnit -->
 
-        <p class="prompt">Include everything or only those events from selected categories (Lectures, Arts Events, etc.)?</p>
+      <p class="prompt">Include everything or only those events from selected categories (Lectures, Arts Events, etc.)?</p>
+      <ul class="noBullet">
+        <li class="trigger">
+          <input type="radio" id="allCategories" name="allOrSomeCats" onclick='uncheckAll("includeCatChecks")' value="all" checked="checked"/>Include everything
+        </li>
+        <li class="trigger">
+          <input type="radio" id="checkedCategories" name="allOrSomeCats" onclick='updateUrlDisplay()' value="selectedCats" />Include selected categories only
+        </li>
+      </ul>
+
+      <div id="selectCategories" class="invisible" >
         <ul class="noBullet">
-          <li class="trigger">
-            <input type="radio" id="allCategories" name="allOrSomeCats" onclick='updateUrlDisplay()' value="all" checked="checked"/>Include everything
-          </li>
-          <li class="trigger">
-            <input type="radio" id="checkedCategories" name="allOrSomeCats" onclick='updateUrlDisplay()' value="selectedCats" />Include selected categories only
+          <li>
+            <table id="categoriesTable">
+              <tbody id="categoriesTableBody"></tbody>
+            </table>
           </li>
         </ul>
+      </div>
 
-        <div id="selectCategories" class="invisible" >
-          <ul class="noBullet">
-            <li>
-              <table id="categoriesTable">
-                <tbody id="categoriesTableBody"></tbody>
-              </table>
-            </li>
-          </ul>
-        </div>
+      <p class="prompt">Exclude nothing from what you've selected above or exclude some categories?</p>
 
-        <p class="prompt">Exclude these categories:</p>
+      <ul class="noBullet">
+        <li class="trigger">
+          <input type="radio" id="noExclusions" name="noOrSomeExclusions" onclick='uncheckAll("excludeCatChecks")' value="all" checked="checked"/>Nothing to exclude
+        </li>
+        <li class="trigger">
+          <input type="radio" id="someExclusions" name="noOrSomeExclusions" onclick='updateUrlDisplay()' value="selectedCats" />Exclude selected categories
+        </li>
+      </ul>
 
-        <div id="excludeCategories">
+      <div id="excludeCategories" class="invisible">
         <ul class="noBullet">
           <li>
             <table id="excludeCatTable">
@@ -525,25 +554,41 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         </ul>
       </div>
 
-        <p class="prompt">Limit to these organizations:</p>
-        <div id="selectGroup">
-          <table>
-          <tbody id="filter" />
-          </tbody>
-        </table>
+
+      <p class="prompt">Limit to a specific organization?</p>
+
+      <ul class="noBullet">
+        <li class="trigger">
+          <input type="radio" id="noLimit" name="limitsOrNot" onclick='uncheckAll("limitCatCheck")' value="all" checked="checked"/>No limit
+        </li>
+        <li class="trigger">
+          <input type="radio" id="doLimit" name="limitsOrNot" value="oneOrg" />Limit to an organization
+        </li>
+      </ul>
+
+      <div id="selectLimit" class="invisible">
+	    <ul class="noBullet">
+          <li>
+            <table>
+              <tbody id="limitTable" />
+            </tbody>
+          </table>
+        </li>
+      </div>
+
+      <div id="URL">
+        <p class="output">
+          Your URL:
+          <a href="" id="UrlBox" target="_top"></a>
+        </p>
+      </div>
+
+      <div id="codeBox" class="invisible">
+        <p class="output">Widget Code:</p>
+        <div id="codeBoxBox">
+          <textarea name="functions" id="functions" rows="20" cols="78"></textarea>
         </div>
-        <div id="URL">
-          <p class="output">
-            Your URL:
-            <a href="" id="UrlBox" target="_top"></a>
-          </p>
-        </div>
-        <div id="codeBox" class="invisible">
-          <p class="output">Widget Code:</p>
-          <div id="codeBoxBox">
-            <textarea name="functions" id="functions" rows="20" cols="78"></textarea>
-          </div>
-        </div>
-      </form>
-    </body>
-  </html>
+      </div>
+    </form>
+  </body>
+</html>
