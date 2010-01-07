@@ -10,6 +10,7 @@ var bwJsWidgetOptions = {
   displayTimeInList: true,
   displayLocationInList: false,
   listMode: 'bySummary', // values: 'byDate' or 'bySummary' - highlights the date or title first (sort is always by date)
+  displayContactInDetails: true,
   displayCostInDetails: true,
   displayTagsInDetails: true,
   displayTimezoneInDetails: true
@@ -209,6 +210,17 @@ function showBwEvent(outputContainerID, eventId) {
   output += "<div class=\"bwEventDesc\">"
   output += event.description;
   output += "</div>";
+
+  // output contact
+  if (bwJsWidgetOptions.displayContactInDetails) {
+    output += "<div class=\"bwEventContact\">"
+    if (event.contact.link != "") {
+      output += "Contact: <a href=\"" + event.contact.link + "\">" + event.contact.name + "</a>";
+    } else {
+      output += "Contact: " + event.contact.name;
+    }
+    output += "</div>";
+  }
 
   // output cost
   if (event.cost != "" && bwJsWidgetOptions.displayCostInDetails) {

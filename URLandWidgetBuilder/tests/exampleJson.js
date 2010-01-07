@@ -1,4 +1,3 @@
-
 var bwObject = {
   'bwEventList': {
 
@@ -33,6 +32,11 @@ var bwObject = {
       },
       "location": {
         "address": "my location",
+        "link": ""
+      },
+      "contact": {
+        "name": "my contact",
+        "phone": "",
         "link": ""
       },
       "calendar": {
@@ -98,6 +102,11 @@ var bwObject = {
         "address": "my location",
         "link": ""
       },
+      "contact": {
+        "name": "my contact",
+        "phone": "",
+        "link": ""
+      },
       "calendar": {
         "name": "MainCal",
         "path": "/public/cals/MainCal",
@@ -159,6 +168,11 @@ var bwObject = {
       },
       "location": {
         "address": "my location",
+        "link": ""
+      },
+      "contact": {
+        "name": "my contact",
+        "phone": "",
         "link": ""
       },
       "calendar": {
