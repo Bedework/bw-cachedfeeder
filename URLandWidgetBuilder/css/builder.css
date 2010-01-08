@@ -79,6 +79,7 @@ p.output {
 }
 
 td {
+  vertical-align: top;
   white-space: nowrap;
 }
 
