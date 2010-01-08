@@ -12,7 +12,6 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
     <script type="text/javascript" src="http://localhost:8080/webcache/v1.0/categories/widget-json-cats/catsObj"></script>
     <link type="text/css" href="css/custom-theme/jquery-ui-1.7.1.custom.css" rel="stylesheet" />
     <link type="text/css" href="css/custom-theme/bedeworkJquery.css" rel="stylesheet" />
-    <link type="text/css" href="css/bedeworkJqueryThemes.css" rel="stylesheet" />
     <link type="text/css" href="css/builder.css" rel="stylesheet" />
     <script type="text/javascript">
     <!--
@@ -213,23 +212,26 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
           <input type="radio" id="jsDisplayLocationFalse" name="jsDisplayLocation" onclick='updateUrlDisplay()' value="false" checked="checked" />False
           <em>(default: false)</em>
         </li>
+
+        <li>
+          Display time in listing?
+          <input type="radio" id="jsDisplayTimeTrue" name="jsDisplayTime" onclick='updateUrlDisplay()' value="true" checked="checked"/>True
+          <input type="radio" id="jsDisplayTimeFalse" name="jsDisplayTime" onclick='updateUrlDisplay()' value="false"  />False
+          <em>(default: true)</em>
+        </li>
+
+        <li>
+          Only display start date in listing?
+          <input type="radio" id="jsDisplayStartDateOnlyTrue" name="jsDisplayStartDateOnly" onclick='updateUrlDisplay()' value="true" />True
+          <input type="radio" id="jsDisplayStartDateOnlyFalse" name="jsDisplayStartDateOnly" onclick='updateUrlDisplay()' value="false" checked="checked" />False
+          <em>(default: false)</em>
+        </li>
+
         <li>
           Highlight event dates or event titles?
           <input type="radio" id="jsDisplayByTitle" name="jsDisplayDateOrTitle" onclick='updateUrlDisplay()' value="'byTitle'" checked="checked" />By title
           <input type="radio" id="jsDisplayByDate" name="jsDisplayDateOrTitle" onclick='updateUrlDisplay()' value="'byDate'" />By date
           <em>(default 'by title')</em>
-        </li>
-        <li>
-          Display contact information in event listing
-          <input type="radio" id="jsDisplayContactTrue" name="jsDisplayContact" onclick='updateUrlDisplay()' value="true" checked="checked" />True
-          <input type="radio" id="jsDisplayContactFalse" name="jsDisplayContact" onclick='updateUrlDisplay()' value="false" />False
-          <em>(default: true)</em>
-        </li>
-        <li>
-          Display cost information in event listing
-          <input type="radio" id="jsDisplayCostTrue" name="jsDisplayCost" onclick='updateUrlDisplay()' value="true" checked="checked" />True
-          <input type="radio" id="jsDisplayCostFalse" name="jsDisplayCost" onclick='updateUrlDisplay()' value="false" />False
-          <em>(default: true)</em>
         </li>
         <li>
           Display event details inline?
@@ -239,25 +241,25 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
 
           <ul id="jsWidgetOptionsInline" class="invisible">
              <li>
-               Display contact in event details
+               Display contact in event details?
                <input type="radio" id="jsDisplayContactInDetailsTrue" name="jsDisplayContactInDetails" onclick='updateUrlDisplay()' value="true" checked="checked" />True
                <input type="radio" id="jsDisplayContactInDetailsFalse" name="jsDisplayContactInDetails" onclick='updateUrlDisplay()' value="false" />False
                <em>(default: true)</em>
              </li>
              <li>
-               Display cost in event details
+               Display cost in event details?
                <input type="radio" id="jsDisplayCostInDetailsTrue" name="jsDisplayCostInDetails" onclick='updateUrlDisplay()' value="true" checked="checked" />True
                <input type="radio" id="jsDisplayCostInDetailsFalse" name="jsDisplayCostInDetails" onclick='updateUrlDisplay()' value="false" />False
                <em>(default: true)</em>
              </li>
              <li>
-               Display tags in event details
+               Display tags in event details?
                <input type="radio" id="jsDisplayTagsTrue" name="jsDisplayTags" onclick='updateUrlDisplay()' value="true" checked="checked" />True
                <input type="radio" id="jsDisplayTagsFalse" name="jsDisplayTags" onclick='updateUrlDisplay()' value="false" />False
                <em>(default: true)</em>
              </li>
              <li>
-               Display timezone in event details
+               Display timezone in event details?
                <input type="radio" id="jsDisplayTimezoneTrue" name="jsDisplayTimezone" onclick='updateUrlDisplay()' value="true" checked="checked" />True
                <input type="radio" id="jsDisplayTimezoneFalse" name="jsDisplayTimezone" onclick='updateUrlDisplay()' value="false" />False
                <em>(default: true)</em>
