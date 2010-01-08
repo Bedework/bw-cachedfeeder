@@ -1,7 +1,7 @@
 body {
   color: black;
   background-color: white;
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-family: "Trebuchet MS", Helvetica, Arial, sans-serif;
   padding: 0.5em 2em 2em 2em;
 }
 
@@ -36,26 +36,14 @@ ul {
   padding: 0;
 }
 
-#codeBoxBox {
-  
-}
-
 #UrlBox {
   font-family: monospace;
-}
-
-#selectGroup {
-  
-}
-
-#timeframeWidgets {
-  
 }
 
 #jsWidgetOptions {
   margin: 1em 0 2em -2em;
   padding: 2em 2em 1em 2em;
-  border: 1px solid #eee;
+  border: 1px solid #ddd;
 }
 
 #jsWidgetOptions h2 {
