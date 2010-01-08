@@ -13,11 +13,11 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
     <link type="text/css" href="css/custom-theme/jquery-ui-1.7.1.custom.css" rel="stylesheet" />
     <link type="text/css" href="css/custom-theme/bedeworkJquery.css" rel="stylesheet" />
     <link type="text/css" href="css/bedeworkJqueryThemes.css" rel="stylesheet" />
-    <link type="text/css" href="css/builder.css" rel="stylesheet">
+    <link type="text/css" href="css/builder.css" rel="stylesheet" />
     <script type="text/javascript">
-      
+    <!--
       $(document).ready(function() {
-      
+
         getCatAndLimitData(); //from server
         //$('#startDate').attr('disabled', 'disabled');
         //$('#endDate').attr('disabled', 'disabled');
@@ -77,19 +77,20 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
           } else {
             $('#jsSetTitle').hide('fast');
           }
-          
+
         });
-      
+
         updateUrlDisplay();
-      
+
       });
+    -->
     </script>
   </head>
   <body>
-    <form>
+    <div id="builder">
       <h1>Bedework Feed URL and Widget Builder</h1>
       <h2>Raw event feed or an embeddable widget?</h2>
-      
+
       <ul>
         <li class="trigger">
           <input type="radio" onclick='updateUrlDisplay()' checked="checked" id="feed" name="feedOrWidget" value="feed" />Feed
@@ -98,7 +99,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
           <input type="radio" onclick='updateUrlDisplay()' id="widget" name="feedOrWidget" value="widget" />Widget
         </li>
       </ul>
-      
+
       <div id="dataFormat">
         <h2>Data format?</h2>
         <ul>
@@ -119,9 +120,9 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
           </li>
         </ul>
       </div>
-      
+
       <!-- DataFormat -->
-      <!-- Don't support iframes for now - let's just do javascript widgets with json 
+      <!-- Don't support iframes for now - let's just do javascript widgets with json
       <div id="output" class="invisible">
         <h2>Output?</h2>
         <ul>
@@ -152,7 +153,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         </ul>
       </div>
       -->
-      
+
       <div id="timeframeUnit">
         <h2>Specify the number of days (from the current date) or provide a start date and an end date.</h2>
         <div id="timeframeWidgets">
@@ -176,7 +177,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
               <td>
                 <div class="dateRange">
                   Start Date: <input size="8" class="datepicker" id="startDate" onclick="updateUrlDisplay()" type="text"></input>
-                  End Date: <input size="8"class="datepicker" id="endDate" onclick="updateUrlDisplay()" type="text"></input>
+                  End Date: <input size="8" class="datepicker" id="endDate" onclick="updateUrlDisplay()" type="text"></input>
                 </div>
               </td>
             </tr>
@@ -185,15 +186,15 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
       </div><!-- timeframeUnit -->
 
 <!--
-	#######  JSON WIDGET OPTIONS SECTION  ##########  
+  #######  JSON WIDGET OPTIONS SECTION  ##########
 -->
 
     <div id="jsWidgetOptions" class="invisible">
-      
+
       <h2>
         Widget Options
       </h2>
-	
+
       <ul>
         <li>
            Show a title above event list
@@ -207,57 +208,57 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
            </div>
         </li>
         <li>
-          Display location in listing? 
+          Display location in listing?
           <input type="radio" id="jsDisplayLocationTrue" name="jsDisplayLocation" onclick='updateUrlDisplay()' value="true" />True
           <input type="radio" id="jsDisplayLocationFalse" name="jsDisplayLocation" onclick='updateUrlDisplay()' value="false" checked="checked" />False
           <em>(default: false)</em>
         </li>
         <li>
-          Highlight event dates or event titles? 
-          <input type="radio" id="jsDisplayByDate" name="jsDisplayDateOrTitle" onclick='updateUrlDisplay()' value="'byDate'" checked="checked"/>By date
-          <input type="radio" id="jsDisplayByTitle" name="jsDisplayDateOrTitle" onclick='updateUrlDisplay()' value="'byTitle'" />By title
-          <em>(default 'by date')</em>
+          Highlight event dates or event titles?
+          <input type="radio" id="jsDisplayByTitle" name="jsDisplayDateOrTitle" onclick='updateUrlDisplay()' value="'byTitle'" checked="checked" />By title
+          <input type="radio" id="jsDisplayByDate" name="jsDisplayDateOrTitle" onclick='updateUrlDisplay()' value="'byDate'" />By date
+          <em>(default 'by title')</em>
         </li>
         <li>
-          Display contact information in event listing 
-          <input type="radio" id="jsDisplayContactTrue" name="jsDisplayContact" onclick='updateUrlDisplay()' value="true" checked="checked" />True 
+          Display contact information in event listing
+          <input type="radio" id="jsDisplayContactTrue" name="jsDisplayContact" onclick='updateUrlDisplay()' value="true" checked="checked" />True
           <input type="radio" id="jsDisplayContactFalse" name="jsDisplayContact" onclick='updateUrlDisplay()' value="false" />False
           <em>(default: true)</em>
         </li>
         <li>
-          Display cost information in event listing 
-          <input type="radio" id="jsDisplayCostTrue" name="jsDisplayCost" onclick='updateUrlDisplay()' value="true" checked="checked" />True 
+          Display cost information in event listing
+          <input type="radio" id="jsDisplayCostTrue" name="jsDisplayCost" onclick='updateUrlDisplay()' value="true" checked="checked" />True
           <input type="radio" id="jsDisplayCostFalse" name="jsDisplayCost" onclick='updateUrlDisplay()' value="false" />False
           <em>(default: true)</em>
         </li>
         <li>
-          Display event details inline?   
+          Display event details inline?
           <input type="radio" id="jsDisplayInlineTrue" class="trigger" name="jsDisplayInline" onclick='updateUrlDisplay()' value="true" />True
           <input type="radio" id="jsDisplayInlineFalse" class="trigger" name="jsDisplayInline" onclick='updateUrlDisplay()' value="false" checked="checked" />False
           <em>(default: false)</em>
-          
+
           <ul id="jsWidgetOptionsInline" class="invisible">
              <li>
-               Display contact in event details 
-               <input type="radio" id="jsDisplayContactTrue" name="jsDisplayContact" onclick='updateUrlDisplay()' value="true" checked="checked" />True 
-               <input type="radio" id="jsDisplayContactFalse" name="jsDisplayContact" onclick='updateUrlDisplay()' value="false" />False
+               Display contact in event details
+               <input type="radio" id="jsDisplayContactInDetailsTrue" name="jsDisplayContactInDetails" onclick='updateUrlDisplay()' value="true" checked="checked" />True
+               <input type="radio" id="jsDisplayContactInDetailsFalse" name="jsDisplayContactInDetails" onclick='updateUrlDisplay()' value="false" />False
                <em>(default: true)</em>
              </li>
              <li>
-               Display cost in event details 
-               <input type="radio" id="jsDisplayCostTrue" name="jsDisplayCost" onclick='updateUrlDisplay()' value="true" checked="checked" />True 
-               <input type="radio" id="jsDisplayCostFalse" name="jsDisplayCost" onclick='updateUrlDisplay()' value="false" />False
+               Display cost in event details
+               <input type="radio" id="jsDisplayCostInDetailsTrue" name="jsDisplayCostInDetails" onclick='updateUrlDisplay()' value="true" checked="checked" />True
+               <input type="radio" id="jsDisplayCostInDetailsFalse" name="jsDisplayCostInDetails" onclick='updateUrlDisplay()' value="false" />False
                <em>(default: true)</em>
              </li>
              <li>
-               Display tags in event details 
-               <input type="radio" id="jsDisplayTagsTrue" name="jsDisplayTags" onclick='updateUrlDisplay()' value="true" checked="checked" />True 
+               Display tags in event details
+               <input type="radio" id="jsDisplayTagsTrue" name="jsDisplayTags" onclick='updateUrlDisplay()' value="true" checked="checked" />True
                <input type="radio" id="jsDisplayTagsFalse" name="jsDisplayTags" onclick='updateUrlDisplay()' value="false" />False
                <em>(default: true)</em>
              </li>
              <li>
-               Display timezone in event details 
-               <input type="radio" id="jsDisplayTimezoneTrue" name="jsDisplayTimezone" onclick='updateUrlDisplay()' value="true" checked="checked" />True 
+               Display timezone in event details
+               <input type="radio" id="jsDisplayTimezoneTrue" name="jsDisplayTimezone" onclick='updateUrlDisplay()' value="true" checked="checked" />True
                <input type="radio" id="jsDisplayTimezoneFalse" name="jsDisplayTimezone" onclick='updateUrlDisplay()' value="false" />False
                <em>(default: true)</em>
              </li>
@@ -265,13 +266,13 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
          </li>
        </ul>
      </div>
-   
+
 <!--
-	#######  END JSON WIDGET OPTIONS SECTION  ##########        
+  #######  END JSON WIDGET OPTIONS SECTION  ##########
 -->
 
 <!--
-    #######  FILTERING SECTION  ##########        
+    #######  FILTERING SECTION  ##########
 -->
       <h2>Include everything or only those events from selected categories (Lectures, Arts Events, etc.)?</h2>
       <ul>
@@ -287,7 +288,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         <ul>
           <li>
             <table id="categoriesTable">
-              <tbody id="categoriesTableBody"></tbody>
+              <tbody id="categoriesTableBody"><tr><td></td></tr></tbody>
             </table>
           </li>
         </ul>
@@ -308,7 +309,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         <ul>
           <li>
             <table id="excludeCatTable">
-              <tbody id="excludeCatTableBody"></tbody>
+              <tbody id="excludeCatTableBody"><tr><td></td></tr></tbody>
             </table>
           </li>
         </ul>
@@ -327,21 +328,21 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
       </ul>
 
       <div id="selectLimit" class="invisible">
-	    <ul>
+        <ul>
           <li>
             <table>
-              <tbody id="limitTable" />
-            </tbody>
-          </table>
-        </li>
+              <tbody id="limitTable"><tr><td></td></tr></tbody>
+            </table>
+          </li>
+        </ul>
       </div>
 <!--
-	    #######  END FILTERING SECTION  ##########        
+      #######  END FILTERING SECTION  ##########
 -->
       <div id="URL">
         <p class="output">
           Your URL:
-          <a href="" id="UrlBox" target="_top"></a>
+          <a href="" id="UrlBox"></a>
         </p>
       </div>
 
@@ -351,6 +352,6 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
           <textarea name="functions" id="functions" rows="20" cols="78"></textarea>
         </div>
       </div>
-    </form>
+    </div>
   </body>
 </html>

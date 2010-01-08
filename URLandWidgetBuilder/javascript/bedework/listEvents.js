@@ -9,7 +9,7 @@ var bwJsWidgetOptions = {
   displayStartDateOnlyInList: false,
   displayTimeInList: true,
   displayLocationInList: false,
-  listMode: 'bySummary', // values: 'byDate' or 'bySummary' - highlights the date or title first (sort is always by date)
+  listMode: 'byTitle', // values: 'byDate' or 'byTitle' - highlights the date or title first (sort is always by date)
   displayContactInDetails: true,
   displayCostInDetails: true,
   displayTagsInDetails: true,
@@ -122,7 +122,7 @@ function formatBwSummary(event,outputContainerID,i) {
   var output = "";
   output += "<span class=\"bwSummary\">";
 
-  if (bwJsWidgetOptions.listMode == 'bySummary') {
+  if (bwJsWidgetOptions.listMode == 'byTitle') {
     output +="<strong>";
   }
 
@@ -148,7 +148,7 @@ function formatBwSummary(event,outputContainerID,i) {
 
   }
 
-  if (bwJsWidgetOptions.listMode == 'bySummary') {
+  if (bwJsWidgetOptions.listMode == 'byTitle') {
     output +="</strong>";
   }
   output += "</span>";
