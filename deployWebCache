@@ -1,1 +1,2 @@
-cp webCache.war ../apache-tomcat-5.5.17/webapps/
+echo "Deploying webcache..."
+cp webcache.war ../apache-tomcat-5.5.17/webapps/
