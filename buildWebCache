@@ -1,2 +1,3 @@
+echo "Building webcache."
 echo "Be patient.  Nothing happens for a short while..."
 ./build/bin/warble
