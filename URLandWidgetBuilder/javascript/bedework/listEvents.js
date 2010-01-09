@@ -6,7 +6,7 @@ var bwJsWidgetOptions = {
   calendarServer: 'http://localhost:8080',
   calSuiteContext: '/cal',
   displayEventDetailsInline: false,
-  displayStartDateOnlyInList: false,
+  displayEndDateInList: true,
   displayTimeInList: true,
   displayLocationInList: false,
   listMode: 'byTitle', // values: 'byDate' or 'byTitle' - highlights the date or title first (sort is always by date)
@@ -94,7 +94,7 @@ function formatBwDateTime(event) {
   if ((event.start.allday == 'false') && bwJsWidgetOptions.displayTimeInList) {
     output += " " + event.start.time;
   }
-  if (!bwJsWidgetOptions.displayStartDateOnlyInList) {
+  if (bwJsWidgetOptions.displayEndDateInList) {
     if (event.start.shortdate != event.end.shortdate) {
       output += " - ";
       output += event.end.longdate;

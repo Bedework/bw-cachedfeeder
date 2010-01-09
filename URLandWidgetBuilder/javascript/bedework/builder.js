@@ -333,24 +333,21 @@ function updateUrlDisplay() {
       jsHtml += '<';
       jsHtml += 'script type="text/javascript" src="' + url + '"> &lt/script>\n';
       jsHtml += '<';
-      jsHtml += 'script>\n'
-      jsHtml += '  bwJsListWidgetOptions = {\n'
-      jsHtml += "    calendarServer: 'http://localhost:8080',\n"
-      jsHtml += "    calSuiteContext: '/cal',\n"
-      jsHtml += "    showTitle: " + $("input[name='jsShowTitle']:checked").val() + ",\n"
-      jsHtml += "    title: " + $("input[name='jsSetTitleName']:checked").val() + ",\n"
-      jsHtml += "    displayLocationInList: " + $("input[name='jsDisplayLocation']:checked").val() + ",\n"
-      jsHtml += "    displayStartDateOnlyInList: " + $("input[name='jsDisplayStartDateOnly']:checked").val() + ",\n"
-	  jsHtml += "    displayTimeInList: " + $("input[name='jsDisplayTime']:checked").val() + ",\n",
-	  jsHtml += "    listMode: " + $("input[name='jsDisplayDateOrTitle']:checked").val() + ", // values: 'byDate' or 'byTitle'\n"    
-      jsHtml += "    displayEventDetailsInline: " + $("input[name='jsDisplayInline']:checked").val() + ",\n"
-      jsHtml += "    displayContactInDetails: " + $("input[name='jsDisplayContactInDetails']:checked").val() + ",\n"
-      jsHtml += "    displayCostInDetails: " + $("input[name='jsDisplayCostInDetails']:checked").val() + ",\n"
-      jsHtml += "    displayTagsInDetails: " + $("input[name='jsDisplayTags']:checked").val() + ",\n"
-      jsHtml += "    displayTimezoneInDetails: " + $("input[name='jsDisplayTimezone']:checked").val() + ",\n"
-      jsHtml += '  }\n'
-      jsHtml += '  insertEvents("bwOutput")\n'
+      jsHtml += 'script type="text/javascript">\n'
+      jsHtml += '  bwJsWidgetOptions.title = "' + $("input[name='jsTitleName']").val() + '";\n';
+      jsHtml += '  bwJsWidgetOptions.showTitle =  ' + $("input[name='jsShowTitle']:checked").val() + ';\n';
+      jsHtml += '  bwJsWidgetOptions.displayEventDetailsInline = ' + $("input[name='jsDisplayInline']:checked").val() + ';\n';
+      jsHtml += '  bwJsWidgetOptions.displayStartDateOnlyInList = ' + $("input[name='jsDisplayEndDate']:checked").val() + ';\n';
+      jsHtml += '  bwJsWidgetOptions.displayTimeInList = ' + $("input[name='jsDisplayTime']:checked").val() + ';\n';
+      jsHtml += '  bwJsWidgetOptions.displayLocationInList = ' + $("input[name='jsDisplayLocation']:checked").val() + ';\n';
+      jsHtml += '  bwJsWidgetOptions.listMode = "' + $("input[name='jsDisplayDateOrTitle']:checked").val() + '";\n';
+      jsHtml += '  bwJsWidgetOptions.displayContactInDetails = ' + $("input[name='jsDisplayContact']:checked").val() + ';\n';
+      jsHtml += '  bwJsWidgetOptions.displayCostInDetails = ' + $("input[name='jsDisplayCost']:checked").val() + ';\n';
+      jsHtml += '  bwJsWidgetOptions.displayTagsInDetails = ' + $("input[name='jsDisplayTags']:checked").val() + ';\n';
+      jsHtml += '  bwJsWidgetOptions.displayTimezoneInDetails = ' + $("input[name='jsDisplayTimezone']:checked").val() + ';\n\n';
+      jsHtml += '  insertBwEvents("bwOutput");\n'
       jsHtml += '&lt/script>\n'
+
       document.getElementById('functions').innerHTML = jsHtml;
     }
   } else {

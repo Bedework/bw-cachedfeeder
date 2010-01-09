@@ -202,9 +202,27 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
            <em>(default: true)</em>
            <div id="jsSetTitle">
              Title:
-             <input size="20" id="jsSetTitleName" onclick="updateUrlDisplay()" type="text" value="Upcoming Events"/>
+             <input size="20" id="jsSetTitleName" name="jsTitleName" onclick="updateUrlDisplay()" type="text" value="Upcoming Events"/>
              <em>(default: "Upcoming Events")</em>
            </div>
+        </li>
+        <li>
+          Highlight event dates or event titles?
+          <input type="radio" id="jsDisplayByTitle" name="jsDisplayDateOrTitle" onclick='updateUrlDisplay()' value="byTitle" checked="checked" />By title
+          <input type="radio" id="jsDisplayByDate" name="jsDisplayDateOrTitle" onclick='updateUrlDisplay()' value="byDate" />By date
+          <em>(default 'by title')</em>
+        </li>
+        <li>
+          Display end date in listing?
+          <input type="radio" id="jsDisplayEndDateTrue" name="jsDisplayEndDate" onclick='updateUrlDisplay()' value="true" checked="checked" />True
+          <input type="radio" id="jsDisplayEndDateFalse" name="jsDisplayEndDate" onclick='updateUrlDisplay()' value="false" />False
+          <em>(default: true)</em>
+        </li>
+        <li>
+          Display time in listing?
+          <input type="radio" id="jsDisplayTimeTrue" name="jsDisplayTime" onclick='updateUrlDisplay()' value="true" checked="checked" />True
+          <input type="radio" id="jsDisplayTimeFalse" name="jsDisplayTime" onclick='updateUrlDisplay()' value="false" />False
+          <em>(default: true)</em>
         </li>
         <li>
           Display location in listing?
