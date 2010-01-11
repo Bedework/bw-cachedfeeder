@@ -73,14 +73,14 @@ class FeedModel
     skinSplits = skin.split(/-/)
     output = skinSplits[1]
     
-    if filter == '-no-filter-'
+    if filter == 'no--filter'
       filterParam = ''
     else
       encodedFilter = CGI::escape(filter)
       filterParam = "&fexpr=" + encodedFilter
     end
       
-    if obj == '-no-object-'
+    if obj == 'no--object'
       objParam = ''
     else
       objParam = "&setappvar=objName(" + obj + ")"
