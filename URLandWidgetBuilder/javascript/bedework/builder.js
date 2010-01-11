@@ -302,7 +302,7 @@ function constructURL() {
   }
 
   if ( filterExpression == "" ) {
-    constructedURL += "-no-filter-";
+    constructedURL += "no--filter";
   } else {
     constructedURL += escape(filterExpression);
   }
