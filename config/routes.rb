@@ -6,31 +6,31 @@ ActionController::Routing::Routes.draw do |map|
 
   # Used for feeds (other than ICS) where the number of days is specified 
   map.connect 'v1.0/genFeedDays/:days/:skin/:filter/:objName', :controller => 'feed', :action => 'genFeedDays',
-    :defaults => { :objName => '-no-object-'}
+    :defaults => { :objName => 'no--object'}
   
   # Used for feeds (other than ICS) where the start and end dates are specified.
   map.connect 'v1.0/genFeedRange/:startDate/:endDate/:skin/:filter/:objName', :controller => 'feed', :action => 'genFeedRange',
     :requirements => {:startDate => /\d{8}/, :endDate => /\d{8}/},
-    :defaults => { :objName => '-no-object-'}
+    :defaults => { :objName => 'no--object'}
 
   # Used for feeds (other than ICS) where the period (day, week, month, year) are specified
   map.connect 'v1.0/genFeedPeriod/:period/:date/:skin/:filter/:objName', :controller => 'feed', :action => 'genFeedPeriod',
    :requirements => {:date => /\d{8}/},
-   :defaults => { :objName => '-no-object-'}
+   :defaults => { :objName => 'no--object'}
    
   # Used for ICS feeds where the number of days is specified.
   map.connect 'v1.0/icsDays/:days/:filter', :controller=> 'feed', :action => 'icsDays',
-    :defaults => { :filter => '-no-filter-'}
+    :defaults => { :filter => 'no--filter'}
   
   # Used for ICS feeds where the start and end dates are specfied
   map.connect 'v1.0/icsRange/:startDate/:endDate/:filter', :controller=> 'feed', :action => 'icsRange',
     :requirements => {:startDate => /\d{8}/, :endDate => /\d{8}/},
-    :defaults => { :filter => '-no-filter-'}
+    :defaults => { :filter => 'no--filter'}
  
   # Used for feeds (other than ICS) where the period (week, month, year) are specified
   map.connect 'v1.0/icsFeedPeriod/:period/:date/:skin/:filter', :controller => 'feed', :action => 'icsPeriod',
     :requirements => {:date => /\d{8}/},
-    :defaults => { :filter => '-no-filter-'}
+    :defaults => { :filter => 'no--filter'}
      
   # Used by Feed/Widget Builder to populate category and group lists.
   map.connect 'v1.0/categories/:skin/:objName', :controller=> 'feed', :action => 'categories'
