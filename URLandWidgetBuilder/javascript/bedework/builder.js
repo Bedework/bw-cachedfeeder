@@ -202,10 +202,11 @@ function constructURL() {
   //   (4)  other feed with date range specified.  Other paramters: skin, limitCategory, categories
   //   (5)  other feed for week or month period specified (widget only)
 
-  ics = false;
-  byDays = false;
-  // weekOrMonth = false;
-  jsonObject = false;
+  var ics = false;
+  var byDays = false;
+  // var weekOrMonth = false;
+  var jsonObject = false;
+  var numberOfDays = 7;
 
   // byDays?  If byDays, get number of days, else get start and end dates.
   if (document.getElementById('startEndDates').checked == true) {
@@ -323,17 +324,15 @@ function updateUrlDisplay() {
     } else {
       url = constructURL();
       bwJsLoc = window.location + 'javascript/bedework/'
-      jsHtml = '<div id="bwOutput"></div>\n';
-      jsHtml += '<';
+      jsHtml = '<textarea name="functions" id="functions" rows="20" cols="78">';
+      jsHtml += '<div id="bwOutput"></div>\n';
       // if (skin == "list-json") {
-      jsHtml += 'script type="text/javascript" src="' + bwJsLoc + 'listEvents.js"> &lt/script>\n';
+      jsHtml += '<script type="text/javascript" src="' + bwJsLoc + 'listEvents.js"> </script>\n';
       // } else {
-      //  jLine3 += 'script type="text/javascript" src="gridEvents.js"> &lt/script>\n';
+      //  jLine3 += 'script type="text/javascript" src="gridEvents.js"> </script>\n';
       // }
-      jsHtml += '<';
-      jsHtml += 'script type="text/javascript" src="' + url + '"> &lt/script>\n';
-      jsHtml += '<';
-      jsHtml += 'script type="text/javascript">\n'
+      jsHtml += '<script type="text/javascript" src="' + url + '"> </script>\n';
+      jsHtml += '<script type="text/javascript">\n'
       jsHtml += '  bwJsWidgetOptions.title = "' + $("input[name='jsTitleName']").val() + '";\n';
       jsHtml += '  bwJsWidgetOptions.showTitle =  ' + $("input[name='jsShowTitle']:checked").val() + ';\n';
       jsHtml += '  bwJsWidgetOptions.displayEventDetailsInline = ' + $("input[name='jsDisplayInline']:checked").val() + ';\n';
@@ -346,9 +345,10 @@ function updateUrlDisplay() {
       jsHtml += '  bwJsWidgetOptions.displayTagsInDetails = ' + $("input[name='jsDisplayTags']:checked").val() + ';\n';
       jsHtml += '  bwJsWidgetOptions.displayTimezoneInDetails = ' + $("input[name='jsDisplayTimezone']:checked").val() + ';\n\n';
       jsHtml += '  insertBwEvents("bwOutput");\n'
-      jsHtml += '&lt/script>\n'
+      jsHtml += '</script>\n';
+      jsHtml += '</textarea>';
 
-      document.getElementById('functions').innerHTML = jsHtml;
+      document.getElementById('codeBoxOutput').innerHTML = jsHtml;
     }
   } else {
     document.getElementById('UrlBox').innerHTML = constructURL();
