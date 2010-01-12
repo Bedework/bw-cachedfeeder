@@ -5,11 +5,11 @@ var bwJsWidgetOptions = {
   showTitle: true,
   calendarServer: 'http://localhost:8080',
   calSuiteContext: '/cal',
-  displayEventDetailsInline: false,
+  listMode: 'byTitle', // values: 'byDate' or 'byTitle' - highlights the date or title first (sort is always by date)
   displayEndDateInList: true,
   displayTimeInList: true,
   displayLocationInList: false,
-  listMode: 'byTitle', // values: 'byDate' or 'byTitle' - highlights the date or title first (sort is always by date)
+  displayEventDetailsInline: false,
   displayContactInDetails: true,
   displayCostInDetails: true,
   displayTagsInDetails: true,

@@ -27,7 +27,7 @@ h2,h3,h4 {
   font-weight: normal;
   background-color: #eee;
   color: black;
-  padding: 4px;
+  padding: 4px 4px 4px 8px;
 }
 
 ul {
@@ -74,7 +74,8 @@ ul {
 p.output {
   background-color: #ffd;
   color: black;
-  padding: 4px;
+  margin-left: -2em;
+  padding: 4px 4px 4px 8px;
   border: 1px solid #ccc;
 }
 
