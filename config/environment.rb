@@ -12,20 +12,19 @@ require RAILS_ROOT + '/lib/hpricot-0.6.161-java/lib/universal-java1.5/fast_xs'
 require RAILS_ROOT + '/lib/hpricot-0.6.161-java/lib/universal-java1.5/hpricot_scan'
 
 Rails::Initializer.run do |config|
-  ## RACKING
-  
-    config.gem "builder"
-    config.time_zone = 'UTC'
+ 
+  config.gem "builder"
+  config.time_zone = 'UTC'
       
-  ## END
-  # config/initializers/load_config.rb
   APP_CONFIG = YAML.load_file("#{RAILS_ROOT}/config/config.yml")
-  config.action_controller.page_cache_directory = RAILS_ROOT + "/public/cache/"
+ 
   config.load_paths += Dir["#{RAILS_ROOT}/vendor/gems/**"].map do |dir| 
     File.directory?(lib = "#{dir}/lib") ? lib : dir
   end
+  #config.action_controller.page_cache_directory = RAILS_ROOT + "/public/"
   config.load_paths << RAILS_ROOT + '/lib/hpricot-0.6.161-java/lib'
   config.gem "httpclient"
+
   # Settings in config/environments/* take precedence over those specified here
   # Skip frameworks you're not going to use (only works if using vendor/rails)
   config.frameworks -= [ :active_record ]

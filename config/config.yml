@@ -1,12 +1,12 @@
 content_type:
   # Include one of these for each output type (second half of the name) in the skin: section just below.
-  html:  text/html; charset=UTF-8
-  rss:   application/rss+xml; charset=UTF-8
-  xml:   text/xml; charset=UTF-8 
-  json:  application/javascript; charset=UTF-8
-  ics:   text/calendar; charset=UTF-8
-  widget-json-groups: text/html; charset=UTF-8
-  widget-json-cats:   text/html; charset=UTF-8
+  html:               text/html; charset=UTF-8
+  rss:                application/rss+xml; charset=UTF-8
+  xml:                text/xml; charset=UTF-8 
+  json:               application/javascript; charset=UTF-8
+  ics:                text/calendar; charset=UTF-8
+  widget-json-groups: application/javascript; charset=UTF-8
+  widget-json-cats:   application/javascript; charset=UTF-8
   
 skin:
   # These skins must correspond to .xls files found in the webapps deployment area. 
