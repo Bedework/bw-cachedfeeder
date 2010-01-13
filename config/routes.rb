@@ -2,6 +2,8 @@ ActionController::Routing::Routes.draw do |map|
   # Routes define all Bedework parameters and feed caching URL segments
   # The priority is based upon order of creation: first created -> highest priority.
 
+  # Number of routes needed = 2 * number of outputs.  3 * number of outputs, if setPeriodView style requests are added back
+  # One set is for when the number of days is specified; the other is for when a date range is specified.
   map.connect 'v1.0/jsonDays/:days/:skin/:filter/:objName' + '.json', :controller => 'feed', :action => 'jsonDays'
   map.connect 'v1.0/htmlDays/:days/:skin/:filter' + '.html', :controller => 'feed', :action => 'htmlDays'
   map.connect 'v1.0/rssDays/:days/:skin/:filter' + '.rss', :controller => 'feed', :action => 'rssDays'
@@ -17,16 +19,7 @@ ActionController::Routing::Routes.draw do |map|
   # Used by Feed/Widget Builder to populate category and group lists.
   map.connect 'v1.0/categories/:skin/:objName' + '.json', :controller=> 'feed', :action => 'categories'
   map.connect 'v1.0/groups/:skin/:objName' + '.json', :controller=> 'feed', :action => 'groups'
-  
-  
-  # Used for feeds (other than ICS) where the number of days is specified 
-  #map.connect 'v1.0/genFeedDays/:days/:skin/:filter/:objName/index.json', :controller => 'feed', :action => 'genFeedDays',
-  # :defaults => { :objName => 'no--object'}
-  
-  # Used for feeds (other than ICS) where the start and end dates are specified.
-  #map.connect 'v1.0/genFeedRange/:startDate/:endDate/:skin/:filter/:objName', :controller => 'feed', :action => 'genFeedRange',
-  # :requirements => {:startDate => /\d{8}/, :endDate => /\d{8}/},
-  # :defaults => { :objName => 'no--object'}
+
 
   # Used for feeds (other than ICS) where the period (day, week, month, year) are specified
   #map.connect 'v1.0/genFeedPeriod/:period/:date/:skin/:filter/:objName', :controller => 'feed', :action => 'genFeedPeriod',
@@ -40,8 +33,8 @@ ActionController::Routing::Routes.draw do |map|
   # :defaults => { :filter => 'no--filter'}
      
   
-  # Used for specific event
-  map.connect 'v1.0/event/:skin/:recurrenceId/:guid', :controller => 'feed', :action => 'event',
+  # Used for specific event in html output
+  map.connect 'v1.0/htmlEvent/:skin/:recurrenceId/:guid' + '.html', :controller => 'feed', :action => 'event',
   :requirements => {:guid => /.*/}  #needed when you have '.' in one of your path elements
   
   # Used for download
