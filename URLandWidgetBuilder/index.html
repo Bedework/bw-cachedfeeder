@@ -9,7 +9,7 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
     <script type="text/javascript" src="javascript/jquery/jquery-1.3.2.min.js"></script>
     <script type="text/javascript" src="javascript/jquery/jquery-ui-1.7.1.custom.min.js"></script>
     <script type="text/javascript" src="javascript/bedework/builder.js"></script>
-    <script type="text/javascript" src="http://localhost:8080/webcache/v1.0/categories/widget-json-cats/catsObj"></script>
+    <script type="text/javascript" src="http://localhost:8080/webcache/v1.0/categories/widget-json-cats/catsObj.json"></script>  
     <link type="text/css" href="css/custom-theme/jquery-ui-1.7.1.custom.css" rel="stylesheet" />
     <link type="text/css" href="css/custom-theme/bedeworkJquery.css" rel="stylesheet" />
     <link type="text/css" href="css/builder.css" rel="stylesheet" />
@@ -18,9 +18,6 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
       $(document).ready(function() {
 
         getCatAndLimitData(); //from server
-        //$('#startDate').attr('disabled', 'disabled');
-        //$('#endDate').attr('disabled', 'disabled');
-        //$('#numDays').attr('disabled', 'disabled');
         $(".trigger").click(function() {
           // if ($('#list').attr('checked') && $('#widget').attr('checked') || $('#feed').attr('checked')) {
             // widget & list or feed
@@ -103,19 +100,19 @@ NOTE: Set the location of your webcache in two places below.  Search for localho
         <h2>Data format?</h2>
         <ul>
           <li>
-            <input type="radio" id="rss" onclick='updateUrlDisplay()' name="dataType" value="list-rss" checked="checked"/>RSS
+            <input type="radio" id="rss" onclick='updateUrlDisplay()' name="dataType" value="rss" checked="checked"/>RSS
           </li>
           <li>
-            <input type="radio" id="json" onclick='updateUrlDisplay()' name="dataType" value="list-json" />JSON
+            <input type="radio" id="json" onclick='updateUrlDisplay()' name="dataType" value="json" />JSON
           </li>
           <li>
             <input type="radio" id="ics" onclick='updateUrlDisplay()' name="dataType" value="ics" />ICS (iCalendar)
           </li>
           <li>
-            <input type="radio" id="xml" onclick='updateUrlDisplay()' name="dataType" value="list-xml" />XML
+            <input type="radio" id="xml" onclick='updateUrlDisplay()' name="dataType" value="xml" />XML
           </li>
           <li>
-            <input type="radio" id="html" onclick='updateUrlDisplay()' name="dataType" value="list-html" />HTML
+            <input type="radio" id="html" onclick='updateUrlDisplay()' name="dataType" value="html" />HTML
           </li>
         </ul>
       </div>

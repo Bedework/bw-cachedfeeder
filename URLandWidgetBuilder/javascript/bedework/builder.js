@@ -144,8 +144,6 @@ function replaceAll(text, strA, strB) {
 }
 
 function processLimitCatData() {
-//      trLine = "<tr><td><input type=\"radio\" checked\=\"checked\" id=\"no--Limit\" name=\"limitCatCheck\" onclick=\"updateUrlDisplay()\" value=\"all\">No Limit</td></tr>";
-//      $("#limitTable").append(trLine);
   $.each(cats.bwCategories.categories.sort(sortByValue), function(i, category) {
     if (category.value.substring(0, 4) == 'org/') {
       trLine = "<tr><td><input type=\"radio\" id=\"Limit" + category.value + "\" name=\"limitCatCheck\" onclick=\"updateUrlDisplay()\" value=\"" + category.uid + "\">" + category.value.substring(4) + "</td></tr>";
@@ -195,13 +193,6 @@ function constructExcludeCategoryList() {
 
 function constructURL() {
 
-  // five cases:
-  //   (1)  ics with number of days specified.  Other parameters: limitCategory, categories
-  //   (2)  ics with date range specified.  Other parameters: limitCategory, categories
-  //   (3)  other feed with number of days specified.  Other parameters: skin, limitCategory, categories
-  //   (4)  other feed with date range specified.  Other paramters: skin, limitCategory, categories
-  //   (5)  other feed for week or month period specified (widget only)
-
   var ics = false;
   var byDays = false;
   // var weekOrMonth = false;
@@ -228,7 +219,8 @@ function constructURL() {
   if (document.getElementById('ics').checked == true) {
     ics = true;
   } else {
-    skin = $("input[name='dataType']:checked").val();
+	outputLang = $("input[name='dataType']:checked").val();
+    skin = 'list-' + outputLang;
   }
 
   // Widget?  set skin.
@@ -238,12 +230,14 @@ function constructURL() {
     // outputType = $("input[name='output']:checked").val();
     // if (document.getElementById('list').checked == true) {
     //list
-    if (outputType == "iframe") {
+    if (outputLang == "iframe") {
       // iframe
       skin = "list-html";
+      outputLang = "html";
     } else {
       // javascript
       skin = "list-json";
+      outputLang = "json";
       jsonObject = true;
     }
   } // else {
@@ -275,9 +269,9 @@ function constructURL() {
     }
   } else {
     if (byDays) {
-      constructedURL = getCacheUrlPrefix() + "genFeedDays" + "/" + numberOfDays + "/" + skin + "/";
+      constructedURL = getCacheUrlPrefix() + outputLang + "Days" + "/" + numberOfDays + "/" + skin + "/";
     } else {
-      constructedURL = getCacheUrlPrefix() + "genFeedRange" + "/" + dates + "/" + skin + "/";
+      constructedURL = getCacheUrlPrefix() + outputLang + "Range" + "/" + dates + "/" + skin + "/";
     }
   }
 
@@ -308,20 +302,24 @@ function constructURL() {
     constructedURL += escape(filterExpression);
   }
 
-  if (jsonObject == true ) {
-    constructedURL += '/bwObject';
+  if (outputLang == 'json') {
+	if (jsonObject == true ) {
+      constructedURL += '/bwObject';
+    } else {
+      constructedURL += '/no--object';
+    }
   }
-  return constructedURL;
+  return constructedURL + '.' + outputLang;
 }
 
 function updateUrlDisplay() {
 
   if (document.getElementById('widget').checked == true) {
-    outputType = $("input[name='output']:checked").val();
-    if (outputType == "iframe") {
-      code = "<iframe src=\"" + constructURL() + "</iframe>";
-      document.getElementById('functions').innerHTML = code;
-    } else {
+    //outputType = $("input[name='output']:checked").val();
+    //if (outputType == "iframe") {
+    //  code = "<iframe src=\"" + constructURL() + "</iframe>";
+    //  document.getElementById('functions').innerHTML = code;
+    //} else {
       url = constructURL();
       bwJsLoc = window.location + 'javascript/bedework/'
       jsHtml = '<textarea name="functions" id="functions" rows="20" cols="78">';
@@ -349,7 +347,7 @@ function updateUrlDisplay() {
       jsHtml += '</textarea>';
 
       document.getElementById('codeBoxOutput').innerHTML = jsHtml;
-    }
+    //}
   } else {
     document.getElementById('UrlBox').innerHTML = constructURL();
     document.getElementById('UrlBox').href = constructURL();
