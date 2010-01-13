@@ -41,22 +41,21 @@ class FeedModel
     return APP_CONFIG['skin'][feedType]
   end
   
-  def buildUrl() # Main URL building action
-    target = 'default'
-    myGroup = 'none'
-    if reqParams[:filter]
-      myFilter = reqParams[:filter]
-    end
-    if reqParams[:objName]
-      myObjName = reqParams[:objName]
-    end 
+  def buildUrl() # dispatcher
+  
     target = case urlType
-      when 'genFeedDays' then getTarget(myFilter, "gen", "days", myObjName)
-      when 'genFeedRange' then getTarget(myFilter, "gen", "range", myObjName)
-      when 'genFeedPeriod' then getTarget(myFilter, "gen", "period", myObjName)
-      when 'icsDays' then getTarget(myFilter, "ics", "days", myObjName)
-      when 'icsRange' then getTarget(myFilter, "ics", "range", myObjName)
-      when 'icsPeriod' then getTarget(myFilter, "ics", "period", myObjName)
+      when 'jsonDays' then getTarget2("json", "days")
+      when 'icsDays' then getTarget2("ics", "days")
+      when 'htmlDays' then getTarget2("html", "days")
+      when 'xmlDays' then getTarget2("xml", "days")
+      when 'rssDays' then getTarget2("rss", "days")
+      when 'jsonRange' then getTarget2("json", "range")
+      when 'icsRange' then getTarget2("ics", "range")
+      when 'htmlRange' then getTarget2("html", "range")
+      when 'xmlRange' then getTarget2("xml", "range")
+      when 'rssRange' then getTarget2("rss", "range")       
+      #when 'genFeedPeriod' then getTarget(myFilter, "gen", "period", myObjName)
+      #when 'icsPeriod' then getTarget(myFilter, "ics", "period", myObjName)
       when 'categories' then getCategories()
       when 'groups' then getGroups()
       when 'event' then getEventTarget()
@@ -72,6 +71,17 @@ class FeedModel
     skin = getSkin(reqParams[:skin])
     skinSplits = skin.split(/-/)
     output = skinSplits[1]
+    
+    if reqParams[:filter]
+      filter = reqParams[:filter]
+    else
+      filter = 'no--filter'
+    end
+    if reqParams[:objName]
+      obj = reqParams[:objName]
+    else
+      obj = 'no--object'
+    end
     
     if filter == 'no--filter'
       filterParam = ''
@@ -99,6 +109,72 @@ class FeedModel
     if genOrIcs == 'ics'
       bedeUrl += "&format=text/calendar&setappvar=summaryMode(details)" + filterParam + objParam
     else 
+      bedeUrl += "&skinName=" + skin + "&setappvar=summaryMode(details)" + filterParam + objParam
+    end
+    if daysRangeOrPeriod == "range"
+      if reqParams[:startDate] and reqParams[:endDate] 
+        if reqParams[:startDate] != "00000000"
+          startD = addDateDashes(reqParams[:startDate])
+          bedeUrl += "&start=" + startD
+        end
+        if reqParams[:endDate] != "00000000"
+          endD = addDateDashes(reqParams[:endDate])
+          bedeUrl += "&end=" + endD
+        end
+      end
+    elsif daysRangeOrPeriod == "days"
+      if (reqParams[:days] != "0")
+        bedeUrl +="&days=" + reqParams[:days]
+      end
+    else
+      if reqParams[:date] != "00000000" 
+        bedeUrl += "&date=" + reqParams[:date]
+      end
+        
+      case reqParams[:period]
+        when 'day' then bedeUrl +="&viewType=dayView"
+        when 'week' then bedeUrl +="&viewType=weekView"
+        when 'month' then bedeUrl +="&viewType=monthView"
+        when 'year' then bedeUrl +="&viewType=yearView"
+      end
+    end
+    return bedeUrl 
+  end
+  
+  def getTarget2(output, daysRangeOrPeriod) 
+    
+    if reqParams[:filter] == 'no--filter'
+      filterParam = ''
+    else
+      encodedFilter = CGI::escape(filter)
+      filterParam = "&fexpr=" + encodedFilter
+    end
+    
+    if output == "json" 
+      obj = reqParams[:objName]
+      if obj == 'no--object'
+        objParam = ''
+      else
+        objParam = "&setappvar=objName(" + obj + ")"
+      end
+    else 
+      objParam = ''
+    end
+    
+    # set Bedework action
+    #if daysRangeOrPeriod == 'period'
+    #  action = gridAction
+    #else
+      action = listAction
+    #end
+    
+    bedeUrl = TARGETSERVER + "/" + action + "?calPath=/public/cals/MainCal"
+    
+    # build the Bedework URL and return it.
+    if output == 'ics'
+      bedeUrl += "&format=text/calendar&setappvar=summaryMode(details)" + filterParam
+    else 
+      skin = getSkin(reqParams[:skin])
       bedeUrl += "&skinName=" + skin + "&setappvar=summaryMode(details)" + filterParam + objParam
     end
     if daysRangeOrPeriod == "range"
