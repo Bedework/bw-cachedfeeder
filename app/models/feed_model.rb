@@ -58,7 +58,7 @@ class FeedModel
       #when 'icsPeriod' then getTarget(myFilter, "ics", "period", myObjName)
       when 'categories' then getCategories()
       when 'groups' then getGroups()
-      when 'event' then getEventTarget()
+      when 'htmlEvent' then getEventTarget()
       when 'download' then getDownloadTarget()
       # when 'external' then getExt()
     end
@@ -242,12 +242,7 @@ class FeedModel
     guidParam = "&guid=" + reqParams[:guid].gsub('_', '.')
     calPathParam = '&calPath=%2Fpublic%2Fcals%2FMainCal'
     bedeUrl = TARGETSERVER + "/" + eventAction + skinParam + calPathParam + guidParam
-    
-    if reqParams[:recurrenceId] != '0'
-      bedeUrl += "&recurrenceId=" + reqParams[:recurrenceId]
-    else
-      bedeUrl += "&recurrenceId=" # is this necessary?
-    end
+    bedeUrl += "&recurrenceId=" + reqParams[:recurrenceId]  
     if reqParams[:date]
       bedeUrl += "&date=" + reqParams[:date]
     end

@@ -4,7 +4,7 @@ require 'httpclient'
 class FeedController < ApplicationController 
   # Rails caching for each action
   #caches_page :calendar, :external
-  caches_page :event, :categories, :groups, :download
+  caches_page :htmlEvent, :categories, :groups, :download
   caches_page :jsonDays, :htmlDays, :rssDays, :xmlDays, :icsDays
   caches_page :jsonRange, :htmlRange, :rssRange, :xmlRange, :icsRange
   
@@ -137,8 +137,8 @@ class FeedController < ApplicationController
     addExtension()
   end
   
-  def event 
-    currUrl = FeedModel.new('event', params)
+  def htmlEvent
+    currUrl = FeedModel.new('htmlEvent', params)
     target = currUrl.buildUrl
     logger.info("URL is #{target}\n")
     @xmlOutput = getFeed(target)
