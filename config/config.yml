@@ -5,8 +5,6 @@ content_type:
   xml:                text/xml; charset=UTF-8 
   json:               application/javascript; charset=UTF-8
   ics:                text/calendar; charset=UTF-8
-  widget-json-groups: application/javascript; charset=UTF-8
-  widget-json-cats:   application/javascript; charset=UTF-8
   
 skin:
   # These skins must correspond to .xls files found in the webapps deployment area. 
