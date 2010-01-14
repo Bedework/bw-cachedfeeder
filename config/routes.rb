@@ -14,7 +14,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'v1.0/htmlRange/:startDate/:endDate/:skin/:filter' + '.html', :controller => 'feed', :action => 'htmlRange'
   map.connect 'v1.0/rssRange/:startDate/:endDate/:skin/:filter' + '.rss', :controller => 'feed', :action => 'rssRange'
   map.connect 'v1.0/xmlRange/:startDate/:endDate/:skin/:filter' + '.xml', :controller => 'feed', :action => 'xmlRange'
-  map.connect 'v1.0/icsRange/:startDate/:endDate/:filter' + '.ics', :controller=> 'feed', :action => 'icsDays'
+  map.connect 'v1.0/icsRange/:startDate/:endDate/:filter' + '.ics', :controller=> 'feed', :action => 'icsRange'
   
   # Used by Feed/Widget Builder to populate category and group lists.
   map.connect 'v1.0/categories/:skin/:objName' + '.json', :controller=> 'feed', :action => 'categories'
