@@ -224,14 +224,9 @@ class FeedModel
   def getDownloadTarget()
     calPathParam = '?calPath=%2Fpublic%2Fcals%2FMainCal'
     guidParam = "&guid=" + reqParams[:guid].gsub('_', '.')
-    bedeUrl = TARGETSERVER + "/" + downloadAction + calPathParam + guidParam + '&nocache=no&contentName='
-    bedeUrl += reqParams[:fileName] + "&calPath=/public/cals/MainCal"
-    
-    if reqParams[:recurrenceId] != '0'
-      bedeUrl += "&recurrenceId=" + reqParams[:recurrenceId]
-    else
-      bedeUrl += "&recurrenceId=" # is this necessary?
-    end
+    bedeUrl = TARGETSERVER + "/" + downloadAction + calPathParam + guidParam 
+    bedeUrl += "&recurrenceId=" + reqParams[:recurrenceId]
+    bedeUrl += '&nocache=no&contentName=' + reqParams[:fileName]
     return bedeUrl
   end
   
