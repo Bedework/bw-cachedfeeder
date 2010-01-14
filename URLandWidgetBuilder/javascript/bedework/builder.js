@@ -179,9 +179,9 @@ function constructExcludeCategoryList() {
   var categoryIDList = "";
   $("input[name='excludeCatChecks']:checked").each(function() {
     if (categoryIDList == "") {
-      categoryIDList = "!catuid='" + this.value + "'";
+      categoryIDList = "catuid!='" + this.value + "'";
     } else {
-      categoryIDList = categoryIDList + "&!catuid='" + this.value + "'";
+      categoryIDList = categoryIDList + "&catuid!='" + this.value + "'";
     }
   });
   return '(' + categoryIDList + ')';
