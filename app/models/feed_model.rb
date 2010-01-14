@@ -146,7 +146,7 @@ class FeedModel
     if reqParams[:filter] == 'no--filter'
       filterParam = ''
     else
-      encodedFilter = CGI::escape(filter)
+      encodedFilter = CGI::escape(reqParams[:filter])
       filterParam = "&fexpr=" + encodedFilter
     end
     
