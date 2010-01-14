@@ -34,7 +34,7 @@ ActionController::Routing::Routes.draw do |map|
      
   
   # Used for specific event in html output
-  map.connect 'v1.0/htmlEvent/:skin/:recurrenceId/:guid' + '.html', :controller => 'feed', :action => 'event',
+  map.connect 'v1.0/htmlEvent/:skin/:recurrenceId/:guid' + '.html', :controller => 'feed', :action => 'htmlEvent',
   :requirements => {:guid => /.*/}  #needed when you have '.' in one of your path elements
   
   # Used for download
