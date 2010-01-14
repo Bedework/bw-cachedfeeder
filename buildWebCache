@@ -1,4 +1,4 @@
 echo "Building webcache."
 echo "Be patient.  Nothing happens for a short while..."
-rm -r tmp/*
+rm -r tmp/war public
 ./build/bin/warble
