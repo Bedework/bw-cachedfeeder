@@ -309,7 +309,11 @@ function constructURL() {
       constructedURL += '/no--object';
     }
   }
-  return constructedURL + '.' + outputLang;
+  if (ics) {
+    return constructedURL + '.ics';
+  } else {
+    return constructedURL + '.' + outputLang;
+  }
 }
 
 function updateUrlDisplay() {
