@@ -198,6 +198,7 @@ function constructURL() {
   // var weekOrMonth = false;
   var jsonObject = false;
   var numberOfDays = 7;
+  var outputLang = "";
 
   // byDays?  If byDays, get number of days, else get start and end dates.
   if (document.getElementById('startEndDates').checked == true) {
