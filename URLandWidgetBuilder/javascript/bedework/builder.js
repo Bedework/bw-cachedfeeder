@@ -1,5 +1,5 @@
 function getCacheUrlPrefix() {
-  return urlPrefix = "http://localhost:8080/webcache/v1.0/"
+  return urlPrefix = "http://localhost:9090/webcache/v1.0/"
 }
 
 // use JQuery UI slider widget for number of days
