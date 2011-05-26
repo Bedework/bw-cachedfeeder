@@ -19,7 +19,7 @@ config.action_controller.perform_caching             = true
 #config.action_controller.page_cache_extension        = '.xml'
 
 config.action_view.debug_rjs                         = true
-TARGETSERVER = 'http://localhost:8080/feeder'
+TARGETSERVER = '/feeder'
 #TARGETSERVER = 'http://events.rpi.edu'
 #TARGETSERVER = 'http://bedework.org:8585/cal'
 
