@@ -71,52 +71,7 @@ class FeedController < ApplicationController
   end
 
   def jsonDays
-      currUrl = FeedModel.new('jsonDays', params)
-    #Normalize url. May be server-relative.
-    if target.slice(0,1) == '/'
-      serverProtocol = request.protocol
-      serverHost = request.host
-      serverPort = request.port.to_s
-      target = serverProtocol + serverHost + ':' + serverPort + target
-    end
-      target = currUrl.buildUrl
-      logger.info("URL is #{target}\n")
-      @xmlOutput = getFeed(target)
-    addExtension()
-    end
-
-    def xmlDays
-      currUrl = FeedModel.new('xmlDays', params)
-      target = currUrl.buildUrl
-    #Normalize url. May be server-relative.
-    if target.slice(0,1) == '/'
-      serverProtocol = request.protocol
-      serverHost = request.host
-      serverPort = request.port.to_s
-      target = serverProtocol + serverHost + ':' + serverPort + target
-    end
-      logger.info("URL is #{target}\n")
-      @xmlOutput = getFeed(target)
-    addExtension()
-    end
-
-    def htmlDays
-      currUrl = FeedModel.new('htmlDays', params)
-      target = currUrl.buildUrl
-    #Normalize url. May be server-relative.
-    if target.slice(0,1) == '/'
-      serverProtocol = request.protocol
-      serverHost = request.host
-      serverPort = request.port.to_s
-      target = serverProtocol + serverHost + ':' + serverPort + target
-    end
-      logger.info("URL is #{target}\n")
-      @xmlOutput = getFeed(target)
-    addExtension()
-    end
-
-    def rssDays
-      currUrl = FeedModel.new('rssDays', params)
+    currUrl = FeedModel.new('jsonDays', params)
     target = currUrl.buildUrl
     #Normalize url. May be server-relative.
     if target.slice(0,1) == '/'
@@ -125,10 +80,56 @@ class FeedController < ApplicationController
       serverPort = request.port.to_s
       target = serverProtocol + serverHost + ':' + serverPort + target
     end
-      logger.info("URL is #{target}\n")
-      @xmlOutput = getFeed(target)
+    logger.info("URL is #{target}\n")
+    @xmlOutput = getFeed(target)
     addExtension()
+  end
+
+  def xmlDays
+    currUrl = FeedModel.new('xmlDays', params)
+    target = currUrl.buildUrl
+    #Normalize url. May be server-relative.
+    if target.slice(0,1) == '/'
+      serverProtocol = request.protocol
+      serverHost = request.host
+      serverPort = request.port.to_s
+      target = serverProtocol + serverHost + ':' + serverPort + target
     end
+    logger.info("URL is #{target}\n")
+    @xmlOutput = getFeed(target)
+    addExtension()
+  end
+
+  def htmlDays
+    currUrl = FeedModel.new('htmlDays', params)
+    target = currUrl.buildUrl
+    #Normalize url. May be server-relative.
+    if target.slice(0,1) == '/'
+      serverProtocol = request.protocol
+      serverHost = request.host
+      serverPort = request.port.to_s
+      target = serverProtocol + serverHost + ':' + serverPort + target
+    end
+    logger.info("URL is #{target}\n")
+    @xmlOutput = getFeed(target)
+    addExtension()
+  end
+
+
+  def rssDays
+    currUrl = FeedModel.new('rssDays', params)
+    target = currUrl.buildUrl
+    #Normalize url. May be server-relative.
+    if target.slice(0,1) == '/'
+      serverProtocol = request.protocol
+      serverHost = request.host
+      serverPort = request.port.to_s
+      target = serverProtocol + serverHost + ':' + serverPort + target
+    end
+    logger.info("URL is #{target}\n")
+    @xmlOutput = getFeed(target)
+    addExtension()
+  end
 
   def icsDays
     currUrl = FeedModel.new('icsDays', params)
@@ -144,69 +145,9 @@ class FeedController < ApplicationController
     @xmlOutput = getFeed(target)
     addExtension()
   end
-
+  
   def jsonRange
-      currUrl = FeedModel.new('jsonRange', params)
-      target = currUrl.buildUrl
-    #Normalize url. May be server-relative.
-    if target.slice(0,1) == '/'
-      serverProtocol = request.protocol
-      serverHost = request.host
-      serverPort = request.port.to_s
-      target = serverProtocol + serverHost + ':' + serverPort + target
-    end
-      logger.info("URL is #{target}\n")
-      @xmlOutput = getFeed(target)
-    addExtension()
-    end
-
-    def xmlRange
-      currUrl = FeedModel.new('xmlRange', params)
-      target = currUrl.buildUrl
-    #Normalize url. May be server-relative.
-    if target.slice(0,1) == '/'
-      serverProtocol = request.protocol
-      serverHost = request.host
-      serverPort = request.port.to_s
-      target = serverProtocol + serverHost + ':' + serverPort + target
-    end
-      logger.info("URL is #{target}\n")
-      @xmlOutput = getFeed(target)
-    addExtension()
-    end
-
-    def htmlRange
-      currUrl = FeedModel.new('htmlRange', params)
-      target = currUrl.buildUrl
-    #Normalize url. May be server-relative.
-    if target.slice(0,1) == '/'
-      serverProtocol = request.protocol
-      serverHost = request.host
-      serverPort = request.port.to_s
-      target = serverProtocol + serverHost + ':' + serverPort + target
-    end
-      logger.info("URL is #{target}\n")
-      @xmlOutput = getFeed(target)
-    addExtension()
-    end
-
-    def rssRange
-      currUrl = FeedModel.new('rssRange', params)
-      target = currUrl.buildUrl
-    #Normalize url. May be server-relative.
-    if target.slice(0,1) == '/'
-      serverProtocol = request.protocol
-      serverHost = request.host
-      serverPort = request.port.to_s
-      target = serverProtocol + serverHost + ':' + serverPort + target
-    end
-      logger.info("URL is #{target}\n")
-      @xmlOutput = getFeed(target)
-    addExtension()
-    end
-
-  def icsRange
-    currUrl = FeedModel.new('icsRange', params)
+    currUrl = FeedModel.new('jsonRange', params)
     target = currUrl.buildUrl
     #Normalize url. May be server-relative.
     if target.slice(0,1) == '/'
@@ -220,6 +161,66 @@ class FeedController < ApplicationController
     addExtension()
   end
 
+  def xmlRange
+    currUrl = FeedModel.new('xmlRange', params)
+    target = currUrl.buildUrl
+    #Normalize url. May be server-relative.
+    if target.slice(0,1) == '/'
+      serverProtocol = request.protocol
+      serverHost = request.host
+      serverPort = request.port.to_s
+      target = serverProtocol + serverHost + ':' + serverPort + target
+    end
+    logger.info("URL is #{target}\n")
+    @xmlOutput = getFeed(target)
+    addExtension()
+  end
+
+  def htmlRange
+    currUrl = FeedModel.new('htmlRange', params)
+    target = currUrl.buildUrl
+    #Normalize url. May be server-relative.
+    if target.slice(0,1) == '/'
+      serverProtocol = request.protocol
+      serverHost = request.host
+      serverPort = request.port.to_s
+      target = serverProtocol + serverHost + ':' + serverPort + target
+    end
+    logger.info("URL is #{target}\n")
+    @xmlOutput = getFeed(target)
+    addExtension()
+  end
+
+  def rssRange
+    currUrl = FeedModel.new('rssRange', params)
+    target = currUrl.buildUrl
+    #Normalize url. May be server-relative.
+    if target.slice(0,1) == '/'
+      serverProtocol = request.protocol
+      serverHost = request.host
+      serverPort = request.port.to_s
+      target = serverProtocol + serverHost + ':' + serverPort + target
+    end
+    logger.info("URL is #{target}\n")
+    @xmlOutput = getFeed(target)
+    addExtension()
+  end
+  
+  def icsRange
+    currUrl = FeedModel.new('icsRange', params)
+     target = currUrl.buildUrl
+    #Normalize url. May be server-relative.
+    if target.slice(0,1) == '/'
+      serverProtocol = request.protocol
+      serverHost = request.host
+      serverPort = request.port.to_s
+      target = serverProtocol + serverHost + ':' + serverPort + target
+    end
+    logger.info("URL is #{target}\n")
+    @xmlOutput = getFeed(target)
+    addExtension()
+  end
+  
   def genFeedPeriod
     currUrl = FeedModel.new('genFeedPeriod', params)
     target = currUrl.buildUrl
