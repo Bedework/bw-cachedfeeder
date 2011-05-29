@@ -17,6 +17,10 @@
 // under the License.
 //
 
+function getCacheUrlPrefix() {
+  return urlPrefix = "http://localhost:8080/webcache/v1.0/"
+}
+
 // use JQuery UI slider widget for number of days
 $(function() {
   $("#slider").slider({
