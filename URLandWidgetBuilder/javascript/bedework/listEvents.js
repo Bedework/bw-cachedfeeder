@@ -188,7 +188,7 @@ function showBwEvent(outputContainerID, eventId) {
   output += "<div id=\"bwEventLogistics\">";
 
   // output date/time
-  output += "<div class=\"bwEventDateTime\">"
+  output += "<div class=\"bwEventDateTime\">";
   output += event.start.longdate;
   if ((event.start.allday == 'false') && bwJsWidgetOptions.displayTimeInList) {
     output += " " + event.start.time;
@@ -217,7 +217,7 @@ function showBwEvent(outputContainerID, eventId) {
   output += "</div>";
 
   // output location
-  output += "<div class=\"bwEventLoc\">"
+  output += "<div class=\"bwEventLoc\">";
   if (event.location.link != "") {
     output += "<a href=\""+ event.location.link + "\">" + event.location.address + "</a>";
   } else {
@@ -226,13 +226,13 @@ function showBwEvent(outputContainerID, eventId) {
   output += "</div>";
 
   // output description
-  output += "<div class=\"bwEventDesc\">"
+  output += "<div class=\"bwEventDesc\">";
   output += event.description;
   output += "</div>";
 
   // output contact
   if (bwJsWidgetOptions.displayContactInDetails) {
-    output += "<div class=\"bwEventContact\">"
+    output += "<div class=\"bwEventContact\">";
     if (event.contact.link != "") {
       output += "Contact: <a href=\"" + event.contact.link + "\">" + event.contact.name + "</a>";
     } else {
@@ -243,24 +243,38 @@ function showBwEvent(outputContainerID, eventId) {
 
   // output cost
   if (event.cost != "" && bwJsWidgetOptions.displayCostInDetails) {
-    output += "<div class=\"bwEventCost\">"
+    output += "<div class=\"bwEventCost\">";
     output += "Cost: " + event.cost;
     output += "</div>";
   }
 
   // output tags (categories)
   if (event.categories != "" && bwJsWidgetOptions.displayTagsInDetails) {
-    output += "<div class=\"bwEventCats\">"
+    output += "<div class=\"bwEventCats\">";
     output += "Tags: " + event.categories;
     output += "</div>";
   }
 
   // output link
   if (event.link != "") {
-    output += "<div class=\"bwEventLink\">"
+    output += "<div class=\"bwEventLink\">";
     output += "See: <a href=\"" + event.link + "\">" + event.link + "</a>";
     output += "</div>";
   }
+  
+   // output download link
+  var downloadPrefix = bwJsWidgetOptions.calendarServer + bwJsWidgetOptions.calSuiteContext + "/misc/export.gdo";
+
+  // generate the query string parameters that get the download
+  var downloadQueryString = "?calPath=" + event.calPath;
+  downloadQueryString += "&amp;guid=" + event.guid;
+  downloadQueryString += "&amp;recurrenceId=" + event.recurrenceId;
+  downloadQueryString += "&amp;nocache=no&amp;contentName=" + event.guid;
+  output += "<div class=\"bwDownloadLink\">";
+  output += "<a href=\"" + downloadPrefix + downloadQueryString + "\">Download ical</a>";
+  output += "</div>";
+
+  
   output += "</div>";
 
   // create a link back to the main view
