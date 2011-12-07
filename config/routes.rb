@@ -19,6 +19,7 @@ ActionController::Routing::Routes.draw do |map|
   # Used by Feed/Widget Builder to populate category and group lists.
   map.connect 'v1.0/categories/:skin/:objName' + '.json', :controller=> 'feed', :action => 'categories'
   map.connect 'v1.0/groups/:skin/:objName' + '.json', :controller=> 'feed', :action => 'groups'
+  map.connect 'v1.0/calendars/:skin/:objName' + '.json', :controller=> 'feed', :action => 'calendars'
 
 
   # Used for feeds (other than ICS) where the period (day, week, month, year) are specified

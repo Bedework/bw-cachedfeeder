@@ -25,7 +25,7 @@ require 'httpclient'
 class FeedController < ApplicationController
   # Rails caching for each action
   #caches_page :calendar, :external
-  caches_page :htmlEvent, :categories, :groups, :download
+  caches_page :htmlEvent, :categories, :groups, :download, :calendars
   caches_page :jsonDays, :htmlDays, :rssDays, :xmlDays, :icsDays
   caches_page :jsonRange, :htmlRange, :rssRange, :xmlRange, :icsRange
 
@@ -300,6 +300,21 @@ class FeedController < ApplicationController
 
   def groups
     currUrl = FeedModel.new('groups', params)
+    target = currUrl.buildUrl
+    #Normalize url. May be server-relative.
+    if target.slice(0,1) == '/'
+      serverProtocol = request.protocol
+      serverHost = request.host
+      serverPort = request.port.to_s
+      target = serverProtocol + serverHost + ':' + serverPort + target
+    end
+    logger.info("URL is #{target}\n")
+    @xmlOutput = getFeed(target)
+    addExtension()
+  end
+  
+  def calendars
+    currUrl = FeedModel.new('calendars', params)
     target = currUrl.buildUrl
     #Normalize url. May be server-relative.
     if target.slice(0,1) == '/'

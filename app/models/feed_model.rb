@@ -21,13 +21,14 @@
 
 class FeedModel
   attr_accessor :urlType, :reqParams
-  attr_reader :listAction, :gridAction, :categoriesAction, :groupsAction, :eventAction, :downloadAction
+  attr_reader :listAction, :gridAction, :categoriesAction, :groupsAction, :eventAction, :downloadAction, :calendarsAction
   def initialize(urlType, reqParams)
     @urlType, @reqParams = urlType, reqParams 
     @gridAction = 'main/setViewPeriod.do'
     @listAction = 'main/listEvents.do'
     @categoriesAction = 'widget/categories.do'
     @groupsAction = 'widget/groups.do'
+    @calendarsAction = 'calendar/fetchPublicCalendars.do'
     @eventAction = 'event/eventView.do'
     @downloadAction = 'misc/export.gdo'
   end
@@ -72,6 +73,7 @@ class FeedModel
       #when 'icsPeriod' then getTarget(myFilter, "ics", "period", myObjName)
       when 'categories' then getCategories()
       when 'groups' then getGroups()
+      when 'calendars' then getCalendars()
       when 'htmlEvent' then getEventTarget()
       when 'download' then getDownloadTarget()
       # when 'external' then getExt()
@@ -232,6 +234,14 @@ class FeedModel
     currSkin = getSkin(reqParams[:skin])
     obj = reqParams[:objName]
     bedeUrl = TARGETSERVER + "/" + groupsAction + "?skinName=" + currSkin + "&setappvar=objName(" + obj + ")&calPath=/public/cals/MainCal"
+    return bedeUrl
+  end
+  
+  def getCalendars()
+    currSkin = getSkin(reqParams[:skin])
+    obj = reqParams[:objName]
+    bedeUrl = TARGETSERVER + "/" + calendarsAction + "?skinName=" + currSkin + "&setappvar=objName(" + obj + ")&calPath=/public/cals/MainCal"
+    bedeUrl += '&setappvar=setSelectionAction(calsuiteSetSelectionAction)'
     return bedeUrl
   end
   

@@ -37,7 +37,8 @@ skin:
   grid-html: grid-html
   widget-json-groups: widget-json-groups
   widget-json-cats: widget-json-cats
-
+  widget-json-cals: widget-json-cals
+  
 # externals:
 # unc:    http://slice.unc.edu/index.php/events/all/eventlist?format=feed&type=rss
 # ncsu:   http://calendar.activedatax.com/ncstate/RSSSyndicator.aspx?category=2-0&location=&type=N&binary=Y&keywords=
