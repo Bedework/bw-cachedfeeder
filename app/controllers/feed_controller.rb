@@ -62,12 +62,8 @@ class FeedController < ApplicationController
   def getFeed(feedUrl) # uses httpclient gem
     target = ARGV.shift || feedUrl
     target = ARGV.shift || target  # shift again to get by version marker
-    #proxy = ENV['HTTP_PROXY']
-    #clnt = HTTPClient.new(proxy)
-    clnt = HTTPClient.new
-    #clnt.reset(target)
-
-    return clnt.get_content(target)
+    # send code for |, since it's an illegal char in NTFS
+    return clnt.get_content(target.gsub('==pipe==','%7c'))
   end
 
   def jsonDays

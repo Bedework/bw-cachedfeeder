@@ -187,7 +187,8 @@ function constructIncludeCategoryList() {
     if (categoryIDList == "") {
       categoryIDList = "catuid='" + this.value + "'";
     } else {
-      categoryIDList = categoryIDList + "|catuid='" + this.value + "'";
+      // NTFS doesn't like the | character and cache may be stored on NTFS
+<     categoryIDList = categoryIDList + "==pipe==catuid='" + this.value + "'";
     }
   });
   return '(' + categoryIDList + ')';
