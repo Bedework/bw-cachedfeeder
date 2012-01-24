@@ -188,7 +188,7 @@ function constructIncludeCategoryList() {
       categoryIDList = "catuid='" + this.value + "'";
     } else {
       // NTFS doesn't like the | character and cache may be stored on NTFS
-<     categoryIDList = categoryIDList + "==pipe==catuid='" + this.value + "'";
+      categoryIDList = categoryIDList + "-_catuid='" + this.value + "'";
     }
   });
   return '(' + categoryIDList + ')';

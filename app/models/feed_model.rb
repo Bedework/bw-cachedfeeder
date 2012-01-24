@@ -102,7 +102,7 @@ class FeedModel
     if filter == 'no--filter'
       filterParam = ''
     else
-      encodedFilter = CGI::escape(filter)
+      encodedFilter = CGI::escape(filter.gsub('-_','|'))
       filterParam = "&fexpr=" + encodedFilter
     end
       

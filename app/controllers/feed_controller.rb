@@ -63,7 +63,8 @@ class FeedController < ApplicationController
     target = ARGV.shift || feedUrl
     target = ARGV.shift || target  # shift again to get by version marker
     # send code for |, since it's an illegal char in NTFS
-    return clnt.get_content(target.gsub('==pipe==','%7c'))
+    clnt = HTTPClient.new
+    return clnt.get_content(target.gsub('-_','%7c'))
   end
 
   def jsonDays
