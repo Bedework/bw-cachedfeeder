@@ -17,7 +17,6 @@
   <property name="bedework.home" location="${project.home}/../bedework"/>
   <property name="build.dir" location="${bedework.home}/build"/>
   <import file="${build.dir}/buildTools/deftasks.xml"/>
-  <import file="${build.dir}/loadDeployConfig.xml" />
 
   <!-- These may already be set from calling dir -->
   <property name="project.name" value="${org.bedework.package.name}"/>
@@ -41,8 +40,8 @@
      =================================================================== -->
 
   <target name="deploy-urlbuilder" depends="init" description="Deploy urlbuilder">
-  	<delete dir="${org.bedework.appserver.staticroot}/URLandWidgetBuilder" />
-  	<copy todir="${org.bedework.appserver.staticroot}/URLandWidgetBuilder" >
+  	<delete dir="${org.bedework.appserver.staticroot}/urlbuilder" />
+  	<copy todir="${org.bedework.appserver.staticroot}/urlbuilder" >
   		<fileset dir="URLandWidgetBuilder"/>
     </copy>
   </target>

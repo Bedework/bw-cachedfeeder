@@ -1,4 +1,0 @@
-echo "Copying urlbuilder to tomcat ROOT..."
-mkdir -p ../apache-tomcat-5.5.17/webapps/ROOT/urlbuilder
-cd URLandWidgetBuilder
-tar --exclude='.svn' -c -f - * | (cd ../../apache-tomcat-5.5.17/webapps/ROOT/urlbuilder ; tar xfp -)
