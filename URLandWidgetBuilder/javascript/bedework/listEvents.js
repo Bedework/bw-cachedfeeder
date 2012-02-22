@@ -22,7 +22,7 @@
 var bwJsWidgetOptions = {
   title: 'Upcoming Events',
   showTitle: true,
-  calendarServer: 'http://localhost:8080',
+  calendarServer: '',
   calSuiteContext: '/cal',
   listMode: 'byTitle', // values: 'byDate' or 'byTitle' - highlights the date or title first (sort is always by date)
   displayEndDateInList: true,
