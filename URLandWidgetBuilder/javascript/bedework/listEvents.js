@@ -32,7 +32,9 @@ var bwJsWidgetOptions = {
   displayContactInDetails: true,
   displayCostInDetails: true,
   displayTagsInDetails: true,
-  displayTimezoneInDetails: true
+  displayTimezoneInDetails: true,
+  limitList: false,
+  limit: 5
 };
 
 // Insert Bedework calendar events from a json feed
@@ -68,6 +70,11 @@ function insertBwEvents(outputContainerID) {
 
     // Now, iterate over the events:
     for(i in eventlist){
+      // stop if we've reached a limit on the number of events
+      if(bwJsWidgetOptions.limitList && bwJsWidgetOptions.limit == i) {
+        break;
+      }
+
       // provide a shorthand reference to the event:
       var event = bwObject.bwEventList.events[eventlist[i]];
 
