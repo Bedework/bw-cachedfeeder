@@ -36,6 +36,20 @@ $(function() {
   $("#numDays").val($("#slider").slider("value"));
 });
 
+$(function() {
+  $("#limitSlider").slider({
+    range: "min",
+    min: 0,
+    max: 50,
+    value: 5,
+    slide: function(event, ui) {
+      $("#jsLimit").val(ui.value);
+      updateUrlDisplay();
+    }
+  });
+  $("#jsLimit").val($("#limitSlider").slider("value"));
+});
+
 // use JQuery UI datepicker widget for start date and end date
 $(function() {
   $("#startDate").datepicker({
@@ -357,14 +371,16 @@ function updateUrlDisplay() {
       jsHtml += '<script type="text/javascript" src="' + url + '"> </script>\n';
       jsHtml += '<script type="text/javascript">\n'
       jsHtml += '  bwJsWidgetOptions.title = "' + $("input[name='jsTitleName']").val() + '";\n';
-      jsHtml += '  bwJsWidgetOptions.showTitle =  ' + $("input[name='jsShowTitle']:checked").val() + ';\n';
+      jsHtml += '  bwJsWidgetOptions.showTitle = ' + $("input[name='jsShowTitle']:checked").val() + ';\n';
       jsHtml += '  bwJsWidgetOptions.displayEventDetailsInline = ' + $("input[name='jsDisplayInline']:checked").val() + ';\n';
       jsHtml += '  bwJsWidgetOptions.displayStartDateOnlyInList = ' + $("input[name='jsDisplayEndDate']:checked").val() + ';\n';
       jsHtml += '  bwJsWidgetOptions.displayTimeInList = ' + $("input[name='jsDisplayTime']:checked").val() + ';\n';
       jsHtml += '  bwJsWidgetOptions.displayLocationInList = ' + $("input[name='jsDisplayLocation']:checked").val() + ';\n';
+      jsHtml += '  bwJsWidgetOptions.limitList = ' + $("input[name='jsLimitList']:checked").val() + ';\n';
+      jsHtml += '  bwJsWidgetOptions.limit = ' + jsLimit.value + ';\n';
       jsHtml += '  bwJsWidgetOptions.listMode = "' + $("input[name='jsDisplayDateOrTitle']:checked").val() + '";\n';
-      jsHtml += '  bwJsWidgetOptions.displayContactInDetails = ' + $("input[name='jsDisplayContact']:checked").val() + ';\n';
-      jsHtml += '  bwJsWidgetOptions.displayCostInDetails = ' + $("input[name='jsDisplayCost']:checked").val() + ';\n';
+      jsHtml += '  bwJsWidgetOptions.displayContactInDetails = ' + $("input[name='jsDisplayContactInDetails']:checked").val() + ';\n';
+      jsHtml += '  bwJsWidgetOptions.displayCostInDetails = ' + $("input[name='jsDisplayCostInDetails']:checked").val() + ';\n';
       jsHtml += '  bwJsWidgetOptions.displayTagsInDetails = ' + $("input[name='jsDisplayTags']:checked").val() + ';\n';
       jsHtml += '  bwJsWidgetOptions.displayTimezoneInDetails = ' + $("input[name='jsDisplayTimezone']:checked").val() + ';\n\n';
       jsHtml += '  insertBwEvents("bwOutput");\n'

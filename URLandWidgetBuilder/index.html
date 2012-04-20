@@ -213,7 +213,19 @@
 
       <ul>
         <li>
-           Show a title above event list
+          Limit the number of events listed?
+          <input type="radio" id="jsShowLimitListTrue" class="trigger" name="jsLimitList" onclick='updateUrlDisplay()' value="true" />True
+          <input type="radio" id="jsShowLimitListFalse" class="trigger" name="jsLimitList" onclick='updateUrlDisplay()' value="false" checked="checked" />False
+          <em>(default: false)</em>
+          <br />
+          <br />
+          <div id="limitSlider" style="width:300px;"></div>
+                  <label for="jsLimit">Limit to:</label>
+                  <input class="slider" onclick='updateUrlDisplay()' type="text" size="3" id="jsLimit" />
+        </li>
+        </li>
+        <li>
+           Show a title above event list?
            <input type="radio" id="jsShowTitleTrue" class="trigger" name="jsShowTitle" onclick='updateUrlDisplay()' value="true" checked="checked" />True
            <input type="radio" id="jsShowTitleFalse" class="trigger" name="jsShowTitle" onclick='updateUrlDisplay()' value="false" />False
            <em>(default: true)</em>
