@@ -22,7 +22,8 @@
 var bwJsWidgetOptions = {
   title: 'Upcoming Events',
   showTitle: true,
-  calendarServer: 'http://localhost:8080', // value should be set to production server
+  displayDescription: false,
+  calendarServer: '',
   calSuiteContext: '/cal',
   listMode: 'byTitle', // values: 'byDate' or 'byTitle' - highlights the date or title first (sort is always by date)
   displayEndDateInList: true,
@@ -94,8 +95,13 @@ function insertBwEvents(outputContainerID) {
       if (bwJsWidgetOptions.displayLocationInList) {
         output += "<br/><span class=\"bwLoc\">" + event.location.address + "</span>";
       }
-
-      output += "</li>";
+      if (bwJsWidgetOptions.displayDescription) {
+        output += "<div class=\"bwEventDescription\"><p>";
+        output += event.description;
+        output += "</p></div>";
+        output += "</div>";
+        output += "</li>";
+      }
     }
     output += "</ul>";
 
@@ -192,6 +198,7 @@ function showBwEvent(outputContainerID, eventId) {
 
   // create the event
   output += "<h3 id=\"bwEventsTitle\">" + event.summary + "</h3>";
+  
   output += "<div id=\"bwEventLogistics\">";
 
   // output date/time
@@ -222,7 +229,7 @@ function showBwEvent(outputContainerID, eventId) {
     }
   }
   output += "</div>";
-
+  
   // output location
   output += "<div class=\"bwEventLoc\">";
   if (event.location.link != "") {
@@ -268,20 +275,6 @@ function showBwEvent(outputContainerID, eventId) {
     output += "See: <a href=\"" + event.link + "\">" + event.link + "</a>";
     output += "</div>";
   }
-  
-   // output download link
-  var downloadPrefix = bwJsWidgetOptions.calendarServer + bwJsWidgetOptions.calSuiteContext + "/misc/export.gdo";
-
-  // generate the query string parameters that get the download
-  var downloadQueryString = "?calPath=" + event.calPath;
-  downloadQueryString += "&amp;guid=" + event.guid;
-  downloadQueryString += "&amp;recurrenceId=" + event.recurrenceId;
-  downloadQueryString += "&amp;nocache=no&amp;contentName=" + event.guid;
-  output += "<div class=\"bwDownloadLink\">";
-  output += "<a href=\"" + downloadPrefix + downloadQueryString + "\">Download ical</a>";
-  output += "</div>";
-
-  
   output += "</div>";
 
   // create a link back to the main view

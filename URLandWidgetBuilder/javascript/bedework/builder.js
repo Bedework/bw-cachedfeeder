@@ -372,6 +372,7 @@ function updateUrlDisplay() {
       jsHtml += '<script type="text/javascript">\n'
       jsHtml += '  bwJsWidgetOptions.title = "' + $("input[name='jsTitleName']").val() + '";\n';
       jsHtml += '  bwJsWidgetOptions.showTitle = ' + $("input[name='jsShowTitle']:checked").val() + ';\n';
+      jsHtml += '  bwJsWidgetOptions.displayDescription = ' + $("input[name='jsDisplayDescription']:checked").val() + ';\n';
       jsHtml += '  bwJsWidgetOptions.displayEventDetailsInline = ' + $("input[name='jsDisplayInline']:checked").val() + ';\n';
       jsHtml += '  bwJsWidgetOptions.displayStartDateOnlyInList = ' + $("input[name='jsDisplayEndDate']:checked").val() + ';\n';
       jsHtml += '  bwJsWidgetOptions.displayTimeInList = ' + $("input[name='jsDisplayTime']:checked").val() + ';\n';
