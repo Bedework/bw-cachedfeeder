@@ -99,9 +99,8 @@ function insertBwEvents(outputContainerID) {
         output += "<div class=\"bwEventDescription\"><p>";
         output += event.description;
         output += "</p></div>";
-        output += "</div>";
-        output += "</li>";
       }
+      output += "</li>";
     }
     output += "</ul>";
 
