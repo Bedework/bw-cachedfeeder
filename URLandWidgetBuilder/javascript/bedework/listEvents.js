@@ -97,7 +97,7 @@ function insertBwEvents(outputContainerID) {
       }
       if (bwJsWidgetOptions.displayDescription) {
         output += "<div class=\"bwEventDescription\"><p>";
-        output += event.description;
+        output += event.description.replace(/\n/g,'<br />');
         output += "</p></div>";
       }
       output += "</li>";
@@ -240,7 +240,7 @@ function showBwEvent(outputContainerID, eventId) {
 
   // output description
   output += "<div class=\"bwEventDesc\">";
-  output += event.description;
+  output += event.description.replace(/\n/g,'<br />');
   output += "</div>";
 
   // output contact
