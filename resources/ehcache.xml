@@ -1,0 +1,7 @@
+<ehcache>
+	<diskStore path="java.io.tmpdir" />
+	<!-- Bedework Cache -->
+	<cache name="BedeworkCache" maxElementsInMemory="100" eternal="false"
+		overflowToDisk="true" timeToIdleSeconds="60" timeToLiveSeconds="3600">
+	</cache>
+</ehcache>

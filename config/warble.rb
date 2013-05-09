@@ -20,7 +20,7 @@ Warbler::Config.new do |config|
   # config.java_libs += FileList["lib/java/*.jar"]
 
   # Loose Java classes and miscellaneous files to be placed in WEB-INF/classes.
-  # config.java_classes = FileList["target/classes/**.*"]
+  config.java_classes = FileList["resources/**.*"]
 
   # One or more pathmaps defining how the java classes should be copied into
   # WEB-INF/classes. The example pathmap below accompanies the java_classes
